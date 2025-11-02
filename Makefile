@@ -40,4 +40,8 @@ else
 endif
 
 GAME_WASMCFILES:=$(filter src/game/%.c,$(SRCFILES))
-GAME_WASMOFILES:=$(patsubst src/%.c,mid/wasm/%.o,$(GAME_WASMCFILES))
+WASM_EXE:=out/costume-conundrum.html
+WASM_LIBA:=libwasm/libraylib.a
+$(info $(GAME_WASMOFILES))
+$(WASM_EXE):;$(PRECMD) emcc -o $(WASM_EXE) $(GAME_WASMCFILES) -Os -Wall $(WASM_LIBA) -Isrc/game -Iinclude -L lib -lraylib -s USE_GLFW=3 --shell-file ../raylib/src/minshell.html -DPLATFORM_WEB
+web:$(WASM_EXE)
