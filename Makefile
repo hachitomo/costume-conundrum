@@ -31,7 +31,7 @@ ifeq ($(USER),andy)
   LINUX_EXE:=out/costume-conundrum-linux
   $(LINUX_EXE):$(LINUX_OFILES);$(PRECMD) gcc -o$@ $^ $(CFLAGS) $(RAYLIB_SDK)/lib/libraylib.a -lm
   all:$(LINUX_EXE)
-  run:$(LINUX_EXE);$(LINUX_EXE)
+  run:$(LINUX_EXE) assets;$(LINUX_EXE)
 # Build with Raylib for Windows.
 else
   GAME_CFILES:=$(filter src/game/%.c,$(SRCFILES))
