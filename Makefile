@@ -6,7 +6,7 @@ EGG_SDK:=../egg2
 
 SRCFILES:=$(shell find src -type f)
 
-edit:;$(EGG_SDK)/out/eggdev serve --htdocs=/data:src/data --htdocs=EGG_SDK/src/web --htdocs=EGG_SDK/src/editor --writeable=src/data
+edit:;$(EGG_SDK)/out/eggdev serve --htdocs=/data:src/data --htdocs=EGG_SDK/src/web --htdocs=EGG_SDK/src/editor --writeable=src/data --project=.
 
 clean:;rm -rf mid out
 
@@ -31,6 +31,7 @@ ifeq ($(USER),andy)
   LINUX_EXE:=out/costume-conundrum-linux
   $(LINUX_EXE):$(LINUX_OFILES);$(PRECMD) gcc -o$@ $^ $(CFLAGS) $(RAYLIB_SDK)/lib/libraylib.a -lm
   all:$(LINUX_EXE)
+  run:$(LINUX_EXE);$(LINUX_EXE)
 # Build with Raylib for Windows.
 else
   GAME_CFILES:=$(filter src/game/%.c,$(SRCFILES))

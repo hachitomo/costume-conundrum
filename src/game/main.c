@@ -41,10 +41,9 @@ int main(void)
 
 void UpdateDrawFrame(void){
     frameTime = frameTime + GetFrameTime();
-    int animFrame = (int)(frameTime * 12) % 8;
+    int animFrame = (int)(frameTime * 8) % 8;
     char output[30];
     sprintf(output,"Frame: %d",(int)animFrame);
-    DrawText(output,10,10,14,BLACK);
     Rectangle texClip = {
         .width=-16,
         .height=26,
@@ -74,6 +73,7 @@ void UpdateDrawFrame(void){
 
         // 4th param is scale, this upscales the output buffer to the screen size
         DrawTextureEx(fbuffer.texture,pos,180,8,WHITE);
+        DrawText(output,10,10,14,BLACK);
 
     EndDrawing();
 }
