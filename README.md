@@ -4,7 +4,7 @@
 
 Download raylib https://github.com/raysan5/raylib/releases/tag/5.5
 
-unzip the `include` and `lib` folders into their respective coutnerparts here
+unzip the `include` and `lib` folders into their respective counterparts here
 
 ## Build for windows/linux
 

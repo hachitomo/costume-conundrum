@@ -10,6 +10,9 @@ edit:;$(EGG_SDK)/out/eggdev serve --htdocs=/data:src/data --htdocs=EGG_SDK/src/w
 
 clean:;rm -rf mid out
 
+assets:;mkdir -p out/data/image && cp src/data/image/* out/data/image
+all:assets
+
 # This builds the slicer. Running it is manual only, and its output doesn't get cleaned.
 SLICER_CFILES:=$(filter src/tool/slicer/%.c,$(SRCFILES))
 SLICER_OFILES:=$(patsubst src/%.c,mid/%.o,$(SLICER_CFILES))
@@ -26,7 +29,7 @@ ifeq ($(USER),andy)
   -include $(LINUX_OFILES:.o=.d)
   mid/linux/%.o:src/%.c;$(PRECMD) gcc -c -MMD -O3 -Isrc -I$(RAYLIB_SDK)/include -o$@ $<
   LINUX_EXE:=out/costume-conundrum-linux
-  $(LINUX_EXE):$(LINUX_OFILES);$(PRECMD) gcc -o$@ $^ $(RAYLIB_SDK)/lib/libraylib.a -lm
+  $(LINUX_EXE):$(LINUX_OFILES);$(PRECMD) gcc -o$@ $^ $(CFLAGS) $(RAYLIB_SDK)/lib/libraylib.a -lm
   all:$(LINUX_EXE)
 # Build with Raylib for Windows.
 else
@@ -43,5 +46,6 @@ GAME_WASMCFILES:=$(filter src/game/%.c,$(SRCFILES))
 WASM_EXE:=out/costume-conundrum.html
 WASM_LIBA:=libwasm/libraylib.a
 $(info $(GAME_WASMOFILES))
-$(WASM_EXE):;$(PRECMD) emcc -o $(WASM_EXE) $(GAME_WASMCFILES) -Os -Wall $(WASM_LIBA) -Isrc/game -Iinclude -L lib -lraylib -s USE_GLFW=3 --shell-file ../raylib/src/minshell.html -DPLATFORM_WEB
+$(WASM_EXE):$(GAME_WASMCFILES);$(PRECMD) emcc -o$@ $^ -Os -Wall $(WASM_LIBA) -Isrc/game -Iinclude -L lib -lraylib -s USE_GLFW=3 --shell-file ../raylib/src/minshell.html -DPLATFORM_WEB
+web:assets
 web:$(WASM_EXE)
