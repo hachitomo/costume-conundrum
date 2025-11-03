@@ -14,12 +14,16 @@ extern const struct decal decalsheet_sprites[256];
 extern const unsigned char tilesheet_terrain[];
 extern const int tilesheet_terrain_length;
 
-// Map cells data. Length is always w*h ie 2400.
-// TODO We'll find a neater way to capture the dimensions, and also extra attached data like spawn points.
-#define map_w 80
-#define map_h 40
-extern const unsigned char map[];
-extern const int map_length;
+// Map cells and annotations.
+extern const int map_w;
+extern const int map_h;
+extern const unsigned char map[]; // map_w*map_h
+extern const struct map_poi {
+  int x,y;
+  int cmd;
+  int argv[4];
+} map_poiv[];
+extern const int map_poic;
 
 // Verbatim data tiles. PNG or mp3 or whatever, for shovelling into Raylib's decoders.
 extern const unsigned char image_sky[];
@@ -28,5 +32,16 @@ extern const unsigned char image_terrain[];
 extern const int           image_terrain_length;
 extern const unsigned char image_sprites[];
 extern const int           image_sprites_length;
+
+// Symbols for map_poiv.
+#define CMD_SPRITE 1
+
+// CMD_SPRITE, argv[0]=type
+#define SPRITE_HERO 1
+#define SPRITE_GHOST 2
+#define SPRITE_PRINCESS 3
+#define SPRITE_PUMPKIN 4
+#define SPRITE_ROBOT 5
+#define SPRITE_CLOWN 6
 
 #endif
