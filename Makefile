@@ -10,10 +10,15 @@ SRCFILES:=$(shell find src -type f)
 edit:;$(EGG_SDK)/out/eggdev serve --htdocs=/data:src/data --htdocs=EGG_SDK/src/web --htdocs=EGG_SDK/src/editor --writeable=src/data --project=.
 
 # Dicer: A tool to take our data files and produce compilable C files from them. Easiest way to pack assets.
+ifeq ($(USER),andy)
+  DICER_CFLAGS:=
+else
+  DICER_CFLAGS:=-DUSE_mswin=1
+endif
 DICER_CFILES:=$(filter src/tool/dicer/%.c,$(SRCFILES))
 DICER_OFILES:=$(patsubst src/%.c,mid/%.o,$(DICER_CFILES))
 -include $(DICER_OFILES:.o=.d)
-mid/tool/dicer/%.o:src/tool/dicer/%.c;$(PRECMD) gcc -c -MMD -DUSE_mswin=1 -O3 -Isrc -o$@ $<
+mid/tool/dicer/%.o:src/tool/dicer/%.c;$(PRECMD) gcc -c -MMD $(DICER_CFLAGS) -O3 -Isrc -o$@ $<
 DICER_EXE:=out/dicer
 $(DICER_EXE):$(DICER_OFILES);$(PRECMD) gcc -o$@ $^
 
