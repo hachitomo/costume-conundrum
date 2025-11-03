@@ -18,7 +18,7 @@ DICER_OFILES:=$(patsubst src/%.c,mid/%.o,$(DICER_CFILES))
 -include $(DICER_OFILES:.o=.d)
 mid/tool/dicer/%.o:src/tool/dicer/%.c;$(PRECMD) gcc -c -MMD -O3 -Isrc -o$@ $<
 DICER_EXE:=out/dicer
-$(DICER_EXE):$(DICER_OFILES);$(PRECMD) gcc -o$@ $^ -lz
+$(DICER_EXE):$(DICER_OFILES);$(PRECMD) gcc -o$@ $^
 
 # Then infer the dicer's output and roll those into SRCFILES.
 # Violating my usual no-outputs-in-mid rule so we don't have to deal with inputs under mid.
