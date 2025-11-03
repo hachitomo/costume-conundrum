@@ -29,3 +29,4 @@ profile.cov
 /lib
 /include
 /libwasm
+/src/data/*/*.c

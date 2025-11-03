@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include <stdio.h>
+#include "data.h"
 
 #ifdef PLATFORM_WEB
 
@@ -20,7 +21,7 @@ int main(void)
     ChangeDirectory(GetApplicationDirectory());
     InitWindow(screenWidth, screenHeight, "Costume Conundrum");
     chartex = LoadTexture("data/image/3-sprites.png");
-
+    
     SetTargetFPS(60);
 
     #if defined(PLATFORM_WEB)
