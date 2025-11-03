@@ -2,7 +2,6 @@
 #define DICER_INTERNAL_H
 
 #include "serial.h"
-#include "image.h"
 #include "fs.h"
 #include <stdlib.h>
 #include <stdio.h>

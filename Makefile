@@ -12,14 +12,6 @@ edit:;$(EGG_SDK)/out/eggdev serve --htdocs=/data:src/data --htdocs=EGG_SDK/src/w
 assets:;mkdir -p out/data/image && cp src/data/image/* out/data/image
 all:assets
 
-# This builds the slicer. Running it is manual only, and its output doesn't get cleaned. XXX Not used.
-SLICER_CFILES:=$(filter src/tool/slicer/%.c,$(SRCFILES))
-SLICER_OFILES:=$(patsubst src/%.c,mid/%.o,$(SLICER_CFILES))
--include $(SLICER_OFILES:.o=.d)
-mid/tool/slicer/%.o:src/tool/slicer/%.c;$(PRECMD) gcc -c -MMD -DUSE_mswin=1 -O3 -Isrc -o$@ $<
-SLICER_EXE:=out/slicer
-$(SLICER_EXE):$(SLICER_OFILES);$(PRECMD) gcc -o$@ $^ -lz
-
 # Ah, but what we really need is a *dicer*. A tool to take our data files and produce compilable C files from them. Easiest way to pack assets.
 DICER_CFILES:=$(filter src/tool/dicer/%.c,$(SRCFILES))
 DICER_OFILES:=$(patsubst src/%.c,mid/%.o,$(DICER_CFILES))
@@ -51,7 +43,7 @@ else
   GAME_CFILES:=$(filter src/game/%.c src/data/%.c,$(SRCFILES))
   GAME_OFILES:=$(patsubst src/%.c,mid/windows/%.o,$(GAME_CFILES))
   -include $(GAME_OFILES:.o=.d)
-  mid/windows/game/%.o:src/game/%.c;$(PRECMD) gcc -c -MMD -DUSE_mswin=1 -O3 -Isrc -Iinclude -o$@ $<
+  mid/windows/%.o:src/%.c;$(PRECMD) gcc -c -MMD -DUSE_mswin=1 -O3 -Isrc -Iinclude -o$@ $<
   GAME_EXE:=out/costume-conundrum.exe
   $(GAME_EXE):$(GAME_OFILES);$(PRECMD) gcc -mwindows -Wl,-static -o$@ $^ -L lib -lraylib -lgdi32 -lwinmm
   all:$(GAME_EXE)
