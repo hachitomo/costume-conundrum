@@ -12,6 +12,7 @@ void UpdateDrawFrame(void);
 
 float frameTime = 0;
 Texture2D chartex;
+Image charimg;
 const int screenWidth = 640;
 const int screenHeight = 360;
 
@@ -20,8 +21,9 @@ int main(void)
     SetTraceLogLevel(LOG_ALL);
     ChangeDirectory(GetApplicationDirectory());
     InitWindow(screenWidth, screenHeight, "Costume Conundrum");
-    chartex = LoadTexture("data/image/3-sprites.png");
-    
+    charimg = LoadImageFromMemory(".png",image_sprites,image_sprites_length);
+    chartex = LoadTextureFromImage(charimg);
+
     SetTargetFPS(60);
 
     #if defined(PLATFORM_WEB)

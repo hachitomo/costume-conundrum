@@ -13,7 +13,7 @@ edit:;$(EGG_SDK)/out/eggdev serve --htdocs=/data:src/data --htdocs=EGG_SDK/src/w
 DICER_CFILES:=$(filter src/tool/dicer/%.c,$(SRCFILES))
 DICER_OFILES:=$(patsubst src/%.c,mid/%.o,$(DICER_CFILES))
 -include $(DICER_OFILES:.o=.d)
-mid/tool/dicer/%.o:src/tool/dicer/%.c;$(PRECMD) gcc -c -MMD -O3 -Isrc -o$@ $<
+mid/tool/dicer/%.o:src/tool/dicer/%.c;$(PRECMD) gcc -c -MMD -DUSE_mswin=1 -O3 -Isrc -o$@ $<
 DICER_EXE:=out/dicer
 $(DICER_EXE):$(DICER_OFILES);$(PRECMD) gcc -o$@ $^
 
@@ -49,7 +49,7 @@ endif
 GAME_WASMCFILES:=$(filter src/game/%.c src/data/%.c,$(SRCFILES))
 WASM_EXE:=out/costume-conundrum.html
 WASM_LIBA:=libwasm/libraylib.a
-$(WASM_EXE):$(GAME_WASMCFILES);$(PRECMD) emcc -o$@ $^ -Os -Wall $(WASM_LIBA) -Isrc/game -Iinclude -L lib -lraylib -s USE_GLFW=3 --shell-file ../raylib/src/minshell.html -DPLATFORM_WEB
+$(WASM_EXE):$(GAME_WASMCFILES);$(PRECMD) emcc -o$@ $^ -Os -Wall $(WASM_LIBA) -Isrc -Iinclude -L lib -lraylib -s USE_GLFW=3 --shell-file ../raylib/src/minshell.html -DPLATFORM_WEB
 web:$(WASM_EXE)
 
 clean:;rm -rf mid out $(DATA_FILES_C)
