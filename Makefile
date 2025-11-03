@@ -9,10 +9,7 @@ SRCFILES:=$(shell find src -type f)
 
 edit:;$(EGG_SDK)/out/eggdev serve --htdocs=/data:src/data --htdocs=EGG_SDK/src/web --htdocs=EGG_SDK/src/editor --writeable=src/data --project=.
 
-assets:;mkdir -p out/data/image && cp src/data/image/* out/data/image
-all:assets
-
-# Ah, but what we really need is a *dicer*. A tool to take our data files and produce compilable C files from them. Easiest way to pack assets.
+# Dicer: A tool to take our data files and produce compilable C files from them. Easiest way to pack assets.
 DICER_CFILES:=$(filter src/tool/dicer/%.c,$(SRCFILES))
 DICER_OFILES:=$(patsubst src/%.c,mid/%.o,$(DICER_CFILES))
 -include $(DICER_OFILES:.o=.d)
@@ -37,7 +34,7 @@ ifeq ($(USER),andy)
   LINUX_EXE:=out/costume-conundrum-linux
   $(LINUX_EXE):$(LINUX_OFILES);$(PRECMD) gcc -o$@ $^ $(CFLAGS) $(RAYLIB_SDK)/lib/libraylib.a -lm
   all:$(LINUX_EXE)
-  run:$(LINUX_EXE) assets;$(LINUX_EXE)
+  run:$(LINUX_EXE);$(LINUX_EXE)
 # Build with Raylib for Windows.
 else
   GAME_CFILES:=$(filter src/game/%.c src/data/%.c,$(SRCFILES))
@@ -53,7 +50,6 @@ GAME_WASMCFILES:=$(filter src/game/%.c src/data/%.c,$(SRCFILES))
 WASM_EXE:=out/costume-conundrum.html
 WASM_LIBA:=libwasm/libraylib.a
 $(WASM_EXE):$(GAME_WASMCFILES);$(PRECMD) emcc -o$@ $^ -Os -Wall $(WASM_LIBA) -Isrc/game -Iinclude -L lib -lraylib -s USE_GLFW=3 --shell-file ../raylib/src/minshell.html -DPLATFORM_WEB
-web:assets
 web:$(WASM_EXE)
 
 clean:;rm -rf mid out $(DATA_FILES_C)

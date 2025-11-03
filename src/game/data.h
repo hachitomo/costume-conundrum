@@ -5,9 +5,10 @@
 #ifndef DATA_H
 #define DATA_H
 
-// Format of decalsheet not yet defined -- it's always empty for now.
-extern const unsigned char decalsheet_sprites[];
-extern const int decalsheet_sprites_length;
+// Decalsheet, unlike most resources, decodes into a live model rather than serial data.
+// It's irrelevant to us, but Egg enforces a 256-decal limit per image. We'll exploit that and make every decalsheet a fixed length.
+struct decal { int id,x,y,w,h; };
+extern const struct decal decalsheet_sprites[256];
 
 // Length always 256. Contains physics values indexed by map tile value. 0=vacant, 1=solid, 2=oneway
 extern const unsigned char tilesheet_terrain[];

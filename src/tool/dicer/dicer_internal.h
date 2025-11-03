@@ -13,8 +13,14 @@ extern struct dicer {
   const char *exename;
   const char *srcpath;
   const char *dstpath;
+  char objname[64];
+  int objnamec;
 } dicer;
 
+/* Compilers will typically produce binary data and return zero.
+ * Optionally, they may compose the C text themselves and return >0.
+ * decalsheet does this, and map probably will soon.
+ */
 int dicer_compile_tilesheet(struct sr_encoder *dst,const void *src,int srcc);
 int dicer_compile_decalsheet(struct sr_encoder *dst,const void *src,int srcc);
 int dicer_compile_map(struct sr_encoder *dst,const void *src,int srcc);
