@@ -32,6 +32,8 @@ extern const unsigned char image_terrain[];
 extern const int           image_terrain_length;
 extern const unsigned char image_sprites[];
 extern const int           image_sprites_length;
+extern const unsigned char image_test[];
+extern const int           image_test_length;
 
 // Symbols for map_poiv.
 #define CMD_SPRITE 1
