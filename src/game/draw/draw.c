@@ -33,7 +33,7 @@ void draw_game(Scene *scene){
     BeginTextureMode(bbuf);
         ClearBackground(scene->clearColor);
         // scene draw function calls will all draw to bbuf
-        scene->draw();
+        scene->draw(scene);
 
         // draw static things like UI/HUD here
     EndTextureMode();

@@ -8,7 +8,7 @@ typedef struct Scene{
     int id;
     Color clearColor;
     // Texture2D terrain;
-    void (*draw)();
+    void (*draw)(struct Scene*);
 }Scene;
 
 extern Scene SCENE_MENU;
