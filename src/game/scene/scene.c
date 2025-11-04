@@ -10,8 +10,8 @@ Texture2D testtex;
 void set_scene(Scene *scene){
     if(scene == &SCENE_MENU){
         current_scene = scene;
-        testimg = LoadImageFromMemory(".png",image_test,image_test_length);
-        testtex = LoadTextureFromImage(testimg);
+        //testimg = LoadImageFromMemory(".png",image_test,image_test_length);
+        //testtex = LoadTextureFromImage(testimg);
     }
 }
 
