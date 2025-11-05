@@ -1,6 +1,7 @@
 #include "scene.h"
 #include "../data.h"
 #include "../frame_timer.h"
+#include "../input/input.h"
 #include <stdio.h>
 
 Scene *current_scene;
@@ -8,11 +9,7 @@ Image testimg;
 Texture2D testtex;
 
 void set_scene(Scene *scene){
-    if(scene == &SCENE_MENU){
-        current_scene = scene;
-        //testimg = LoadImageFromMemory(".png",image_test,image_test_length);
-        //testtex = LoadTextureFromImage(testimg);
-    }
+    current_scene = scene;
 }
 
 Scene SCENE_MENU = {
@@ -44,10 +41,15 @@ void draw_scene_menu(Scene *scene){
     if(timer->global_framect%2 == 0){
        DrawText("Press anything!",270,250,18,BLUE);
     }
+    Inputs inputs = get_inputs();
+    if(inputs.left|inputs.down|inputs.right|inputs.up|inputs.interact){
+        set_scene(&SCENE_GAME);
+    }
 }
 
 void draw_scene_game(Scene *scene){
-
+    DrawText("Wow, it's the game!!!",160,90,42,PURPLE);
+    DrawText("AMAZING!",105,175,32,PURPLE);
 }
 
 void draw_scene_end(Scene *scene){

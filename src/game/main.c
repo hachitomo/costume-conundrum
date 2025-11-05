@@ -1,10 +1,11 @@
 #include "raylib.h"
-#include <stdio.h>
 #include "data.h"
 #include "main.h"
 #include "draw/draw.h"
 #include "scene/scene.h"
 #include "frame_timer.h"
+#include "input/input.h"
+#include <stdio.h>
 
 #ifdef PLATFORM_WEB
 
@@ -40,6 +41,7 @@ int main(void)
 
 void UpdateDrawFrame(){
     update_frame_timer();
+    poll_inputs();
     draw_game(get_current_scene());
 }
 
