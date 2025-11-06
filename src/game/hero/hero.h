@@ -10,7 +10,7 @@
 typedef struct Hero{
     Vector2 position,velocity;
     Sprite sprite;
-    int state,direction,just_updated;
+    int state,xtransform,just_updated;
     float state_time;
 }Hero;
 
@@ -23,8 +23,8 @@ void draw_hero(Hero *hero);
 Rectangle hero_bbox(Hero *hero);
 SpriteAnimation *get_hero_animations();
 
-static const int HERO_WIDTH = 17;
-static const int HERO_HEIGHT = 27;
+static const int HERO_WIDTH = 34;
+static const int HERO_HEIGHT = 54;
 static const int STATE_IDLE = 0;
 static const int STATE_WALK = 1;
 static const int STATE_AIRBORN = 2;
@@ -50,39 +50,39 @@ static const Rectangle hero_walk_frames[8]={
     {.x=37,
     .y=1,
     .width=17,
-    .height=26},
-    {.x=56,
+    .height=27},
+    {.x=55,
     .y=1,
     .width=17,
     .height=27},
-    {.x=74,
+    {.x=73,
     .y=1,
-    .width=16,
-    .height=26},
-    {.x=92,
+    .width=17,
+    .height=27},
+    {.x=91,
     .y=1,
-    .width=16,
-    .height=26},
-    {.x=110,
+    .width=17,
+    .height=27},
+    {.x=109,
     .y=1,
-    .width=16,
-    .height=26},
-    {.x=128,
+    .width=17,
+    .height=27},
+    {.x=127,
     .y=1,
-    .width=16,
-    .height=26},
-    {.x=146,
+    .width=17,
+    .height=27},
+    {.x=145,
     .y=1,
-    .width=16,
-    .height=26},
-    {.x=164,
+    .width=17,
+    .height=27},
+    {.x=163,
     .y=1,
-    .width=16,
-    .height=26},
+    .width=17,
+    .height=27},
 };
 static const SpriteAnimation hero_walk = {
     .frames=hero_walk_frames,
-    .framesc=8,
+    .framesc=7,
     .duration=0.125,
     .time=0.0,
 };

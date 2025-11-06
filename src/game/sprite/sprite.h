@@ -20,15 +20,14 @@ typedef struct SpriteMap{
 // state_time: how long since the state last changed, in seconds
 typedef struct Sprite{
     Texture2D texture;
-    Vector2 position;
-    int state,width,height,direction;
-    float state_time; 
+    Rectangle destination;
+    int state,xtransform;
     const SpriteMap *sprite_map;
 }Sprite;
 
 
-void update_sprite_state(Sprite *sprite,int newstate, float state_time);
 void draw_sprite(Sprite *sprite,float state_time);
-void move_sprite(Vector2 position);
+// void move_sprite(Vector2 position);
+int animation_frame(SpriteAnimation *anim,float time);
 
 #endif
