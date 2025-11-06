@@ -15,11 +15,12 @@ extern Scene SCENE_MENU;
 extern Scene SCENE_GAME;
 extern Scene SCENE_END;
 
-void set_scene(Scene *);
+void set_scene(Scene *scene);
 Scene *get_current_scene();
 
-void draw_scene_menu(Scene *);
-void draw_scene_game(Scene *);
-void draw_scene_end(Scene *);
+void run_scene_menu(Scene *scene);
+void run_scene_game(Scene *scene);
+void run_scene_end(Scene *scene);
+void draw_scene_game(Scene *scene);
 
 #endif

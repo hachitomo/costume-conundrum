@@ -1,8 +1,10 @@
 #include "frame_timer.h"
 #include "raylib.h"
+#include <stdio.h>
 
 FrameTimer frame_timer = {
-    .global_framect=0,
+    .frame_time=0.0,
+    .global_exetime_sec=0,
 };
 
 FrameTimer *get_frame_timer(){
@@ -12,9 +14,13 @@ FrameTimer *get_frame_timer(){
 void update_frame_timer() {
     float ftime = GetFrameTime();
     frame_timer.frame_time = ftime;
-    frame_timer.frame_offset += ftime;
-    if(frame_timer.frame_offset > 1){
-        frame_timer.global_framect += (int)frame_timer.frame_offset;
-        frame_timer.frame_offset = frame_timer.frame_offset - (int)frame_timer.frame_offset;
+    frame_timer.global_exetime_sec += ftime;
+}
+
+float elapsed(float since){
+    if(since > frame_timer.global_exetime_sec){
+        printf("WARNING: Requested elapsed since future time %f!",since);
+        return 0.0;
     }
+    return frame_timer.global_exetime_sec - since;
 }

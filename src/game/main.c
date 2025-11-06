@@ -2,6 +2,7 @@
 #include "data.h"
 #include "main.h"
 #include "draw/draw.h"
+#include "hero/hero.h"
 #include "scene/scene.h"
 #include "frame_timer.h"
 #include "input/input.h"
@@ -19,8 +20,8 @@ int main(void)
     InitWindow(RENDER_WIDTH, RENDER_HEIGHT, "Costume Conundrum");
     set_scene(&SCENE_MENU);
 
-
     init_draw();
+    init_hero();
 
     #if defined(PLATFORM_WEB)
         SetTargetFPS(TARGET_FPS);
