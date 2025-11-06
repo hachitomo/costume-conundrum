@@ -22,5 +22,8 @@ void draw_sprite(Sprite *sprite,float state_time){
     SpriteAnimation anim = map->animations[state];
     Rectangle frame = anim.frames[0];
     frame.width *= sprite->direction;
+    if(sprite->direction<0){
+        frame.width += 1;
+    }
     DrawTextureRec(sprite->texture,frame,sprite->position,WHITE);
 };

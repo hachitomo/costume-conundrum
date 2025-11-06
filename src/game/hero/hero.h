@@ -47,9 +47,9 @@ static const SpriteAnimation hero_idle = {
 
 // walk
 static const Rectangle hero_walk_frames[8]={
-    {.x=38,
+    {.x=37,
     .y=1,
-    .width=16,
+    .width=17,
     .height=26},
     {.x=56,
     .y=1,
