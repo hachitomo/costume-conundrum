@@ -12,4 +12,6 @@
  */
 #define NS_sys_bgcolor 0x374456
 
+#define EGGDEV_ignoreData "*.c,*.bak"
+
 #endif
