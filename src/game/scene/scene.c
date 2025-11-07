@@ -6,10 +6,27 @@
 #include "../hero/hero.h"
 #include "../input/input.h"
 #include <stdio.h>
+#include <math.h>
 
+static Vector2 LOGO_OFFSET = {
+    .x=88,
+    .y=20,
+};
 Scene *current_scene;
-Image testimg;
-Texture2D testtex;
+Texture2D skytex,logotex;
+Rectangle render_bounds = {
+    .x=0,
+    .y=0,
+    .width=RENDER_WIDTH,
+    .height=RENDER_HEIGHT,
+};
+
+void init_menu(){
+    Image skyteximg = LoadImageFromMemory(".png",image_sky,image_sky_length);
+    skytex = LoadTextureFromImage(skyteximg);
+    Image logoteximg = LoadImageFromMemory(".png",image_logo,image_logo_length);
+    logotex = LoadTextureFromImage(logoteximg);
+};
 
 void set_scene(Scene *scene){
     current_scene = scene;
@@ -42,10 +59,13 @@ Scene *get_current_scene(void){
 
 void run_scene_menu(Scene *scene){
     FrameTimer *timer = get_frame_timer();
-    DrawText("Costume",160,90,80,PURPLE);
-    DrawText("Conundrum",105,175,80,PURPLE);
-    if(timer->global_exetime_sec%2 == 0){
-       DrawText("Press anything!",270,250,18,BLUE);
+    Rectangle sky_clip=render_bounds;
+    sky_clip.x=25*GetTime();
+    DrawTexturePro(skytex,sky_clip,render_bounds,VEC_ZERO,0,WHITE);
+    DrawTextureEx(logotex,LOGO_OFFSET,0,4,WHITE);
+    float time = GetTime();
+    if(time - floor(time) < 0.8){
+       DrawText("Press anything!",230,250,24,PURPLE);
     }
     Inputs inputs = get_inputs();
     if(inputs.left|inputs.down|inputs.right|inputs.up|inputs.interact){
@@ -64,9 +84,10 @@ void run_scene_game(Scene *scene){
     //...
 
     // draw
-    BeginMode2D(*camera);
+    DrawTexturePro(skytex,render_bounds,render_bounds,VEC_ZERO,0,WHITE);
+    // BeginMode2D(*camera);
         draw_scene_game(scene);
-    EndMode2D();
+    // EndMode2D();
 }
 
 void run_scene_end(Scene *scene){
@@ -74,5 +95,6 @@ void run_scene_end(Scene *scene){
 }
 
 void draw_scene_game(Scene *scene){
-    
+    Hero *hero = get_hero();
+    draw_hero(hero);
 }

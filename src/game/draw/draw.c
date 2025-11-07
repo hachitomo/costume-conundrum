@@ -40,7 +40,6 @@ void draw_game(Scene *scene){
 
     // bbuf -> screen
     BeginDrawing();
-        ClearBackground(scene->clearColor);
         DrawTexturePro(bbuf.texture,buffer_rec,buffer_rec,screen_origin,0,WHITE);
     EndDrawing();
 }

@@ -81,7 +81,6 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
     hero->sprite.destination = hero_bbox(hero);
     hero->sprite.xtransform = hero->xtransform;
     hero->sprite.state = hero->state;
-    draw_hero(hero);
 }
 
 void draw_hero(Hero *hero){
