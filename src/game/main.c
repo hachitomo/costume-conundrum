@@ -20,7 +20,6 @@ int main(void)
     InitWindow(RENDER_WIDTH, RENDER_HEIGHT, "Costume Conundrum");
     set_scene(&SCENE_MENU);
 
-    init_menu();
     init_draw();
     init_hero();
 

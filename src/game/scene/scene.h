@@ -15,7 +15,7 @@ extern Scene SCENE_MENU;
 extern Scene SCENE_GAME;
 extern Scene SCENE_END;
 
-void init_menu();
+void init_textures();
 void set_scene(Scene *scene);
 Scene *get_current_scene();
 

@@ -5,7 +5,8 @@
 
 typedef struct Map{
     Texture2D terraintex,spritestex;
-    
+    Rectangle *areas;
+    int areasc;
 }Map;
 
 #endif

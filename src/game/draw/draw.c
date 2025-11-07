@@ -1,5 +1,6 @@
 #include "draw.h"
 #include "raylib.h"
+#include "../data.h"
 #include "../scene/scene.h"
 #include "../constants.h"
 #include <stdlib.h>
@@ -21,11 +22,43 @@ Rectangle buffer_rec = {
     .height=-RENDER_HEIGHT,
 };
 
-void init_draw(){
-    bbuf = LoadRenderTexture(RENDER_WIDTH,RENDER_HEIGHT);
+Texture2D skytex,logotex,terraintex,spritestex;
+
+Texture2D *get_texture(int texture){
+    switch(texture){
+        case TEXTURE_SKY:
+            return &skytex;
+        break;
+        case TEXTURE_TERRAIN:
+            return &terraintex;
+        break;
+        case TEXTURE_SPRITES:
+            return &spritestex;
+        break;
+        case TEXTURE_LOGO:
+            return &logotex;
+        break;
+    }
 }
+
+void init_draw(){
+    Image skyteximg = LoadImageFromMemory(".png",image_sky,image_sky_length);
+    skytex = LoadTextureFromImage(skyteximg);
+    Image terrainteximg = LoadImageFromMemory(".png",image_terrain,image_terrain_length);
+    terraintex = LoadTextureFromImage(terrainteximg);
+    Image spritesteximg = LoadImageFromMemory(".png",image_sprites,image_sprites_length);
+    spritestex = LoadTextureFromImage(spritesteximg);
+    Image logoteximg = LoadImageFromMemory(".png",image_logo,image_logo_length);
+    logotex = LoadTextureFromImage(logoteximg);
+    bbuf = LoadRenderTexture(RENDER_WIDTH,RENDER_HEIGHT);
+};
+
 void deinit_draw(){
     UnloadTexture(bbuf.texture);
+    UnloadTexture(skytex);
+    UnloadTexture(logotex);
+    UnloadTexture(terraintex);
+    UnloadTexture(spritestex);
 }
 
 void draw_game(Scene *scene){

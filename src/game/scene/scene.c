@@ -5,6 +5,7 @@
 #include "../camera/camera.h"
 #include "../hero/hero.h"
 #include "../input/input.h"
+#include "../draw/draw.h"
 #include <stdio.h>
 #include <math.h>
 
@@ -13,7 +14,6 @@ static Vector2 LOGO_OFFSET = {
     .y=20,
 };
 Scene *current_scene;
-Texture2D skytex,logotex;
 Rectangle render_bounds = {
     .x=0,
     .y=0,
@@ -21,12 +21,6 @@ Rectangle render_bounds = {
     .height=RENDER_HEIGHT,
 };
 
-void init_menu(){
-    Image skyteximg = LoadImageFromMemory(".png",image_sky,image_sky_length);
-    skytex = LoadTextureFromImage(skyteximg);
-    Image logoteximg = LoadImageFromMemory(".png",image_logo,image_logo_length);
-    logotex = LoadTextureFromImage(logoteximg);
-};
 
 void set_scene(Scene *scene){
     current_scene = scene;
@@ -61,8 +55,10 @@ void run_scene_menu(Scene *scene){
     FrameTimer *timer = get_frame_timer();
     Rectangle sky_clip=render_bounds;
     sky_clip.x=25*GetTime();
-    DrawTexturePro(skytex,sky_clip,render_bounds,VEC_ZERO,0,WHITE);
-    DrawTextureEx(logotex,LOGO_OFFSET,0,4,WHITE);
+    Texture2D *skytex = get_texture(TEXTURE_SKY);
+    Texture2D *logotex = get_texture(TEXTURE_LOGO);
+    DrawTexturePro(*skytex,sky_clip,render_bounds,VEC_ZERO,0,WHITE);
+    DrawTextureEx(*logotex,LOGO_OFFSET,0,4,WHITE);
     float time = GetTime();
     if(time - floor(time) < 0.8){
        DrawText("Press anything!",230,250,24,PURPLE);
@@ -86,7 +82,8 @@ void run_scene_game(Scene *scene){
     // draw
     Rectangle sky_clip=render_bounds;
     sky_clip.x=25*GetTime();
-    DrawTexturePro(skytex,sky_clip,render_bounds,VEC_ZERO,0,WHITE);
+    Texture2D *skytex = get_texture(TEXTURE_SKY);
+    DrawTexturePro(*skytex,sky_clip,render_bounds,VEC_ZERO,0,WHITE);
     // BeginMode2D(*camera);
         draw_scene_game(scene);
     // EndMode2D();
