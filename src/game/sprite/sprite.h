@@ -5,29 +5,25 @@
 
 // duration - length of each frame of the animation, in secs
 // 0 for static (no movement)
-typedef struct SpriteAnimation{
-    const Rectangle *frames;
-    int framesc;
-    float time,duration;
-}SpriteAnimation;
+// typedef struct SpriteAnimation{
+//     const Rectangle *frames;
+//     int framesc;
+//     float time,duration;
+// }SpriteAnimation;
 
-// map state int to different animations
-typedef struct SpriteMap{
-    SpriteAnimation animations[2];
-    int animationc;
-}SpriteMap;
 
-// state_time: how long since the state last changed, in seconds
 typedef struct Sprite{
     Texture2D texture;
-    Rectangle destination;
-    int state,xtransform;
-    const SpriteMap *sprite_map;
+    int state,xtransform,framesc;
+    float frate;
+    Rectangle (*get_animation_frame)(int state, float state_time);
 }Sprite;
 
 
-void draw_sprite(Sprite *sprite,float state_time);
-// void move_sprite(Vector2 position);
-int animation_frame(SpriteAnimation *anim,float time);
+// given a sprite object and how long it's been in its current state,
+// area of the sprite texture do we clip to draw this frame?
+// Rectangle animation_frame(Sprite *sprite,float time);
+void draw_sprite(Sprite *sprite,Rectangle dest,float state_time);
+int get_animation_frame(float animtime, float rate,int framec);
 
 #endif
