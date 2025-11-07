@@ -25,7 +25,7 @@ extern const struct map_poi {
 } map_poiv[];
 extern const int map_poic;
 
-// Verbatim data tiles. PNG or mp3 or whatever, for shovelling into Raylib's decoders.
+// Verbatim data files. PNG or mp3 or whatever, for shovelling into Raylib's decoders.
 extern const unsigned char image_sky[];
 extern const int           image_sky_length;
 extern const unsigned char image_terrain[];
@@ -34,6 +34,18 @@ extern const unsigned char image_sprites[];
 extern const int           image_sprites_length;
 extern const unsigned char image_logo[];
 extern const int           image_logo_length;
+
+// Background images:
+extern const unsigned char image_orbis_fixe[]; // Me first, motionless
+extern const int           image_orbis_fixe_length;
+extern const unsigned char image_clouds1[]; // Slowest
+extern const int           image_clouds1_length;
+extern const unsigned char image_clouds2[]; // Mediumest
+extern const int           image_clouds2_length;
+extern const unsigned char image_clouds3[]; // Fastest
+extern const int           image_clouds3_length;
+extern const unsigned char image_bgover[]; // Me last, motionless
+extern const int           image_bgover_length;
 
 // Symbols for map_poiv.
 #define CMD_SPRITE 1
