@@ -84,7 +84,9 @@ void run_scene_game(Scene *scene){
     //...
 
     // draw
-    DrawTexturePro(skytex,render_bounds,render_bounds,VEC_ZERO,0,WHITE);
+    Rectangle sky_clip=render_bounds;
+    sky_clip.x=25*GetTime();
+    DrawTexturePro(skytex,sky_clip,render_bounds,VEC_ZERO,0,WHITE);
     // BeginMode2D(*camera);
         draw_scene_game(scene);
     // EndMode2D();
