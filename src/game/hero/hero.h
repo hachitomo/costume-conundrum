@@ -25,7 +25,7 @@ Rectangle hero_bbox(Hero *hero);
 // SpriteAnimation *get_hero_animations();
 
 static const int HERO_WIDTH = 17;
-static const int HERO_HEIGHT = 37;
+static const int HERO_HEIGHT = 27;
 static const int STATE_IDLE = 0;
 static const int STATE_WALK = 1;
 static const int STATE_JUMP = 2;

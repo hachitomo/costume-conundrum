@@ -51,13 +51,27 @@ Scene *get_current_scene(void){
     return current_scene;
 }
 
+static int TEMP_framec=0;
+
+static void draw_sky_layer(int texid,int speed) {
+    int dstx = -((speed * TEMP_framec) % RENDER_WIDTH);
+    Texture2D *texture = get_texture(texid);
+    DrawTexture(*texture,dstx,0,WHITE);
+    if (dstx) DrawTexture(*texture,dstx+RENDER_WIDTH,0,WHITE);
+}
+
 void run_scene_menu(Scene *scene){
     FrameTimer *timer = get_frame_timer();
-    Rectangle sky_clip=render_bounds;
-    sky_clip.x=25*GetTime();
-    Texture2D *skytex = get_texture(TEXTURE_SKY);
     Texture2D *logotex = get_texture(TEXTURE_LOGO);
-    DrawTexturePro(*skytex,sky_clip,render_bounds,VEC_ZERO,0,WHITE);
+    
+    // sky
+    TEMP_framec++;
+    draw_sky_layer(TEXTURE_ORBIS_FIXE,0);
+    draw_sky_layer(TEXTURE_CLOUDS1,1);
+    draw_sky_layer(TEXTURE_CLOUDS2,2);
+    draw_sky_layer(TEXTURE_CLOUDS3,3);
+    draw_sky_layer(TEXTURE_BGOVER,0);
+    
     DrawTextureEx(*logotex,LOGO_OFFSET,0,2,WHITE);
     float time = GetTime();
     if(time - floor(time) < 0.8){
@@ -78,12 +92,16 @@ void run_scene_game(Scene *scene){
     // update camera 
     Camera2D* camera = get_camera();
     //...
+    
+    // sky
+    TEMP_framec++;
+    draw_sky_layer(TEXTURE_ORBIS_FIXE,0);
+    draw_sky_layer(TEXTURE_CLOUDS1,1);
+    draw_sky_layer(TEXTURE_CLOUDS2,2);
+    draw_sky_layer(TEXTURE_CLOUDS3,3);
+    draw_sky_layer(TEXTURE_BGOVER,0);
 
     // draw
-    Rectangle sky_clip=render_bounds;
-    sky_clip.x=25*GetTime();
-    Texture2D *skytex = get_texture(TEXTURE_SKY);
-    DrawTexturePro(*skytex,sky_clip,render_bounds,VEC_ZERO,0,WHITE);
     // BeginMode2D(*camera);
         draw_scene_game(scene);
     // EndMode2D();

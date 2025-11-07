@@ -28,13 +28,11 @@ Rectangle output_rec = {
     .height=-RENDER_HEIGHT*2,
 };
 
-Texture2D skytex,logotex,terraintex,spritestex;
+Texture2D logotex,terraintex,spritestex;
+Texture2D orbis_fixetex,clouds1tex,clouds2tex,clouds3tex,bgovertex;
 
 Texture2D *get_texture(int texture){
     switch(texture){
-        case TEXTURE_SKY:
-            return &skytex;
-        break;
         case TEXTURE_TERRAIN:
             return &terraintex;
         break;
@@ -44,27 +42,50 @@ Texture2D *get_texture(int texture){
         case TEXTURE_LOGO:
             return &logotex;
         break;
+        case TEXTURE_ORBIS_FIXE:
+            return &orbis_fixetex;
+        break;
+        case TEXTURE_CLOUDS1:
+            return &clouds1tex;
+        break;
+        case TEXTURE_CLOUDS2:
+            return &clouds2tex;
+        break;
+        case TEXTURE_CLOUDS3:
+            return &clouds3tex;
+        break;
+        case TEXTURE_BGOVER:
+            return &bgovertex;
+        break;
     }
 }
 
 void init_draw(){
-    Image skyteximg = LoadImageFromMemory(".png",image_sky,image_sky_length);
-    skytex = LoadTextureFromImage(skyteximg);
-    Image terrainteximg = LoadImageFromMemory(".png",image_terrain,image_terrain_length);
-    terraintex = LoadTextureFromImage(terrainteximg);
-    Image spritesteximg = LoadImageFromMemory(".png",image_sprites,image_sprites_length);
-    spritestex = LoadTextureFromImage(spritesteximg);
-    Image logoteximg = LoadImageFromMemory(".png",image_logo,image_logo_length);
-    logotex = LoadTextureFromImage(logoteximg);
+    #define LOADIMG(tag) \
+      Image tag##img = LoadImageFromMemory(".png",image_##tag,image_##tag##_length); \
+      tag##tex = LoadTextureFromImage(tag##img);
+    LOADIMG(terrain)
+    LOADIMG(sprites)
+    LOADIMG(logo)
+    LOADIMG(orbis_fixe)
+    LOADIMG(clouds1)
+    LOADIMG(clouds2)
+    LOADIMG(clouds3)
+    LOADIMG(bgover)
+    #undef LOADIMG
     bbuf = LoadRenderTexture(RENDER_WIDTH,RENDER_HEIGHT);
 };
 
 void deinit_draw(){
     UnloadTexture(bbuf.texture);
-    UnloadTexture(skytex);
     UnloadTexture(logotex);
     UnloadTexture(terraintex);
     UnloadTexture(spritestex);
+    UnloadTexture(orbis_fixetex);
+    UnloadTexture(clouds1tex);
+    UnloadTexture(clouds2tex);
+    UnloadTexture(clouds3tex);
+    UnloadTexture(bgovertex);
 }
 
 void draw_game(Scene *scene){
