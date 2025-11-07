@@ -226,11 +226,11 @@ void set_hero_state(int state){
 void update_hero(Hero *hero, Scene *scene, Inputs inputs){
     FrameTimer *ftimer = get_frame_timer();
     if(inputs.left && !inputs.right){
-        hero->velocity.x = -125;
+        hero->velocity.x = -75;
         hero->xtransform = -1;
         set_hero_state(STATE_WALK);
     }else if(!inputs.left && inputs.right){
-        hero->velocity.x = 125;
+        hero->velocity.x = 75;
         hero->xtransform = 1;
         set_hero_state(STATE_WALK);
     }else{
@@ -238,16 +238,16 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
         set_hero_state(STATE_IDLE);
     }
     
-    if(hero->position.y >=200){
+    if(hero->position.y >=100){
         if(inputs.up){
-            hero->velocity.y = -250;
+            hero->velocity.y = -125;
             set_hero_state(STATE_JUMP);
         }else{
             hero->velocity.y = 0;
-            hero->position.y = 200;
+            hero->position.y = 100;
         }
-    }else if(hero->position.y < 200){
-        hero->velocity.y += 8;
+    }else if(hero->position.y < 100){
+        hero->velocity.y += 4;
         if(hero->velocity.y > 0){
             set_hero_state(STATE_FALL);
         }else{
@@ -263,8 +263,8 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
     if(hero->position.x <=8){
         hero->position.x = 8;
     }
-    if(hero->position.x >=600){
-        hero->position.x = 600;
+    if(hero->position.x >=312){
+        hero->position.x = 312;
     }
 
     if(hero->just_updated==0){

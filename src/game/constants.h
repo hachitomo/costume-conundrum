@@ -1,8 +1,8 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#define RENDER_HEIGHT 360
-#define RENDER_WIDTH 640
+#define RENDER_HEIGHT 180
+#define RENDER_WIDTH 360
 #define LOG_LEVEL LOG_WARNING
 #define TARGET_FPS 60
 

@@ -21,6 +21,12 @@ Rectangle buffer_rec = {
     .width=RENDER_WIDTH,
     .height=-RENDER_HEIGHT,
 };
+Rectangle output_rec = {
+    .x=0,
+    .y=0,
+    .width=RENDER_WIDTH*2,
+    .height=-RENDER_HEIGHT*2,
+};
 
 Texture2D skytex,logotex,terraintex,spritestex;
 
@@ -73,6 +79,6 @@ void draw_game(Scene *scene){
 
     // bbuf -> screen
     BeginDrawing();
-        DrawTexturePro(bbuf.texture,buffer_rec,buffer_rec,screen_origin,0,WHITE);
+        DrawTexturePro(bbuf.texture,buffer_rec,output_rec,screen_origin,0,WHITE);
     EndDrawing();
 }

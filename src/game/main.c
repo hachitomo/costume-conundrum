@@ -17,7 +17,7 @@
 int main(void)
 {
     SetTraceLogLevel(LOG_LEVEL);
-    InitWindow(RENDER_WIDTH, RENDER_HEIGHT, "Costume Conundrum");
+    InitWindow(RENDER_WIDTH*2, RENDER_HEIGHT*2, "Costume Conundrum");
     set_scene(&SCENE_MENU);
 
     init_draw();

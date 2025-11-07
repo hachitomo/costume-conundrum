@@ -10,8 +10,8 @@
 #include <math.h>
 
 static Vector2 LOGO_OFFSET = {
-    .x=88,
-    .y=20,
+    .x=44,
+    .y=10,
 };
 Scene *current_scene;
 Rectangle render_bounds = {
@@ -58,10 +58,10 @@ void run_scene_menu(Scene *scene){
     Texture2D *skytex = get_texture(TEXTURE_SKY);
     Texture2D *logotex = get_texture(TEXTURE_LOGO);
     DrawTexturePro(*skytex,sky_clip,render_bounds,VEC_ZERO,0,WHITE);
-    DrawTextureEx(*logotex,LOGO_OFFSET,0,4,WHITE);
+    DrawTextureEx(*logotex,LOGO_OFFSET,0,2,WHITE);
     float time = GetTime();
     if(time - floor(time) < 0.8){
-       DrawText("Press anything!",230,250,24,PURPLE);
+       DrawText("Press anything!",115,125,24,PURPLE);
     }
     Inputs inputs = get_inputs();
     if(inputs.left|inputs.down|inputs.right|inputs.up|inputs.interact){
