@@ -56,7 +56,7 @@ GAME_WASMCFILES:=$(filter src/game/%.c src/data/%.c,$(SRCFILES))
 WASM_EXE:=out/costume-conundrum.html
 WASM_LIBA:=libwasm/libraylib.a
 $(WASM_EXE):$(GAME_WASMCFILES);$(PRECMD) emcc -o$@ $^ -Os -Wall $(WASM_LIBA) -Isrc -Iinclude -L lib -lraylib -s USE_GLFW=3 --shell-file src/minshell.html -DPLATFORM_WEB
-web:$(out/favicon.ico)
+web:out/favicon.ico
 web:$(WASM_EXE)
 
 clean:;rm -rf mid out $(DATA_FILES_C)
