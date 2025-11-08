@@ -34,6 +34,8 @@ extern const unsigned char image_sprites[];
 extern const int           image_sprites_length;
 extern const unsigned char image_logo[];
 extern const int           image_logo_length;
+extern const unsigned char image_font[]; // 16x6 glyphs of 8x12 each, first glyph is U+20
+extern const int           image_font_length;
 
 // Background images:
 extern const unsigned char image_orbis_fixe[]; // Me first, motionless
