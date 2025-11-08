@@ -6,6 +6,7 @@ PRECMD=echo "  $@" ; mkdir -p $(@D) ;
 EGG_SDK:=../egg2
 
 SRCFILES:=$(shell find src -type f)
+out/favicon.ico:etc/favicon.ico;$(PRECMD) cp $< $@
 
 edit:;$(EGG_SDK)/out/eggdev serve --htdocs=/data:src/data --htdocs=EGG_SDK/src/web --htdocs=EGG_SDK/src/editor --writeable=src/data --project=.
 
@@ -54,7 +55,8 @@ endif
 GAME_WASMCFILES:=$(filter src/game/%.c src/data/%.c,$(SRCFILES))
 WASM_EXE:=out/costume-conundrum.html
 WASM_LIBA:=libwasm/libraylib.a
-$(WASM_EXE):$(GAME_WASMCFILES);$(PRECMD) emcc -o$@ $^ -Os -Wall $(WASM_LIBA) -Isrc -Iinclude -L lib -lraylib -s USE_GLFW=3 --shell-file ../raylib/src/minshell.html -DPLATFORM_WEB
+$(WASM_EXE):$(GAME_WASMCFILES);$(PRECMD) emcc -o$@ $^ -Os -Wall $(WASM_LIBA) -Isrc -Iinclude -L lib -lraylib -s USE_GLFW=3 --shell-file src/minshell.html -DPLATFORM_WEB
+web:$(out/favicon.ico)
 web:$(WASM_EXE)
 
 clean:;rm -rf mid out $(DATA_FILES_C)
