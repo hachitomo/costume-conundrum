@@ -63,5 +63,9 @@
 #define NS_decal_ghost_query 45
 #define NS_decal_princess_query 46
 #define NS_decal_pumpkin_query 47
+#define NS_decal_lightbear_dig1 48
+#define NS_decal_lightbear_dig2 49
+#define NS_decal_lightbear_eat1 50
+#define NS_decal_lightbear_eat2 51
 
 #endif

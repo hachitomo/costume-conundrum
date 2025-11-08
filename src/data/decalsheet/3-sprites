@@ -45,3 +45,7 @@ ghost_wrong 1 57 24 29
 ghost_query 151 57 24 29
 princess_query 103 87 16 28
 pumpkin_query 116 122 22 31
+lightbear_dig1 120 87 11 18
+lightbear_dig2 132 87 11 18
+lightbear_eat1 144 87 11 18
+lightbear_eat2 156 87 11 18
