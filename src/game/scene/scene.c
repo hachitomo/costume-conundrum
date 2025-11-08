@@ -11,7 +11,7 @@
 
 Color SKYCOLOR = { 42, 60, 91, 255 };
 static Vector2 LOGO_OFFSET = {
-    .x=44,
+    .x=32,
     .y=10,
 };
 static Vector2 PROMPT_OFFSET = {.x=115,.y=125};
@@ -73,7 +73,7 @@ void run_scene_menu(Scene *scene){
     draw_sky_layer(TEXTURE_CLOUDS3,3,timer->total);
     draw_sky_layer(TEXTURE_BGOVER,0,timer->total);
     
-    DrawTextureEx(*logotex,LOGO_OFFSET,0,2,WHITE);
+    DrawTextureEx(*logotex,LOGO_OFFSET,0,1,WHITE);
     Font font = get_font();
     float time = GetTime();
 
