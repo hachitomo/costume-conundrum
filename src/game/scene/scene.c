@@ -1,4 +1,5 @@
 #include "scene.h"
+#include "rlgl.h"
 #include "../constants.h"
 #include "../data.h"
 #include "../frame_timer.h"
@@ -100,12 +101,14 @@ void run_scene_game(Scene *scene){
     
     // sky
     ClearBackground(WHITE);
-    draw_sky_layer(TEXTURE_ORBIS_FIXE,0,timer->total);
-    draw_sky_layer(TEXTURE_CLOUDS1,1,timer->total);
-    draw_sky_layer(TEXTURE_CLOUDS2,2,timer->total);
-    draw_sky_layer(TEXTURE_CLOUDS3,3,timer->total);
-    draw_sky_layer(TEXTURE_BGOVER,0,timer->total);
-
+    BeginBlendMode(BLEND_CUSTOM_SEPARATE);
+    rlSetBlendFactorsSeparate(0x0302, 0x0303, 1, 0x0303, 0x8006, 0x8006);
+        draw_sky_layer(TEXTURE_ORBIS_FIXE,0,timer->total);
+        draw_sky_layer(TEXTURE_CLOUDS1,1,timer->total);
+        draw_sky_layer(TEXTURE_CLOUDS2,2,timer->total);
+        draw_sky_layer(TEXTURE_CLOUDS3,3,timer->total);
+        draw_sky_layer(TEXTURE_BGOVER,0,timer->total);
+    EndBlendMode();
     // draw
     // BeginMode2D(*camera);
         draw_scene_game(scene);

@@ -28,7 +28,6 @@ Rectangle output_rec = {
     .height=-RENDER_HEIGHT*2,
 };
 
-// how many glyphs? why does font decalsheet seem like it has more than 99? hmmm
 Rectangle fontrecs[96];
 GlyphInfo fontglyphs[96];
 Texture2D logotex,terraintex,spritestex;
