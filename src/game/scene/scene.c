@@ -51,10 +51,9 @@ Scene *get_current_scene(void){
     return current_scene;
 }
 
-static int TEMP_framec=0;
-
-static void draw_sky_layer(int texid,int speed) {
-    int dstx = -((speed * TEMP_framec) % RENDER_WIDTH);
+static void draw_sky_layer(int texid,int speed,double now) {
+    const double base_speed = 12.0; // px/s for the slowest layer.
+    int dstx = -((int)(speed * now * base_speed) % RENDER_WIDTH);
     Texture2D *texture = get_texture(texid);
     DrawTexture(*texture,dstx,0,WHITE);
     if (dstx) DrawTexture(*texture,dstx+RENDER_WIDTH,0,WHITE);
@@ -65,12 +64,11 @@ void run_scene_menu(Scene *scene){
     Texture2D *logotex = get_texture(TEXTURE_LOGO);
     
     // sky
-    TEMP_framec++;
-    draw_sky_layer(TEXTURE_ORBIS_FIXE,0);
-    draw_sky_layer(TEXTURE_CLOUDS1,1);
-    draw_sky_layer(TEXTURE_CLOUDS2,2);
-    draw_sky_layer(TEXTURE_CLOUDS3,3);
-    draw_sky_layer(TEXTURE_BGOVER,0);
+    draw_sky_layer(TEXTURE_ORBIS_FIXE,0,timer->total);
+    draw_sky_layer(TEXTURE_CLOUDS1,1,timer->total);
+    draw_sky_layer(TEXTURE_CLOUDS2,2,timer->total);
+    draw_sky_layer(TEXTURE_CLOUDS3,3,timer->total);
+    draw_sky_layer(TEXTURE_BGOVER,0,timer->total);
     
     DrawTextureEx(*logotex,LOGO_OFFSET,0,2,WHITE);
     float time = GetTime();
@@ -84,6 +82,8 @@ void run_scene_menu(Scene *scene){
 }
 
 void run_scene_game(Scene *scene){
+    FrameTimer *timer = get_frame_timer();
+    
     // update
     Inputs inputs = get_inputs();
     Hero *hero = get_hero();
@@ -94,12 +94,11 @@ void run_scene_game(Scene *scene){
     //...
     
     // sky
-    TEMP_framec++;
-    draw_sky_layer(TEXTURE_ORBIS_FIXE,0);
-    draw_sky_layer(TEXTURE_CLOUDS1,1);
-    draw_sky_layer(TEXTURE_CLOUDS2,2);
-    draw_sky_layer(TEXTURE_CLOUDS3,3);
-    draw_sky_layer(TEXTURE_BGOVER,0);
+    draw_sky_layer(TEXTURE_ORBIS_FIXE,0,timer->total);
+    draw_sky_layer(TEXTURE_CLOUDS1,1,timer->total);
+    draw_sky_layer(TEXTURE_CLOUDS2,2,timer->total);
+    draw_sky_layer(TEXTURE_CLOUDS3,3,timer->total);
+    draw_sky_layer(TEXTURE_BGOVER,0,timer->total);
 
     // draw
     // BeginMode2D(*camera);

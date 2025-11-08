@@ -5,6 +5,7 @@
 FrameTimer frame_timer = {
     .frame_time=0.0,
     .global_exetime_sec=0,
+    .total=0.0,
 };
 
 FrameTimer *get_frame_timer(){
@@ -13,7 +14,8 @@ FrameTimer *get_frame_timer(){
 
 void update_frame_timer() {
     frame_timer.frame_time = GetFrameTime();
-    frame_timer.global_exetime_sec = GetTime();
+    frame_timer.total = GetTime();
+    frame_timer.global_exetime_sec = (long)frame_timer.total;
 }
 
 float elapsed(float since){

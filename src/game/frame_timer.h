@@ -8,6 +8,7 @@
 typedef struct FrameTimer{
     float frame_time;
     long global_exetime_sec;
+    double total; // Same as global_exetime_sec but the whole thing.
 }FrameTimer;
 
 FrameTimer *get_frame_timer();
