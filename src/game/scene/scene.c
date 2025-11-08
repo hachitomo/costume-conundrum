@@ -10,7 +10,7 @@
 #include <math.h>
 
 static Vector2 LOGO_OFFSET = {
-    .x=44,
+    .x=32,
     .y=10,
 };
 Scene *current_scene;
@@ -70,7 +70,7 @@ void run_scene_menu(Scene *scene){
     draw_sky_layer(TEXTURE_CLOUDS3,3,timer->total);
     draw_sky_layer(TEXTURE_BGOVER,0,timer->total);
     
-    DrawTextureEx(*logotex,LOGO_OFFSET,0,2,WHITE);
+    DrawTextureEx(*logotex,LOGO_OFFSET,0,1,WHITE);
     float time = GetTime();
     if(time - floor(time) < 0.8){
        DrawText("Press anything!",115,125,24,PURPLE);
