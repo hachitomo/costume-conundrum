@@ -105,7 +105,7 @@ void init_draw(){
 };
 
 void load_font_from_decalsheet(){
-    for(int i=0;i<100;i++){
+    for(int i=0;i<96;i++){
         Rectangle letter = {
             .x=decalsheet_font[i].x,
             .y=decalsheet_font[i].y,
