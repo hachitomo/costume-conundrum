@@ -8,7 +8,6 @@ RenderTexture2D _sprite_buf;
 int init = 1;
 
 void draw_sprite(Sprite *sprite,Rectangle dest,float state_time){
-    int state = sprite->state;
     Rectangle frame = sprite->get_animation_frame(sprite->state,state_time);
     frame.width *= sprite->xtransform;
     DrawTexturePro(sprite->texture,frame,dest,VEC_ZERO,0,WHITE);

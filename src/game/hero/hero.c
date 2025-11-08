@@ -300,6 +300,8 @@ Rectangle get_hero_frame(int state,float state_time){
         case 3:
             return fall_frames[frame];
     }
+    printf("Fallback - hero state not detected: %d]\nDisplaying idle.\n",state);
+    return idle_frames[0];
 }
 
 Rectangle hero_bbox(Hero *hero){

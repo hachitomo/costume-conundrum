@@ -21,8 +21,8 @@ void deinit_draw();
 // top-level control; called from main
 void draw_game(Scene *);
 Texture2D *get_texture(int texture);
+Font get_font(void);
+void load_font_from_decalsheet(void);
 
-// Raylib wrappers to draw to back buffer
-// int DrawToBuffer(void);
 
 #endif

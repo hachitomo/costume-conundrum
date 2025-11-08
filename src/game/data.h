@@ -9,6 +9,7 @@
 // It's irrelevant to us, but Egg enforces a 256-decal limit per image. We'll exploit that and make every decalsheet a fixed length.
 struct decal { int id,x,y,w,h; };
 extern const struct decal decalsheet_sprites[256];
+extern const struct decal decalsheet_font[256];
 
 // Length always 256. Contains physics values indexed by map tile value. 0=vacant, 1=solid, 2=oneway
 extern const unsigned char tilesheet_terrain[];
@@ -48,6 +49,11 @@ extern const unsigned char image_clouds3[]; // Fastest
 extern const int           image_clouds3_length;
 extern const unsigned char image_bgover[]; // Me last, motionless
 extern const int           image_bgover_length;
+
+// error image to make visually debugging textures easier
+extern const unsigned char image_error[];
+extern const int           image_error_length;
+
 
 // Symbols for map_poiv.
 #define CMD_SPRITE 1

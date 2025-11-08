@@ -28,8 +28,20 @@ Rectangle output_rec = {
     .height=-RENDER_HEIGHT*2,
 };
 
+// how many glyphs? why does font decalsheet seem like it has more than 99? hmmm
+Rectangle fontrecs[96];
+GlyphInfo fontglyphs[96];
 Texture2D logotex,terraintex,spritestex;
-Texture2D orbis_fixetex,clouds1tex,clouds2tex,clouds3tex,bgovertex;
+Texture2D orbis_fixetex,clouds1tex,clouds2tex,clouds3tex,bgovertex,fonttex,errortex;
+
+int font_codepoints[96] = {
+    32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
+    48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63,
+    64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
+    80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 
+    96, 97, 98, 99, 100,101,102,103,104,105,106,107,108,109,110,111,
+    112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,0,
+};
 
 Texture2D *get_texture(int texture){
     switch(texture){
@@ -58,7 +70,20 @@ Texture2D *get_texture(int texture){
             return &bgovertex;
         break;
     }
+    return &errortex;
 }
+
+Font get_font(){
+    Font font = {
+        .baseSize=12,
+        .glyphCount=99,
+        .glyphPadding=0,
+        .texture=fonttex,
+        .recs=fontrecs,
+        .glyphs=fontglyphs,
+    };
+    return font;
+};
 
 void init_draw(){
     #define LOADIMG(tag) \
@@ -72,9 +97,31 @@ void init_draw(){
     LOADIMG(clouds2)
     LOADIMG(clouds3)
     LOADIMG(bgover)
+    LOADIMG(font)
+    LOADIMG(error)
     #undef LOADIMG
+    load_font_from_decalsheet();
     bbuf = LoadRenderTexture(RENDER_WIDTH,RENDER_HEIGHT);
 };
+
+void load_font_from_decalsheet(){
+    for(int i=0;i<100;i++){
+        Rectangle letter = {
+            .x=decalsheet_font[i].x,
+            .y=decalsheet_font[i].y,
+            .width=decalsheet_font[i].w,
+            .height=decalsheet_font[i].h,
+        };
+        fontrecs[i] = letter;
+        GlyphInfo glyph = {
+            .value=font_codepoints[i]-1,
+            .offsetX=0,
+            .offsetY=0,
+            .advanceX=0,
+        };
+        fontglyphs[i] = glyph;
+    }
+}
 
 void deinit_draw(){
     UnloadTexture(bbuf.texture);

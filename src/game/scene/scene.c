@@ -9,10 +9,12 @@
 #include <stdio.h>
 #include <math.h>
 
+Color SKYCOLOR = { 42, 60, 91, 255 };
 static Vector2 LOGO_OFFSET = {
     .x=44,
     .y=10,
 };
+static Vector2 PROMPT_OFFSET = {.x=115,.y=125};
 Scene *current_scene;
 Rectangle render_bounds = {
     .x=0,
@@ -31,19 +33,19 @@ void set_scene(Scene *scene){
 
 Scene SCENE_MENU = {
     .id=0,
-    .clearColor=ORANGE,
+    .clearColor=WHITE,
     .draw=run_scene_menu,
 };
 
 Scene SCENE_GAME = {
     .id=1,
-    .clearColor=ORANGE,
+    .clearColor=WHITE,
     .draw=run_scene_game,
 };
 
 Scene SCENE_END = {
     .id=2,
-    .clearColor=ORANGE,
+    .clearColor=WHITE,
     .draw=run_scene_end,
 };
 
@@ -52,7 +54,7 @@ Scene *get_current_scene(void){
 }
 
 static void draw_sky_layer(int texid,int speed,double now) {
-    const double base_speed = 12.0; // px/s for the slowest layer.
+    const double base_speed = 50.0; // px/s for the slowest layer.
     int dstx = -((int)(speed * now * base_speed) % RENDER_WIDTH);
     Texture2D *texture = get_texture(texid);
     DrawTexture(*texture,dstx,0,WHITE);
@@ -62,6 +64,7 @@ static void draw_sky_layer(int texid,int speed,double now) {
 void run_scene_menu(Scene *scene){
     FrameTimer *timer = get_frame_timer();
     Texture2D *logotex = get_texture(TEXTURE_LOGO);
+    ClearBackground(WHITE);
     
     // sky
     draw_sky_layer(TEXTURE_ORBIS_FIXE,0,timer->total);
@@ -71,9 +74,11 @@ void run_scene_menu(Scene *scene){
     draw_sky_layer(TEXTURE_BGOVER,0,timer->total);
     
     DrawTextureEx(*logotex,LOGO_OFFSET,0,2,WHITE);
+    Font font = get_font();
     float time = GetTime();
+
     if(time - floor(time) < 0.8){
-       DrawText("Press anything!",115,125,24,PURPLE);
+       DrawTextEx(font,"Press anything!",PROMPT_OFFSET,18,1,PURPLE);
     }
     Inputs inputs = get_inputs();
     if(inputs.left|inputs.down|inputs.right|inputs.up|inputs.interact){
@@ -90,10 +95,11 @@ void run_scene_game(Scene *scene){
     update_hero(hero,scene,inputs);
 
     // update camera 
-    Camera2D* camera = get_camera();
+    // Camera2D* camera = get_camera();
     //...
     
     // sky
+    ClearBackground(WHITE);
     draw_sky_layer(TEXTURE_ORBIS_FIXE,0,timer->total);
     draw_sky_layer(TEXTURE_CLOUDS1,1,timer->total);
     draw_sky_layer(TEXTURE_CLOUDS2,2,timer->total);

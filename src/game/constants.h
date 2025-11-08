@@ -3,7 +3,7 @@
 
 #define RENDER_HEIGHT 180
 #define RENDER_WIDTH 320
-#define LOG_LEVEL LOG_WARNING
+#define LOG_LEVEL LOG_DEBUG
 #define TARGET_FPS 60
 
 // Gen. purpose use for when a Vec2 param is required
