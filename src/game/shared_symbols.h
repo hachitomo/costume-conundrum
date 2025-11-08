@@ -61,5 +61,8 @@
 #define NS_decal_clown_walk4 42
 #define NS_decal_dot_jump2 43
 #define NS_decal_dot_fall2 44
+#define NS_decal_ghost_query 45
+#define NS_decal_princess_query 46
+#define NS_decal_pumpkin_query 47
 
 #endif
