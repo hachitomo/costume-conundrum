@@ -10,7 +10,6 @@
 /* Background color for map editor.
  * At runtime, it's image:sky. This color is selected from about the middle of that pic.
  */
-#define NS_sys_bgcolor_old 0x374456
 #define NS_sys_bgcolor 0x4e6d8e
 
 #define EGGDEV_ignoreData "*.c,*.bak"

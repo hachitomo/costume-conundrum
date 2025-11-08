@@ -15,6 +15,13 @@ extern struct dicer {
   const char *dstpath;
   char objname[64];
   int objnamec;
+  
+  struct sym {
+    char *k;
+    int kc,v;
+  } *symv;
+  int symc,syma;
+  int sym_loaded;
 } dicer;
 
 /* Compilers will typically produce binary data and return zero.
@@ -26,5 +33,10 @@ int dicer_compile_decalsheet(struct sr_encoder *dst,const void *src,int srcc);
 int dicer_compile_map(struct sr_encoder *dst,const void *src,int srcc);
 
 int dicer_to_c(struct sr_encoder *dst,const void *src,int srcc);
+
+/* Look up any integer from shared_symbols.h
+ * Integer values only.
+ */
+int sym_get(int *v,const char *pfx,int pfxc,const char *k,int kc);
 
 #endif

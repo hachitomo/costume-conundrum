@@ -15,6 +15,13 @@ int dicer_compile_decalsheet(struct sr_encoder *dst,const void *src,int srcc) {
     
     // Every line that isn't blank or comment is: ID X Y W H [EXTRA...]
     int linep=0,id,x,y,w,h;
+    const char *idsrc=line+linep;
+    int idsrcc=0;
+    while ((linep<linec)&&((unsigned char)line[linep++]>0x20)) idsrcc++;
+    if (sym_get(&id,"NS_decal_",9,idsrc,idsrcc)<0) {
+      fprintf(stderr,"%s:%d: Expected integer or 'NS_decal_' symbol, found '%.*s'\n",dicer.srcpath,lineno,idsrcc,idsrc);
+      return -2;
+    }
     #define INTTOKEN(name) { \
       while ((linep<linec)&&((unsigned char)line[linep]<=0x20)) linep++; \
       const char *token=line+linep; \
@@ -25,7 +32,6 @@ int dicer_compile_decalsheet(struct sr_encoder *dst,const void *src,int srcc) {
         return -2; \
       } \
     }
-    INTTOKEN(id)
     INTTOKEN(x)
     INTTOKEN(y)
     INTTOKEN(w)
