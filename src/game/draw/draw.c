@@ -75,7 +75,7 @@ Texture2D *get_texture(int texture){
 Font get_font(){
     Font font = {
         .baseSize=12,
-        .glyphCount=99,
+        .glyphCount=96,
         .glyphPadding=0,
         .texture=fonttex,
         .recs=fontrecs,

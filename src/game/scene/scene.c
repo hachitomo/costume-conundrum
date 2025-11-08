@@ -79,7 +79,7 @@ void run_scene_menu(Scene *scene){
     float time = GetTime();
 
     if(time - floor(time) < 0.8){
-       DrawTextEx(font,"Press anything!",PROMPT_OFFSET,18,1,PURPLE);
+       DrawTextEx(font,"Press anything!",PROMPT_OFFSET,12,1,PURPLE);
     }
     Inputs inputs = get_inputs();
     if(inputs.left|inputs.down|inputs.right|inputs.up|inputs.interact){
