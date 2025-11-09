@@ -9,12 +9,12 @@
 #include "../sprite/sprite.h"
 #include <stdio.h>
 
-Sprite _hero_sprite = {0};
+Sprite hero_sprite = {0};
 Image hero_img;
 Texture2D hero_tex;
 float HERO_ANIM_RATE = 0.125;
 
-Hero _hero = {
+Hero hero = {
     .position=GAME_START_POS,
     .velocity=VEC_ZERO,
     .state=STATE_IDLE,
@@ -200,28 +200,28 @@ Rectangle fall_frames[]={
 
 void init_hero(void){
     hero_img = LoadImageFromMemory(".png",image_sprites,image_sprites_length);
-    _hero_sprite.texture = LoadTextureFromImage(hero_img);
-    _hero_sprite.get_animation_frame = get_hero_frame;
-    _hero_sprite.xtransform=1;
-    _hero.sprite=_hero_sprite;
+    hero_sprite.texture = LoadTextureFromImage(hero_img);
+    hero_sprite.get_animation_frame = get_hero_frame;
+    hero_sprite.xtransform=1;
+    hero.sprite=hero_sprite;
 };
 
 void deinit_hero(void){
-    UnloadTexture(_hero_sprite.texture);
+    UnloadTexture(hero_sprite.texture);
 };
 
 Hero *get_hero(void){
-    return &_hero;
+    return &hero;
 }
 
 void set_hero_state(int state){
-    if(_hero.state == state){
-        _hero.just_updated = 1;
+    if(hero.state == state){
+        hero.just_updated = 1;
         return;
     }
-    _hero.state = state;
-    _hero.state_time = 0.0;
-    _hero.just_updated = 0;
+    hero.state = state;
+    hero.state_time = 0.0;
+    hero.just_updated = 0;
 }
 
 void update_hero(Hero *hero, Scene *scene, Inputs inputs){

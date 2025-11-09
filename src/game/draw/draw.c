@@ -42,34 +42,34 @@ int font_codepoints[96] = {
     112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,0,
 };
 
-Texture2D *get_texture(int texture){
+Texture2D get_texture(int texture){
     switch(texture){
         case TEXTURE_TERRAIN:
-            return &terraintex;
+            return terraintex;
         break;
         case TEXTURE_SPRITES:
-            return &spritestex;
+            return spritestex;
         break;
         case TEXTURE_LOGO:
-            return &logotex;
+            return logotex;
         break;
         case TEXTURE_ORBIS_FIXE:
-            return &orbis_fixetex;
+            return orbis_fixetex;
         break;
         case TEXTURE_CLOUDS1:
-            return &clouds1tex;
+            return clouds1tex;
         break;
         case TEXTURE_CLOUDS2:
-            return &clouds2tex;
+            return clouds2tex;
         break;
         case TEXTURE_CLOUDS3:
-            return &clouds3tex;
+            return clouds3tex;
         break;
         case TEXTURE_BGOVER:
-            return &bgovertex;
+            return bgovertex;
         break;
     }
-    return &errortex;
+    return errortex;
 }
 
 Font get_font(){

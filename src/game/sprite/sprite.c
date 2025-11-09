@@ -4,7 +4,7 @@
 #include <math.h>
 #include <stdio.h>
 
-RenderTexture2D _sprite_buf;
+RenderTexture2D sprite_buf;
 int init = 1;
 
 void draw_sprite(Sprite *sprite,Rectangle dest,float state_time){

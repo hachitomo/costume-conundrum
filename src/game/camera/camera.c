@@ -2,32 +2,32 @@
 #include "camera.h"
 #include "../constants.h"
 
-Camera2D _camera;
-Vector2 _transition_target;
-float _transition_duration;
+Camera2D camera;
+Vector2 transition_target;
+float transition_duration;
 
 void init_camera(){
-    _camera.target=VEC_ZERO;
-    _camera.offset.x=RENDER_WIDTH*0.5f;
-    _camera.offset.y=RENDER_HEIGHT*0.5f;
-    _camera.rotation=0.0f;
-    _camera.zoom=1.0f;
+    camera.target=VEC_ZERO;
+    camera.offset.x=RENDER_WIDTH*0.5f;
+    camera.offset.y=RENDER_HEIGHT*0.5f;
+    camera.rotation=0.0f;
+    camera.zoom=1.0f;
 }
 
 Camera2D* get_camera(void){
-    return &_camera;
+    return &camera;
 };
 
 void camera_set_target(Vector2 target){
-    _camera.target = target;
+    camera.target = target;
 };
 
 void camera_set_offset(Vector2 offset){
-    _camera.offset = offset;
+    camera.offset = offset;
 };
 
 // begins a transition. interrupts any current transition
 void camera_transition_offset(Vector2 offset,float duration_sec){
-    _transition_target = offset;
-    _transition_duration = duration_sec;
+    transition_target = offset;
+    transition_duration = duration_sec;
 }

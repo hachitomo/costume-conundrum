@@ -58,9 +58,9 @@ Scene *get_current_scene(void){
 static void draw_sky_layer(int texid,int speed,double now) {
     const double base_speed = 50.0; // px/s for the slowest layer.
     int dstx = -((int)(speed * now * base_speed) % RENDER_WIDTH);
-    Texture2D *texture = get_texture(texid);
-    DrawTexture(*texture,dstx,0,WHITE);
-    if (dstx) DrawTexture(*texture,dstx+RENDER_WIDTH,0,WHITE);
+    Texture2D texture = get_texture(texid);
+    DrawTexture(texture,dstx,0,WHITE);
+    if (dstx) DrawTexture(texture,dstx+RENDER_WIDTH,0,WHITE);
 }
 
 void run_scene_menu(Scene *scene){
@@ -72,7 +72,7 @@ void run_scene_menu(Scene *scene){
     }
     UpdateMusicStream(menu_song);
     FrameTimer *timer = get_frame_timer();
-    Texture2D *logotex = get_texture(TEXTURE_LOGO);
+    Texture2D logotex = get_texture(TEXTURE_LOGO);
     ClearBackground(WHITE);
     
     // sky
@@ -82,7 +82,7 @@ void run_scene_menu(Scene *scene){
     draw_sky_layer(TEXTURE_CLOUDS3,3,timer->total);
     draw_sky_layer(TEXTURE_BGOVER,0,timer->total);
     
-    DrawTextureEx(*logotex,LOGO_OFFSET,0,1,WHITE);
+    DrawTextureEx(logotex,LOGO_OFFSET,0,1,WHITE);
     Font font = get_font();
     float time = GetTime();
 
@@ -140,4 +140,5 @@ void run_scene_end(Scene *scene){
 void draw_scene_game(Scene *scene){
     Hero *hero = get_hero();
     draw_hero(hero);
+    draw_map();
 }

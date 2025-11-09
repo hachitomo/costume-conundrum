@@ -3,11 +3,12 @@
 #define SCENE_H
 
 #include "raylib.h"
+#include "../map/map.h"
 
 typedef struct Scene{
-    int id;
+    int id, mapc;
     Color clearColor;
-    // Texture2D terrain;
+    Map *maps;
     void (*draw)(struct Scene*);
 }Scene;
 
@@ -15,9 +16,10 @@ extern Scene SCENE_MENU;
 extern Scene SCENE_GAME;
 extern Scene SCENE_END;
 
-void init_textures();
 void set_scene(Scene *scene);
 Scene *get_current_scene();
+
+
 
 void run_scene_menu(Scene *scene);
 void run_scene_game(Scene *scene);
