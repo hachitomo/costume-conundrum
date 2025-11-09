@@ -114,8 +114,8 @@ void run_scene_game(Scene *scene){
     update_hero(hero,scene,inputs);
 
     // update camera 
-    // Camera2D* camera = get_camera();
-    //...
+    Camera2D* camera = get_camera();
+    camera->target = hero->position;
     
     // sky
     ClearBackground(WHITE);
@@ -128,9 +128,9 @@ void run_scene_game(Scene *scene){
         draw_sky_layer(TEXTURE_BGOVER,0,timer->total);
     EndBlendMode();
     // draw
-    // BeginMode2D(*camera);
+    BeginMode2D(*camera);
         draw_scene_game(scene);
-    // EndMode2D();
+    EndMode2D();
 }
 
 void run_scene_end(Scene *scene){
@@ -138,7 +138,7 @@ void run_scene_end(Scene *scene){
 }
 
 void draw_scene_game(Scene *scene){
+    draw_map();
     Hero *hero = get_hero();
     draw_hero(hero);
-    draw_map();
 }

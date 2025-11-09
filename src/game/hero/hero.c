@@ -226,36 +226,49 @@ void set_hero_state(int state){
 
 void update_hero(Hero *hero, Scene *scene, Inputs inputs){
     FrameTimer *ftimer = get_frame_timer();
-    if(inputs.left && !inputs.right){
-        hero->velocity.x = -75;
+    hero->velocity.x=0;
+    hero->velocity.y=0;
+    if(inputs.left){
+        hero->velocity.x -= 75;
         hero->xtransform = -1;
         set_hero_state(STATE_WALK);
-    }else if(!inputs.left && inputs.right){
-        hero->velocity.x = 75;
+    }
+    if(inputs.right){
+        hero->velocity.x += 75;
         hero->xtransform = 1;
         set_hero_state(STATE_WALK);
-    }else{
+    }
+    if(inputs.up){
+        hero->velocity.y -= 75;
+        set_hero_state(STATE_WALK);
+    }
+    if(inputs.down){
+        hero->velocity.y += 75;
+        set_hero_state(STATE_WALK);
+    }
+    if(!inputs.up && !inputs.down && !inputs.left && !inputs.right){
         hero->velocity.x=0;
+        hero->velocity.y=0;
         set_hero_state(STATE_IDLE);
     }
     
-    if(hero->position.y >=100){
-        if(inputs.up){
-            hero->velocity.y = -125;
-            set_hero_state(STATE_JUMP);
-            PlaySound(get_sound(SOUND_BLIP));
-        }else{
-            hero->velocity.y = 0;
-            hero->position.y = 100;
-        }
-    }else if(hero->position.y < 100){
-        hero->velocity.y += 4;
-        if(hero->velocity.y > 0){
-            set_hero_state(STATE_FALL);
-        }else{
-            set_hero_state(STATE_JUMP);
-        }
-    }
+    // if(hero->position.y >=100){
+    //     if(inputs.up){
+    //         hero->velocity.y = -125;
+    //         set_hero_state(STATE_JUMP);
+    //         PlaySound(get_sound(SOUND_BLIP));
+    //     }else{
+    //         hero->velocity.y = 0;
+    //         hero->position.y = 100;
+    //     }
+    // }else if(hero->position.y < 100){
+    //     hero->velocity.y += 4;
+    //     if(hero->velocity.y > 0){
+    //         set_hero_state(STATE_FALL);
+    //     }else{
+    //         set_hero_state(STATE_JUMP);
+    //     }
+    // }
     
     hero->position.x += hero->velocity.x * ftimer->frame_time;
     hero->position.y += hero->velocity.y * ftimer->frame_time;
@@ -263,10 +276,16 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
     // temp. physics check here... nothing to collide with for now
     // except fake bounds at the edge of the creen
     if(hero->position.x <=8){
-        hero->position.x = 8;
+        hero->position.x=8;
     }
-    if(hero->position.x >=312){
-        hero->position.x = 312;
+    if(hero->position.x >=1264){
+        hero->position.x=1264;
+    }
+    if(hero->position.y <= 14){
+        hero->position.y=14;
+    }
+    if(hero->position.y >=464){
+        hero->position.y=464;
     }
 
     if(hero->just_updated==0){
