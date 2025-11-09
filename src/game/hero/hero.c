@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "hero.h"
 #include "../data.h"
+#include "../audio/audio.h"
 #include "../constants.h"
 #include "../frame_timer.h"
 #include "../input/input.h"
@@ -242,6 +243,7 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
         if(inputs.up){
             hero->velocity.y = -125;
             set_hero_state(STATE_JUMP);
+            PlaySound(get_sound(SOUND_BLIP));
         }else{
             hero->velocity.y = 0;
             hero->position.y = 100;

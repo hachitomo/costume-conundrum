@@ -54,6 +54,14 @@ extern const int           image_bgover_length;
 extern const unsigned char image_error[];
 extern const int           image_error_length;
 
+extern const unsigned char sound_blip[];
+extern const int           sound_blip_length;
+extern const unsigned char sound_boop[];
+extern const int           sound_boop_length;
+extern const unsigned char sound_arp[];
+extern const int           sound_arp_length;
+extern const unsigned char sound_fanfare[];
+extern const int           sound_fanfare_length;
 
 // Symbols for map_poiv.
 #define CMD_SPRITE 1

@@ -1,11 +1,12 @@
 #include "raylib.h"
 #include "data.h"
+#include "frame_timer.h"
 #include "main.h"
+#include "audio/audio.h"
 #include "draw/draw.h"
 #include "hero/hero.h"
-#include "scene/scene.h"
-#include "frame_timer.h"
 #include "input/input.h"
+#include "scene/scene.h"
 #include <stdio.h>
 
 #ifdef PLATFORM_WEB
@@ -20,6 +21,7 @@ int main(void)
     InitWindow(RENDER_WIDTH*2, RENDER_HEIGHT*2, "Costume Conundrum");
     set_scene(&SCENE_MENU);
 
+    init_audio();
     init_draw();
     init_hero();
 
@@ -34,6 +36,7 @@ int main(void)
         }
     #endif
 
+    deinit_audio();
     deinit_draw();
     CloseWindow();
 
