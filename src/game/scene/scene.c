@@ -3,6 +3,7 @@
 #include "../constants.h"
 #include "../data.h"
 #include "../frame_timer.h"
+#include "../audio/audio.h"
 #include "../camera/camera.h"
 #include "../hero/hero.h"
 #include "../input/input.h"
@@ -63,6 +64,13 @@ static void draw_sky_layer(int texid,int speed,double now) {
 }
 
 void run_scene_menu(Scene *scene){
+    Music menu_song = get_song(SONG_MENU);
+    bool playing = IsMusicStreamPlaying(menu_song);
+    bool valid = IsMusicValid(menu_song);
+    if(!playing){
+        PlayMusicStream(menu_song);
+    }
+    UpdateMusicStream(menu_song);
     FrameTimer *timer = get_frame_timer();
     Texture2D *logotex = get_texture(TEXTURE_LOGO);
     ClearBackground(WHITE);
@@ -81,13 +89,23 @@ void run_scene_menu(Scene *scene){
     if(time - floor(time) < 0.8){
        DrawTextEx(font,"Press anything!",PROMPT_OFFSET,12,1,PURPLE);
     }
+    char validtxt[30], playingtxt[30];
+    
     Inputs inputs = get_inputs();
     if(inputs.left|inputs.down|inputs.right|inputs.up|inputs.interact){
         set_scene(&SCENE_GAME);
+        StopMusicStream(menu_song);
     }
 }
 
 void run_scene_game(Scene *scene){
+    Music game_song = get_song(SONG_GAME);
+    bool playing = IsMusicStreamPlaying(game_song);
+    bool valid = IsMusicValid(game_song);
+    if(!playing){
+        PlayMusicStream(game_song);
+    }
+    UpdateMusicStream(game_song);
     FrameTimer *timer = get_frame_timer();
     
     // update

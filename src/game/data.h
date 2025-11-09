@@ -63,6 +63,13 @@ extern const int           sound_arp_length;
 extern const unsigned char sound_fanfare[];
 extern const int           sound_fanfare_length;
 
+extern const unsigned char song_menu[];
+extern const int           song_menu_length;
+extern const unsigned char song_game[];
+extern const int           song_game_length;
+extern const unsigned char song_ending[];
+extern const int           song_ending_length;
+
 // Symbols for map_poiv.
 #define CMD_SPRITE 1
 
