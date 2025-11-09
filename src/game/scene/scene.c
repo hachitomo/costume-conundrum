@@ -98,6 +98,14 @@ void run_scene_menu(Scene *scene){
     }
 }
 
+Vector2 intvector(Vector2 v){
+    Vector2 result = {
+        .x=(int)v.x,
+        .y=(int)v.y,
+    };
+    return result;
+}
+
 void run_scene_game(Scene *scene){
     Music game_song = get_song(SONG_GAME);
     bool playing = IsMusicStreamPlaying(game_song);
@@ -115,7 +123,7 @@ void run_scene_game(Scene *scene){
 
     // update camera 
     Camera2D* camera = get_camera();
-    camera->target = hero->position;
+    camera->target = intvector(hero->position);
     
     // sky
     ClearBackground(WHITE);
