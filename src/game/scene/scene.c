@@ -106,17 +106,18 @@ Vector2 intvector(Vector2 v){
 
 Vector2 clamp_camera(Vector2 target){
     Vector2 result = target;
-    float minscroll = RENDER_WIDTH*0.5;
+    float minscrollx = RENDER_WIDTH*0.5;
+    float minscrolly = RENDER_HEIGHT*0.5;
     float maxscrollx = (map_w*TILE_SIZE) - RENDER_WIDTH*0.5;
     float maxscrolly = (map_h*TILE_SIZE) - RENDER_HEIGHT*0.5;
-    if(target.x < minscroll){
-        result.x = minscroll;
+    if(target.x < minscrollx){
+        result.x = minscrollx;
     }
     if(target.x > maxscrollx){
         result.x = maxscrollx;
     }
-    if(target.y < minscroll){
-        result.y = minscroll;
+    if(target.y < minscrolly){
+        result.y = minscrolly;
     }
     if(target.y > maxscrolly){
         result.y = maxscrolly;
