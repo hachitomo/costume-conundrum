@@ -59,7 +59,7 @@ void draw_map(){
 }
 
 void draw_map_selection(Rectangle selection){
-    #define warn(param,value) printf("WARNING: clamping invalid selection selection.%s in draw_map_selection: %d",param,value);
+    #define warn(param,value) printf("WARNING: clamping invalid selection selection.%s in draw_map_selection: %f",param,value);
     if(selection.x < 0){
         warn("x",selection.x)
         selection.x = 0;

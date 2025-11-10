@@ -66,7 +66,6 @@ static void draw_sky_layer(int texid,int speed,double now) {
 void run_scene_menu(Scene *scene){
     Music menu_song = get_song(SONG_MENU);
     bool playing = IsMusicStreamPlaying(menu_song);
-    bool valid = IsMusicValid(menu_song);
     if(!playing){
         PlayMusicStream(menu_song);
     }
@@ -89,7 +88,6 @@ void run_scene_menu(Scene *scene){
     if(time - floor(time) < 0.8){
        DrawTextEx(font,"Press anything!",PROMPT_OFFSET,12,1,PURPLE);
     }
-    char validtxt[30], playingtxt[30];
     
     Inputs inputs = get_inputs();
     if(inputs.left|inputs.down|inputs.right|inputs.up|inputs.interact){
@@ -106,10 +104,29 @@ Vector2 intvector(Vector2 v){
     return result;
 }
 
+Vector2 clamp_camera(Vector2 target){
+    Vector2 result = target;
+    float minscroll = RENDER_WIDTH*0.5;
+    float maxscrollx = (map_w*TILE_SIZE) - RENDER_WIDTH*0.5;
+    float maxscrolly = (map_h*TILE_SIZE) - RENDER_HEIGHT*0.5;
+    if(target.x < minscroll){
+        result.x = minscroll;
+    }
+    if(target.x > maxscrollx){
+        result.x = maxscrollx;
+    }
+    if(target.y < minscroll){
+        result.y = minscroll;
+    }
+    if(target.y > maxscrolly){
+        result.y = maxscrolly;
+    }
+    return result;
+}
+
 void run_scene_game(Scene *scene){
     Music game_song = get_song(SONG_GAME);
     bool playing = IsMusicStreamPlaying(game_song);
-    bool valid = IsMusicValid(game_song);
     if(!playing){
         PlayMusicStream(game_song);
     }
@@ -123,7 +140,8 @@ void run_scene_game(Scene *scene){
 
     // update camera 
     Camera2D* camera = get_camera();
-    camera->target = intvector(hero->position);
+    camera->target = intvector(clamp_camera(hero->position));
+    
     
     // sky
     ClearBackground(WHITE);
