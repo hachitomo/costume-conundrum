@@ -275,6 +275,7 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
 
     // temp. physics check here... nothing to collide with for now
     // except fake bounds at the edge of the creen
+    /*XXX aks -- resizing map and i need to explore all of it
     if(hero->position.x <=8){
         hero->position.x=8;
     }
@@ -287,6 +288,7 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
     if(hero->position.y >=464){
         hero->position.y=464;
     }
+    /**/
 
     if(hero->just_updated==0){
         hero->state_time = 0;
