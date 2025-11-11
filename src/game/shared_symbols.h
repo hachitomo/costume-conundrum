@@ -67,5 +67,14 @@
 #define NS_decal_lightbear_dig2 49
 #define NS_decal_lightbear_eat1 50
 #define NS_decal_lightbear_eat2 51
+#define NS_decal_pumpkinhat 52
+#define NS_decal_robotmask 53
+#define NS_decal_clownmask 54
+#define NS_decal_jack1 55
+#define NS_decal_jack2 56
+#define NS_decal_cat1 57
+#define NS_decal_cat2 58
+#define NS_decal_cat3 59
+#define NS_decal_cat4 60
 
 #endif
