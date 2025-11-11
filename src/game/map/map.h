@@ -2,6 +2,7 @@
 #define MAP_H
 
 #include "raylib.h"
+#include "../physics/physics.h"
 
 #define TILE_SIZE 16
 
@@ -28,6 +29,6 @@ void init_map();
 Rectangle get_tile_rect(int tileid);
 void draw_map(); // draw the entire map (suitable for small maps)
 void draw_map_selection(Rectangle coords); // rectangle of map coords! NOT world space
-// void solids_in_selection(Map *map, Rectangle coords); // generate colliders in given selection 
+int solids_in_selection(Solid *out, Rectangle coords, int maxitems); // generate colliders in given selection 
 
 #endif

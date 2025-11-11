@@ -13,5 +13,6 @@ Camera2D* get_camera(void);
 void camera_set_target(Vector2 target);
 void camera_set_offset(Vector2 offset);
 void camera_transition_offset(Vector2 offset,float duration_sec);
+Vector2 clamp_camera(Vector2 toclamp);
 
 #endif

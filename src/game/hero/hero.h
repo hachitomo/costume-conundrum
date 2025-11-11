@@ -4,11 +4,12 @@
 
 #include "raylib.h"
 #include "../input/input.h"
+#include "../physics/physics.h"
 #include "../scene/scene.h"
 #include "../sprite/sprite.h"
 
 typedef struct Hero{
-    Vector2 position,velocity;
+    Actor actor;
     Sprite sprite;
     int state,xtransform,just_updated;
     float state_time;

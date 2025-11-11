@@ -104,27 +104,6 @@ Vector2 intvector(Vector2 v){
     return result;
 }
 
-Vector2 clamp_camera(Vector2 target){
-    Vector2 result = target;
-    float minscrollx = RENDER_WIDTH*0.5;
-    float minscrolly = RENDER_HEIGHT*0.5;
-    float maxscrollx = (map_w*TILE_SIZE) - RENDER_WIDTH*0.5;
-    float maxscrolly = (map_h*TILE_SIZE) - RENDER_HEIGHT*0.5;
-    if(target.x < minscrollx){
-        result.x = minscrollx;
-    }
-    if(target.x > maxscrollx){
-        result.x = maxscrollx;
-    }
-    if(target.y < minscrolly){
-        result.y = minscrolly;
-    }
-    if(target.y > maxscrolly){
-        result.y = maxscrolly;
-    }
-    return result;
-}
-
 void run_scene_game(Scene *scene){
     Music game_song = get_song(SONG_GAME);
     bool playing = IsMusicStreamPlaying(game_song);
@@ -137,11 +116,16 @@ void run_scene_game(Scene *scene){
     // update
     Inputs inputs = get_inputs();
     Hero *hero = get_hero();
+    
     update_hero(hero,scene,inputs);
 
     // update camera 
     Camera2D* camera = get_camera();
-    camera->target = intvector(clamp_camera(hero->position));
+    Vector2 playerpos = {
+        .x=hero->actor.position.x,
+        .y=hero->actor.position.y,
+    };
+    camera->target = intvector(clamp_camera(playerpos));
     
     
     // sky

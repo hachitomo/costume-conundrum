@@ -13,9 +13,7 @@ static const Vector2 VEC_ZERO = {
     .y=0,
 };
 
-static const Vector2 GAME_START_POS = {
-    .x=200,
-    .y=200,
-};
+#define GAME_START_X 200
+#define GAME_START_Y 120
 
 #endif

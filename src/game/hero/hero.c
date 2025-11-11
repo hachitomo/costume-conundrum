@@ -7,16 +7,29 @@
 #include "../input/input.h"
 #include "../scene/scene.h"
 #include "../sprite/sprite.h"
+#include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
+
+void reset_colliders();
 
 Sprite hero_sprite = {0};
 Image hero_img;
 Texture2D hero_tex;
 float HERO_ANIM_RATE = 0.125;
+Solid hero_colliders[100];
+int collidersc = 0;
+Actor hero_actor = {
+    .position={
+        .x=GAME_START_X,
+        .y=GAME_START_Y,
+        .width=17,
+        .height=27,
+    },
+    .velocity=VEC_ZERO,
+};
 
 Hero hero = {
-    .position=GAME_START_POS,
-    .velocity=VEC_ZERO,
     .state=STATE_IDLE,
     .xtransform=1,
     .just_updated=1,
@@ -204,6 +217,11 @@ void init_hero(void){
     hero_sprite.get_animation_frame = get_hero_frame;
     hero_sprite.xtransform=1;
     hero.sprite=hero_sprite;
+    hero.actor=hero_actor;
+    if(hero_colliders == NULL) {
+        // idk, burn everything down?
+        printf("Oh no, no memory for colliders I guess");
+    }
 };
 
 void deinit_hero(void){
@@ -224,69 +242,63 @@ void set_hero_state(int state){
     hero.just_updated = 0;
 }
 
+#define LEFT -1
+#define RIGHT 1
+#define accel 15
+#define decel 20
+#define airdecel 7
+#define driftreduce 20
+#define topspeed 40
+#define gravity 0.35
+
+int solidc = 0;
+
 void update_hero(Hero *hero, Scene *scene, Inputs inputs){
     FrameTimer *ftimer = get_frame_timer();
-    hero->velocity.x=0;
-    hero->velocity.y=0;
-    if(inputs.left){
-        hero->velocity.x -= 75;
-        hero->xtransform = -1;
-        set_hero_state(STATE_WALK);
-    }
-    if(inputs.right){
-        hero->velocity.x += 75;
-        hero->xtransform = 1;
-        set_hero_state(STATE_WALK);
-    }
-    if(inputs.up){
-        hero->velocity.y -= 75;
-        set_hero_state(STATE_WALK);
-    }
-    if(inputs.down){
-        hero->velocity.y += 75;
-        set_hero_state(STATE_WALK);
-    }
-    if(!inputs.up && !inputs.down && !inputs.left && !inputs.right){
-        hero->velocity.x=0;
-        hero->velocity.y=0;
-        set_hero_state(STATE_IDLE);
-    }
-    
-    // if(hero->position.y >=100){
-    //     if(inputs.up){
-    //         hero->velocity.y = -125;
-    //         set_hero_state(STATE_JUMP);
-    //         PlaySound(get_sound(SOUND_BLIP));
-    //     }else{
-    //         hero->velocity.y = 0;
-    //         hero->position.y = 100;
-    //     }
-    // }else if(hero->position.y < 100){
-    //     hero->velocity.y += 4;
-    //     if(hero->velocity.y > 0){
-    //         set_hero_state(STATE_FALL);
-    //     }else{
-    //         set_hero_state(STATE_JUMP);
-    //     }
-    // }
-    
-    hero->position.x += hero->velocity.x * ftimer->frame_time;
-    hero->position.y += hero->velocity.y * ftimer->frame_time;
+    Vector2 newvel = hero->actor.velocity;
 
-    // temp. physics check here... nothing to collide with for now
-    // except fake bounds at the edge of the creen
-    if(hero->position.x <=8){
-        hero->position.x=8;
-    }
-    if(hero->position.x >=1264){
-        hero->position.x=1264;
-    }
-    if(hero->position.y <= 14){
-        hero->position.y=14;
-    }
-    if(hero->position.y >=464){
-        hero->position.y=464;
-    }
+	if(inputs.left){
+		int acc = accel;
+		if(newvel.x > 0){
+			acc = acc + driftreduce;
+		}
+		newvel.x -= acc * ftimer->frame_time;
+		if(newvel.x < -topspeed){
+			newvel.x = -topspeed;
+		}
+		if(!inputs.right){
+			hero->xtransform = LEFT;
+		}
+	}
+
+	if(inputs.right){
+		float acc = accel;
+		if(newvel.x < 0){
+			acc = acc + driftreduce;
+		}
+		newvel.x += acc * ftimer->frame_time;
+		if(newvel.x > topspeed){
+			newvel.x = topspeed;
+		}
+		if(!inputs.left){
+			hero->xtransform = RIGHT;
+		}
+	}
+
+	if(!inputs.left && !inputs.right){
+		float slow = decel;
+		if(!hero->actor.grounded){
+			slow = airdecel;
+		}
+		if(newvel.x > 0){
+			newvel.x -= slow * ftimer->frame_time;
+		} else if(newvel.x < 0){
+			newvel.x += slow * ftimer->frame_time;
+		}
+		if(fabs(newvel.x) < 0.25){
+			newvel.x = 0;
+		}
+	}
 
     if(hero->just_updated==0){
         hero->state_time = 0;
@@ -296,6 +308,29 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
     }
     hero->sprite.xtransform = hero->xtransform;
     hero->sprite.state = hero->state;
+
+    int widthtiles = (int)(RENDER_WIDTH / TILE_SIZE);
+    int heighttiles = (int)(RENDER_HEIGHT / TILE_SIZE);
+    Rectangle physics_zone = {
+        .x=(int)((hero->actor.position.x / TILE_SIZE) - widthtiles*0.5),
+        .y=(int)((hero->actor.position.y / TILE_SIZE) - heighttiles*0.5),
+        .width=widthtiles,
+        .height=heighttiles,
+    };
+    solidc = solids_in_selection(hero_colliders,physics_zone,100);
+    move_actor(hero->actor,hero_colliders,solidc);
+    reset_colliders();
+}
+
+void reset_colliders(){
+    for(int i=0; i<collidersc; i++){
+        hero_colliders[i].physics = TILE_VISUAL;
+        hero_colliders[i].position.x = 0;
+        hero_colliders[i].position.y = 0;
+        hero_colliders[i].position.width = 1;
+        hero_colliders[i].position.height = 1;
+    }
+    collidersc = 0;
 }
 
 void draw_hero(Hero *hero){
@@ -327,8 +362,8 @@ Rectangle get_hero_frame(int state,float state_time){
 
 Rectangle hero_bbox(Hero *hero){
     Rectangle result = {0};
-    result.x = (int)hero->position.x;
-    result.y = (int)hero->position.y;
+    result.x = (int)hero->actor.position.x;
+    result.y = (int)hero->actor.position.y;
     result.width = (int)HERO_WIDTH;
     result.height = (int)HERO_HEIGHT;
     return result;
