@@ -77,8 +77,13 @@ void move_actor(Actor *actor, Solid *colliders, int collidersc){
                     fix.nudge.y = collider->position.y - actormaxy;
                 }
             }
-            if(collider->physics == TILE_ONE_WAY && actor->velocity.y > 0 && collider->position.y >= actor->position.y+actor->position.height){
-                fix.nudge.y = collider->position.y - actormaxy;
+            if(
+                collider->physics == TILE_ONE_WAY &&
+                actor->velocity.y > 0 &&
+                collider->position.y >= actor->position.y+actor->position.height 
+                && !(actor->position.y < collider->position.y && collider->position.y + collider->position.height < actor->position.y + actor->position.height)
+                ){
+                    fix.nudge.y = collider->position.y - actormaxy;
             }
 
             if(fix.nudge.x != 0 || fix.nudge.y != 0){

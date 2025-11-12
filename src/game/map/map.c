@@ -165,6 +165,9 @@ int solids_in_selection(Solid *out, Rectangle selection, int maxitems){
             iter->position.width=length*TILE_SIZE;
             iter->position.height=TILE_SIZE;
             iter->physics=physics;
+            if(iter->physics==TILE_ONE_WAY){
+                iter->position.height = 4;
+            }
             resultc++;
             x+=length-1;
             iter++;
