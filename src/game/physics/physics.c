@@ -1,6 +1,7 @@
 #include "physics.h"
 #include "raylib.h"
 #include "../constants.h"
+#include "../frame_timer.h"
 #include "../map/map.h"
 #include <math.h>
 #include <stdio.h>
@@ -13,7 +14,7 @@ Actor base_actor = {
         .height=1
     },
     .velocity=VEC_ZERO,
-    .grounded=1,
+    .grounded=0,
     .collidersc=0,
     .collidersmax=COLLIDERS_DEFAULT_MAX
 };
@@ -22,143 +23,152 @@ Actor init_actor(){
     return base_actor;
 }
 
-void move_actor(Actor actor, Solid *colliders, int collidersc){
-    Rectangle newpos = {
-        .x=actor.position.x,
-        .y=actor.position.y+actor.velocity.y, // check Y axis first
-        .width=actor.position.width,
-        .height=actor.position.height,
-    };
-    CollisionFix yfixes[10] = {0};
-    int yfixesc = 0;
-    Solid *collider = colliders;
 
-    // Y rectification 
+float vector_magnitude(Vector2 vec) {
+	return (float)sqrt(
+		pow((float)vec.x, 2) + pow((float)vec.y, 2)
+	);
+}
+
+
+void move_actor(Actor *actor, Solid *colliders, int collidersc){
+    FrameTimer *ftimer = get_frame_timer();
+    Rectangle newpos = {
+        .x=actor->position.x+actor->velocity.x,
+        .y=actor->position.y+actor->velocity.y,
+        .width=actor->position.width,
+        .height=actor->position.height,
+    };
+    CollisionFix fixes[10] = {0};
+    int fixesc = 0;
+    CollisionFix *fixiter = fixes;
+    Solid *collider = colliders;
+    Vector2 finalnudge = VEC_ZERO;
+
     for(int i=0; i<collidersc; i++){
         float actormaxy = newpos.y+newpos.height;
         float collidermaxy = collider->position.y+collider->position.height;
-        int passed_pos = actormaxy <= collider->position.y && newpos.y >= collidermaxy ? 0 : 1;
-        int passed_neg = actor.position.y >= collidermaxy && actormaxy <= collider->position.y ? 0 : 1;
-
-        if(CheckCollisionRecs(newpos,collider->position)){
-            actor_append_collider(actor,collider);
-            CollisionFix fix = {
-                .collider=collider,
-                .magnitude=0,
-                .nudge=VEC_ZERO,
-                .clip=1,
-            };
-            float ychange = 0;
-            if(actor.velocity.y > 0 && collidermaxy >= actormaxy && actormaxy > collider->position.y){
-                ychange = -(actormaxy - collider->position.y);
-            }
-			if(actor.velocity.y < 0 && collider->position.y <= newpos.y && newpos.y < collider->position.y){
-				ychange = collidermaxy - newpos.y;
-			}
-            fix.nudge.y = ychange;
-            fix.magnitude = ychange;
-            yfixes[i] = fix;
-            yfixesc++;
-        } else if(passed_neg || passed_pos){
-            actor_append_collider(actor,collider);
-            yfixesc++;
-            CollisionFix fix = {
-                .collider=collider,
-                .magnitude=0,
-                .nudge=VEC_ZERO,
-                .clip=0,
-            };
-			if(passed_pos) {
-				fix.nudge.y = -((newpos.y + actor.position.height) - collider->position.y);
-			} else if(passed_neg) {
-				fix.nudge.y = collidermaxy - actor.position.y;
-			}
-            fix.magnitude = fabs(fix.nudge.y);
-        }
-
-        if(yfixesc == 0){
-            actor.grounded = 1;
-        } else if(yfixesc == 1){
-            newpos.y += yfixes[0].nudge.y;
-        } else {
-            int smallest = 0;
-            int sign = 1;
-            for(int i=0; i<yfixesc;i++){
-                float yfix = yfixes[i].magnitude;
-                if((yfix > 0 && yfix < smallest) || smallest == 0){
-                    smallest = yfix;
-                    sign = smallest > 0 ? 1 : -1;
-                }
-            }
-            newpos.y += (smallest * sign);
-        }
-    }
-
-    // X rectification
-    newpos.x += actor.velocity.x;
-    CollisionFix xfixes[10] = {0};
-    int xfixesc = 0;
-    collider = colliders;
-    for(int i=0; i<collidersc; i++){
         float actormaxx = newpos.x+newpos.width;
         float collidermaxx = collider->position.x+collider->position.width;
-        int passed_pos = actormaxx <= collider->position.x && newpos.x >= collidermaxx ? 0 : 1;
-        int passed_neg = actor.position.x >= collidermaxx && actormaxx <= collider->position.x ? 0 : 1;
+        int passed_hor_pos = actormaxx <= collider->position.x && newpos.x >= collidermaxx ? 1 : 0;
+        int passed_hor_neg = actor->position.x >= collidermaxx && actormaxx <= collider->position.x ? 1 : 0;
+        int passed_ver_pos = actormaxy <= collider->position.y && newpos.y >= collidermaxy ? 1 : 0;
+        int passed_ver_neg = actor->position.y >= collidermaxy && actormaxy <= collider->position.y ? 1 : 0;
 
         if(CheckCollisionRecs(newpos,collider->position)){
-            actor_append_collider(actor,collider);
-            xfixesc++;
-            CollisionFix fix = {
-                .collider=collider,
-                .magnitude=0,
-                .nudge=VEC_ZERO,
-                .clip=1,
-            };
-            float ychange = 0;
-            if(actor.velocity.x > 0 && collidermaxx >= actormaxx && actormaxx > collider->position.x){
-                ychange = -(actormaxx - collider->position.x);
-            }
-			if(actor.velocity.x < 0 && collider->position.x <= newpos.x && newpos.x < collider->position.x){
-				ychange = collidermaxx - newpos.x;
-			}
-            fix.nudge.x = ychange;
-            fix.magnitude = ychange;
-        } else if(passed_neg || passed_pos){
-            actor_append_collider(actor,collider);
-            xfixesc++;
+            actor_append_collider(*actor,collider);
             CollisionFix fix = {
                 .collider=collider,
                 .magnitude=0,
                 .nudge=VEC_ZERO,
                 .clip=0,
             };
-			if(passed_pos) {
-				fix.nudge.x = -((newpos.x + actor.position.width) - collider->position.x);
-			} else if(passed_neg) {
-				fix.nudge.x = collidermaxx - actor.position.x;
+            if(collidermaxx > newpos.x && actormaxx > collidermaxx){
+                fix.nudge.x = collidermaxx - newpos.x;
+            }
+			if(collider->position.x < actormaxx && newpos.x < collider->position.x){
+				fix.nudge.x = collider->position.x - actormaxx;
 			}
-            fix.magnitude = fabs(fix.nudge.x);
-        }
+            if(collidermaxy >= newpos.y && actormaxy > collidermaxy){
+                fix.nudge.y = collidermaxy - newpos.y;
+            }
+			if(collider->position.y < actormaxy && newpos.y < collider->position.y){
+				fix.nudge.y = collider->position.y - actormaxy;
+			}
 
-        if(xfixesc == 0){
-            actor.grounded = 1;
-        } else if(xfixesc == 1){
-            newpos.x += xfixes[0].nudge.x;
-        } else {
-            int smallest = 0;
-            int sign = 1;
-            for(int i=0; i<xfixesc;i++){
-                float yfix = xfixes[i].magnitude;
-                if((yfix > 0 && yfix < smallest) || smallest == 0){
-                    smallest = yfix;
-                    sign = smallest > 0 ? 1 : -1;
+            if(fix.nudge.x != 0 || fix.nudge.y != 0){
+                float absx = fabs(fix.nudge.x);
+                float absy = fabs(fix.nudge.y);
+                if(absx != 0 && absy != 0){
+                    if(absx < absy){
+                        fix.nudge.y = 0;
+                    }else {
+                        fix.nudge.x = 0;
+                    }
                 }
             }
-            newpos.x += (smallest * sign);
+            fix.magnitude = vector_magnitude(fix.nudge);
+            *fixiter = fix;
+            fixiter++;
+            fixesc++;
+        } else if(passed_ver_neg || passed_ver_pos || passed_hor_neg || passed_hor_pos){
+            actor_append_collider(*actor,collider);
+            fixesc++;
+            CollisionFix fix = {
+                .collider=collider,
+                .magnitude=0,
+                .nudge=VEC_ZERO,
+                .clip=1,
+            };
+			
+            if(passed_hor_pos) {
+				fix.nudge.x = -((newpos.x + actor->position.width) - collider->position.x);
+			} else if(passed_hor_neg) {
+				fix.nudge.x = collidermaxx - actor->position.x;
+			}
+            if(passed_hor_pos) {
+				fix.nudge.y = -((newpos.y + actor->position.height) - collider->position.y);
+			} else if(passed_hor_neg) {
+				fix.nudge.y = collidermaxy - actor->position.y;
+			}
+			fix.magnitude = vector_magnitude(fix.nudge);
+
+            *fixiter = fix;
+            fixiter++;
+            fixesc++;
         }
+        collider++;
     }
 
-    actor.position = newpos;
+    if(fixesc == 0){
+        actor->position = newpos;
+        return;
+    } else if(fixesc == 1){
+        if(fixes->nudge.x != 0 && fixes->nudge.y != 0){
+            if(fabs(fixes->nudge.x) > fabs(fixes->nudge.y)){
+                fixes->nudge.x = 0;
+            } else{
+                fixes->nudge.y = 0;
+            }
+        }
+        if(fixes->nudge.x != 0){
+            actor->velocity.x = 0;
+        }
+        if(fixes->nudge.y != 0){
+            actor->velocity.y = 0;
+            if(fixes->nudge.y < 0){
+                actor->grounded = 1;
+            }
+        }
+        finalnudge = fixes->nudge;
+    } else {
+        CollisionFix *result;
+        float smallesty = 0;
+        float smallestx = 0;
+        for(int i=0; i<fixesc;i++){
+            CollisionFix *fixiter = fixes+i;
+            float yfix = fabs(fixiter->nudge.y);
+            float xfix = fabs(fixiter->nudge.x);
+            if(yfix > 0 && (yfix < fabs(smallesty) || smallesty == 0)){
+                smallesty = fixiter->nudge.y;
+            }
+            if(xfix > 0 && (xfix < fabs(smallestx) || smallestx == 0)){
+                smallestx = fixiter->nudge.x;
+            }
+        }
+        finalnudge.y += smallesty;
+        finalnudge.x += smallestx;
+    }
+
+    if(finalnudge.y < 0){
+        actor->grounded = 1;
+    }
+    if(finalnudge.x != 0){
+        actor->velocity.x = 0;
+    }
+
+    actor->position.x = newpos.x + finalnudge.x;
+    actor->position.y = newpos.y + finalnudge.y;
 }
 
 void actor_append_collider(Actor actor, Solid *collider){

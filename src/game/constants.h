@@ -14,6 +14,6 @@ static const Vector2 VEC_ZERO = {
 };
 
 #define GAME_START_X 200
-#define GAME_START_Y 120
+#define GAME_START_Y 70
 
 #endif

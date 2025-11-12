@@ -64,35 +64,27 @@ void draw_map(){
 
 void draw_map_selection(Rectangle selection){
     if(selection.x < 0){
-        warn("x","draw_map_selection",selection.x)
         selection.x = 0;
     }
-    if(selection.x > game_map.width-2){
-        warn("x","draw_map_selection",selection.x)
-        selection.x = game_map.width-2;
+    if(selection.x > game_map.width-1){
+        selection.x = game_map.width-1;
     }
     if(selection.y < 0){
-        warn("y","draw_map_selection",selection.y)
         selection.y = 0;
     }
     if(selection.y > game_map.height-1){
-        warn("y","draw_map_selection",selection.y)
         selection.y = game_map.height-1;
     }
     if(selection.width < 1){
-        warn("width","draw_map_selection",selection.width)
         selection.width = 1;
     }
     if(selection.width > game_map.width-1-selection.x){
-        warn("width","draw_map_selection",selection.width)
         selection.width = game_map.width-1-selection.x;
     }
     if(selection.height < 1){
-        warn("height","draw_map_selection",selection.height)
         selection.height = 1;
     }
     if(selection.height > game_map.height-1-selection.y){
-        warn("height","draw_map_selection",selection.height)
         selection.height = game_map.height-1-selection.y;
     }
     for(int y=selection.y; y<game_map.height; y++){
@@ -133,17 +125,17 @@ int solids_in_selection(Solid *out, Rectangle selection, int maxitems){
         warn("width","solids_in_selection",selection.width)
         selection.width = 1;
     }
-    if(selection.width > game_map.width-1-selection.x){
+    if(selection.width > game_map.width-selection.x){
         warn("width","solids_in_selection",selection.width)
-        selection.width = game_map.width-1-selection.x;
+        selection.width = game_map.width-selection.x;
     }
     if(selection.height < 1){
         warn("height","solids_in_selection",selection.height)
         selection.height = 1;
     }
-    if(selection.height > game_map.height-1-selection.y){
+    if(selection.height > game_map.height-selection.y){
         warn("height","solids_in_selection",selection.height)
-        selection.height = game_map.height-1-selection.y;
+        selection.height = game_map.height-selection.y;
     }
 
     for(int y = selection.y; y < selection.y+selection.height; y++){

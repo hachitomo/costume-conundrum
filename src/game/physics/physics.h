@@ -27,7 +27,8 @@ typedef struct CollisionFix{
 }CollisionFix;
 
 Actor init_actor();
-void move_actor(Actor actor, Solid *colliders, int colidersc);
+void move_actor(Actor *actor, Solid *colliders, int colidersc);
 void actor_append_collider(Actor actor, Solid *collider);
+float vector_magnitude(Vector2 vec);
 
 #endif

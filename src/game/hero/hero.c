@@ -244,35 +244,71 @@ void set_hero_state(int state){
 
 #define LEFT -1
 #define RIGHT 1
-#define accel 15
-#define decel 20
-#define airdecel 7
-#define driftreduce 20
-#define topspeed 40
-#define gravity 0.35
+#define accel 5
+#define decel 7
+#define airdecel 4
+#define driftreduce 2
+#define topspeed 15
+#define gravity 3.5
+#define maxgravity 8
 
 int solidc = 0;
 
 void update_hero(Hero *hero, Scene *scene, Inputs inputs){
     FrameTimer *ftimer = get_frame_timer();
     Vector2 newvel = hero->actor.velocity;
+    newvel.y += gravity * ftimer->frame_time;
+    if(newvel.y > maxgravity){
+        newvel.y = maxgravity;
+    }
 
-    // temp. physics check here... nothing to collide with for now
-    // except fake bounds at the edge of the creen
-    /*XXX aks -- resizing map and i need to explore all of it
-    if(hero->position.x <=8){
-        hero->position.x=8;
-    }
-    if(hero->position.x >=1264){
-        hero->position.x=1264;
-    }
-    if(hero->position.y <= 14){
-        hero->position.y=14;
-    }
-    if(hero->position.y >=464){
-        hero->position.y=464;
-    }
-    /**/
+	if(inputs.left){
+		float acc = accel;
+		if(newvel.x > 0){
+			acc = acc + driftreduce;
+		}
+		newvel.x -= acc * ftimer->frame_time;
+		if(newvel.x < -topspeed){
+			newvel.x = -topspeed;
+		}
+		if(newvel.x > topspeed){
+			newvel.x = topspeed;
+		}
+		if(!inputs.right){
+			hero->xtransform = LEFT;
+		}
+	}
+
+	if(inputs.right){
+		float acc = accel;
+		if(newvel.x < 0){
+			acc = acc + driftreduce;
+		}
+		newvel.x += acc * ftimer->frame_time;
+		if(newvel.x > topspeed){
+			newvel.x = topspeed;
+		}
+		if(!inputs.left){
+			hero->xtransform = RIGHT;
+		}
+	}
+
+	if(!inputs.left && !inputs.right){
+		float slow = decel;
+		if(!hero->actor.grounded){
+			slow = airdecel;
+		}
+		if(newvel.x > 0){
+			newvel.x -= slow * ftimer->frame_time;
+		} else if(newvel.x < 0){
+			newvel.x += slow * ftimer->frame_time;
+		}
+		if(fabs(newvel.x) < 0.25){
+			newvel.x = 0;
+		}
+	}
+    hero->actor.velocity.x = newvel.x;
+    hero->actor.velocity.y = newvel.y;
 
     if(hero->just_updated==0){
         hero->state_time = 0;
@@ -281,7 +317,6 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
         hero->state_time += ftimer->frame_time;
     }
     hero->sprite.xtransform = hero->xtransform;
-    hero->sprite.state = hero->state;
 
     int widthtiles = (int)(RENDER_WIDTH / TILE_SIZE);
     int heighttiles = (int)(RENDER_HEIGHT / TILE_SIZE);
@@ -289,11 +324,32 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
         .x=(int)((hero->actor.position.x / TILE_SIZE) - widthtiles*0.5),
         .y=(int)((hero->actor.position.y / TILE_SIZE) - heighttiles*0.5),
         .width=widthtiles,
-        .height=heighttiles,
+        .height=heighttiles + 5,
     };
     solidc = solids_in_selection(hero_colliders,physics_zone,100);
-    move_actor(hero->actor,hero_colliders,solidc);
-    reset_colliders();
+    move_actor(&hero->actor,hero_colliders,solidc);
+
+    if(!hero->actor.grounded){
+        if(newvel.y > 0){
+            hero->state = STATE_FALL;
+        }else{
+            hero->state = STATE_JUMP;
+        }
+    }
+	if(hero->actor.grounded && ((!inputs.left && inputs.right) || (inputs.left && !inputs.right))){
+        hero->state = STATE_WALK;
+    }
+    if(hero->actor.grounded && !inputs.left && !inputs.right){
+        hero->state = STATE_IDLE;
+    }
+    if(hero->actor.grounded && inputs.up){
+        hero->actor.velocity.y = -2.5;
+        hero->actor.grounded = 0;
+        hero->state = STATE_JUMP;
+    }
+    hero->sprite.state = hero->state;
+
+    // reset_colliders();
 }
 
 void reset_colliders(){
@@ -309,6 +365,17 @@ void reset_colliders(){
 
 void draw_hero(Hero *hero){
     draw_sprite(&hero->sprite,hero_bbox(hero),hero->state_time);
+    for(int i=0; i<solidc; i++){
+        DrawRectangleLines(
+            (int)hero_colliders[i].position.x,
+            (int)hero_colliders[i].position.y,
+            (int)hero_colliders[i].position.width,
+            (int)hero_colliders[i].position.height,
+            LIME
+        );
+    }
+    DrawRectangleLinesEx(hero_bbox(get_hero()),1,RED);
+    reset_colliders();
 }
 
 int hero_framesc[] = {1,8,2,2};
