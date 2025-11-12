@@ -110,17 +110,28 @@ void move_actor(Actor *actor, Solid *colliders, int collidersc){
                 .nudge=VEC_ZERO,
                 .clip=1,
             };
-			
-            if(passed_hor_pos) {
-				fix.nudge.x = -((newpos.x + actor->position.width) - collider->position.x);
-			} else if(passed_hor_neg) {
-				fix.nudge.x = collidermaxx - actor->position.x;
-			}
-            if(passed_hor_pos) {
-				fix.nudge.y = -((newpos.y + actor->position.height) - collider->position.y);
-			} else if(passed_hor_neg) {
-				fix.nudge.y = collidermaxy - actor->position.y;
-			}
+			if(collider->physics == TILE_PHYSICAL){
+                if(passed_hor_pos) {
+                    fix.nudge.x = -((newpos.x + actor->position.width) - collider->position.x);
+                } else if(passed_hor_neg) {
+                    fix.nudge.x = collidermaxx - actor->position.x;
+                }
+                if(passed_ver_pos) {
+                    fix.nudge.y = -((newpos.y + actor->position.height) - collider->position.y);
+                } else if(passed_ver_neg) {
+                    fix.nudge.y = collidermaxy - actor->position.y;
+                }
+            }
+            if(
+                collider->physics == TILE_ONE_WAY &&
+                actor->velocity.y > 0 &&
+                collider->position.y >= actor->position.y+actor->position.height 
+                && !(actor->position.y < collider->position.y && collider->position.y + collider->position.height < actor->position.y + actor->position.height)
+                ){
+                    fix.nudge.y = collider->position.y - actormaxy;
+            }else if(collider->physics == TILE_ONE_WAY){
+                continue;
+            }
 			fix.magnitude = vector_magnitude(fix.nudge);
 
             *fixiter = fix;
