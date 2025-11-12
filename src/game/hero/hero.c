@@ -1,8 +1,9 @@
 #include "raylib.h"
 #include "hero.h"
 #include "../data.h"
-#include "../audio/audio.h"
 #include "../constants.h"
+#include "../shared_symbols.h"
+#include "../audio/audio.h"
 #include "../frame_timer.h"
 #include "../input/input.h"
 #include "../scene/scene.h"
@@ -36,21 +37,6 @@ Hero hero = {
     .state_time=0.0f,
 };
 
-// vvv--ANIMATION DEFINITIONS--vvv
-
-// idle
-// SpriteAnimation hero_idle = {
-//     .frames={
-//         {.x=1,
-//         .y=1,
-//         .width=17,
-//         .height=27}
-//     },
-//     .framesc=1,
-//     .duration=0.0,
-//     .time=0.0,
-// };
-
 // idle
 Rectangle idle_frames[]={
     {.x=1,
@@ -60,155 +46,22 @@ Rectangle idle_frames[]={
 };
 
 // walk
-Rectangle walk_frames[]={
-    {.x=37,
-    .y=1,
-    .width=17,
-    .height=27},
-    {.x=55,
-    .y=1,
-    .width=17,
-    .height=27},
-    {.x=73,
-    .y=1,
-    .width=17,
-    .height=27},
-    {.x=91,
-    .y=1,
-    .width=17,
-    .height=27},
-    {.x=109,
-    .y=1,
-    .width=17,
-    .height=27},
-    {.x=127,
-    .y=1,
-    .width=17,
-    .height=27},
-    {.x=145,
-    .y=1,
-    .width=17,
-    .height=27},
-    {.x=163,
-    .y=1,
-    .width=17,
-    .height=27},
+int walk_frames[]={
+    NS_decal_dot_walk1,
+    NS_decal_dot_walk2,
+    NS_decal_dot_walk3,
+    NS_decal_dot_walk4,
+    NS_decal_dot_walk5,
+    NS_decal_dot_walk6,
+    NS_decal_dot_walk7,
+    NS_decal_dot_walk8,
 };
-// SpriteAnimation hero_walk = {
-//     .frames={
-//         {.x=37,
-//         .y=1,
-//         .width=17,
-//         .height=27},
-//         {.x=55,
-//         .y=1,
-//         .width=17,
-//         .height=27},
-//         {.x=73,
-//         .y=1,
-//         .width=17,
-//         .height=27},
-//         {.x=91,
-//         .y=1,
-//         .width=17,
-//         .height=27},
-//         {.x=109,
-//         .y=1,
-//         .width=17,
-//         .height=27},
-//         {.x=127,
-//         .y=1,
-//         .width=17,
-//         .height=27},
-//         {.x=145,
-//         .y=1,
-//         .width=17,
-//         .height=27},
-//         {.x=163,
-//         .y=1,
-//         .width=17,
-//         .height=27},
-//     },
-//     .framesc=7,
-//     .duration=0.125,
-//     .time=0.0,
-// };
 
 // jump (airborn up)
-Rectangle jump_frames[]={
-    {
-    .x=181,
-    .y=1,
-    .width=17,
-    .height=27
-    },{
-    .x=217,
-    .y=1,
-    .width=17,
-    .height=27
-    },
-};
-// SpriteAnimation hero_jump = {
-//     .duration=0.125,
-//     .frames={
-//         {
-//         .x=181,
-//         .y=1,
-//         .width=17,
-//         .height=27
-//         },{
-//         .x=217,
-//         .y=1,
-//         .width=17,
-//         .height=27
-//         },
-//     },
-//     .framesc=2,
-//     .time=0.0,
-// };
+int jump_frames[]={NS_decal_dot_jump1,NS_decal_dot_jump2};
 
 // fall (airborn down)
-Rectangle fall_frames[]={
-    {
-    .x=199,
-    .y=1,
-    .width=17,
-    .height=27
-    },{
-    .x=235,
-    .y=1,
-    .width=17,
-    .height=27
-    },
-};
-// SpriteAnimation hero_fall = {
-//     .duration=0.125,
-//     .frames={
-//         {
-//         .x=199,
-//         .y=1,
-//         .width=17,
-//         .height=27
-//         },{
-//         .x=235,
-//         .y=1,
-//         .width=17,
-//         .height=27
-//         },
-//     },
-//     .framesc=2,
-//     .time=0.0,
-// };
-
-// SpriteMap hero_sprite_map = {
-//     .animations={
-//         hero_idle,
-//         hero_walk,
-//         hero_jump,
-//         hero_fall,
-//     },
-//     .animationc=4,
-// };
+int fall_frames[]={NS_decal_dot_fall1,NS_decal_dot_fall2};
 
 
 void init_hero(void){
@@ -380,25 +233,35 @@ void draw_hero(Hero *hero){
 
 int hero_framesc[] = {1,8,2,2};
 
+Rectangle get_sprite_frame_info(const struct decal sheet[], int frame){
+    Rectangle result = {
+        .x=sheet[frame].x,
+        .y=sheet[frame].y,
+        .width=sheet[frame].w,
+        .height=sheet[frame].h
+    };
+    return result;
+}
+
 Rectangle get_hero_frame(int state,float state_time){
     if(state == 0){
-        return idle_frames[0];
+        return get_sprite_frame_info(decalsheet_sprites,NS_decal_dot_idle);
     }
     if(state > 3){
         printf("tried to get hero frame length OOB %d",state);
-        return idle_frames[0];
+        return get_sprite_frame_info(decalsheet_sprites,NS_decal_dot_idle);
     }
     int frame = get_animation_frame(state_time,HERO_ANIM_RATE,hero_framesc[state]);
     switch(state){
         case 1:
-            return walk_frames[frame];
+            return get_sprite_frame_info(decalsheet_sprites,walk_frames[frame]);
         case 2:
-            return jump_frames[frame];
+            return get_sprite_frame_info(decalsheet_sprites,jump_frames[frame]);
         case 3:
-            return fall_frames[frame];
+            return get_sprite_frame_info(decalsheet_sprites,fall_frames[frame]);
     }
     printf("Fallback - hero state not detected: %d]\nDisplaying idle.\n",state);
-    return idle_frames[0];
+    return get_sprite_frame_info(decalsheet_sprites,NS_decal_dot_idle);
 }
 
 Rectangle hero_bbox(Hero *hero){

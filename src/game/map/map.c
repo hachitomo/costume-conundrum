@@ -5,8 +5,6 @@
 #include "../draw/draw.h"
 #include <stdio.h>
 
-#define warn(param,func,value) printf("WARNING: clamping invalid selection selection.%s in %s: %f\n",param,func,value);
-
 Map game_map;
 Rectangle areas[256];
 Tilesheet map_tilesheet;
@@ -106,35 +104,27 @@ int solids_in_selection(Solid *out, Rectangle selection, int maxitems){
     Solid *iter = out;
 
     if(selection.x < 0){
-        warn("x","solids_in_selection",selection.x)
         selection.x = 0;
     }
     if(selection.x > game_map.width-2){
-        warn("x","solids_in_selection",selection.x)
         selection.x = game_map.width-2;
     }
     if(selection.y < 0){
-        warn("y","solids_in_selection",selection.y)
         selection.y = 0;
     }
     if(selection.y > game_map.height-1){
-        warn("y","solids_in_selection",selection.y)
         selection.y = game_map.height-1;
     }
     if(selection.width < 1){
-        warn("width","solids_in_selection",selection.width)
         selection.width = 1;
     }
     if(selection.width > game_map.width-selection.x){
-        warn("width","solids_in_selection",selection.width)
         selection.width = game_map.width-selection.x;
     }
     if(selection.height < 1){
-        warn("height","solids_in_selection",selection.height)
         selection.height = 1;
     }
     if(selection.height > game_map.height-selection.y){
-        warn("height","solids_in_selection",selection.height)
         selection.height = game_map.height-selection.y;
     }
 
