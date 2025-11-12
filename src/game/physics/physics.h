@@ -21,7 +21,7 @@ typedef struct Actor{
 
 typedef struct CollisionFix{
     Solid   *collider;
-    Vector2 nudge;
+    Vector2 delta;
     float   magnitude;
     int clip;
 }CollisionFix;

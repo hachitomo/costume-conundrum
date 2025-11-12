@@ -60,21 +60,21 @@ void move_actor(Actor *actor, Solid *colliders, int collidersc){
             CollisionFix fix = {
                 .collider=collider,
                 .magnitude=0,
-                .nudge=VEC_ZERO,
+                .delta=VEC_ZERO,
                 .clip=0,
             };
             if(collider->physics == TILE_PHYSICAL){
                 if(collidermaxx > newpos.x && actormaxx > collidermaxx){
-                    fix.nudge.x = collidermaxx - newpos.x;
+                    fix.delta.x = collidermaxx - newpos.x;
                 }
                 if(collider->position.x < actormaxx && newpos.x < collider->position.x){
-                    fix.nudge.x = collider->position.x - actormaxx;
+                    fix.delta.x = collider->position.x - actormaxx;
                 }
                 if(collidermaxy >= newpos.y && actormaxy > collidermaxy){
-                    fix.nudge.y = collidermaxy - newpos.y;
+                    fix.delta.y = collidermaxy - newpos.y;
                 }
                 if(collider->position.y < actormaxy && newpos.y < collider->position.y){
-                    fix.nudge.y = collider->position.y - actormaxy;
+                    fix.delta.y = collider->position.y - actormaxy;
                 }
             }
             if(
@@ -83,21 +83,21 @@ void move_actor(Actor *actor, Solid *colliders, int collidersc){
                 collider->position.y >= actor->position.y+actor->position.height 
                 && !(actor->position.y < collider->position.y && collider->position.y + collider->position.height < actor->position.y + actor->position.height)
                 ){
-                    fix.nudge.y = collider->position.y - actormaxy;
+                    fix.delta.y = collider->position.y - actormaxy;
             }
 
-            if(fix.nudge.x != 0 || fix.nudge.y != 0){
-                float absx = fabs(fix.nudge.x);
-                float absy = fabs(fix.nudge.y);
+            if(fix.delta.x != 0 || fix.delta.y != 0){
+                float absx = fabs(fix.delta.x);
+                float absy = fabs(fix.delta.y);
                 if(absx != 0 && absy != 0){
                     if(absx < absy){
-                        fix.nudge.y = 0;
+                        fix.delta.y = 0;
                     }else {
-                        fix.nudge.x = 0;
+                        fix.delta.x = 0;
                     }
                 }
             }
-            fix.magnitude = vector_magnitude(fix.nudge);
+            fix.magnitude = vector_magnitude(fix.delta);
             *fixiter = fix;
             fixiter++;
             fixesc++;
@@ -107,19 +107,19 @@ void move_actor(Actor *actor, Solid *colliders, int collidersc){
             CollisionFix fix = {
                 .collider=collider,
                 .magnitude=0,
-                .nudge=VEC_ZERO,
+                .delta=VEC_ZERO,
                 .clip=1,
             };
 			if(collider->physics == TILE_PHYSICAL){
                 if(passed_hor_pos) {
-                    fix.nudge.x = -((newpos.x + actor->position.width) - collider->position.x);
+                    fix.delta.x = -((newpos.x + actor->position.width) - collider->position.x);
                 } else if(passed_hor_neg) {
-                    fix.nudge.x = collidermaxx - actor->position.x;
+                    fix.delta.x = collidermaxx - actor->position.x;
                 }
                 if(passed_ver_pos) {
-                    fix.nudge.y = -((newpos.y + actor->position.height) - collider->position.y);
+                    fix.delta.y = -((newpos.y + actor->position.height) - collider->position.y);
                 } else if(passed_ver_neg) {
-                    fix.nudge.y = collidermaxy - actor->position.y;
+                    fix.delta.y = collidermaxy - actor->position.y;
                 }
             }
             if(
@@ -128,11 +128,11 @@ void move_actor(Actor *actor, Solid *colliders, int collidersc){
                 collider->position.y >= actor->position.y+actor->position.height 
                 && !(actor->position.y < collider->position.y && collider->position.y + collider->position.height < actor->position.y + actor->position.height)
                 ){
-                    fix.nudge.y = collider->position.y - actormaxy;
+                    fix.delta.y = collider->position.y - actormaxy;
             }else if(collider->physics == TILE_ONE_WAY){
                 continue;
             }
-			fix.magnitude = vector_magnitude(fix.nudge);
+			fix.magnitude = vector_magnitude(fix.delta);
 
             *fixiter = fix;
             fixiter++;
@@ -145,36 +145,36 @@ void move_actor(Actor *actor, Solid *colliders, int collidersc){
         actor->position = newpos;
         return;
     } else if(fixesc == 1){
-        if(fixes->nudge.x != 0 && fixes->nudge.y != 0){
-            if(fabs(fixes->nudge.x) > fabs(fixes->nudge.y)){
-                fixes->nudge.x = 0;
+        if(fixes->delta.x != 0 && fixes->delta.y != 0){
+            if(fabs(fixes->delta.x) > fabs(fixes->delta.y)){
+                fixes->delta.x = 0;
             } else{
-                fixes->nudge.y = 0;
+                fixes->delta.y = 0;
             }
         }
-        if(fixes->nudge.x != 0){
+        if(fixes->delta.x != 0){
             actor->velocity.x = 0;
         }
-        if(fixes->nudge.y != 0){
+        if(fixes->delta.y != 0){
             actor->velocity.y = 0;
-            if(fixes->nudge.y < 0){
+            if(fixes->delta.y < 0){
                 actor->grounded = 1;
             }
         }
-        finalnudge = fixes->nudge;
+        finalnudge = fixes->delta;
     } else {
         CollisionFix *result;
         float smallesty = 0;
         float smallestx = 0;
         for(int i=0; i<fixesc;i++){
             CollisionFix *fixiter = fixes+i;
-            float yfix = fabs(fixiter->nudge.y);
-            float xfix = fabs(fixiter->nudge.x);
+            float yfix = fabs(fixiter->delta.y);
+            float xfix = fabs(fixiter->delta.x);
             if(yfix > 0 && (yfix < fabs(smallesty) || smallesty == 0)){
-                smallesty = fixiter->nudge.y;
+                smallesty = fixiter->delta.y;
             }
             if(xfix > 0 && (xfix < fabs(smallestx) || smallestx == 0)){
-                smallestx = fixiter->nudge.x;
+                smallestx = fixiter->delta.x;
             }
         }
         finalnudge.y += smallesty;
@@ -188,8 +188,8 @@ void move_actor(Actor *actor, Solid *colliders, int collidersc){
         actor->velocity.x = 0;
     }
 
-    actor->position.x = newpos.x + finalnudge.x;
-    actor->position.y = newpos.y + finalnudge.y;
+    actor->position.x = round(newpos.x + finalnudge.x);
+    actor->position.y = round(newpos.y + finalnudge.y);
 }
 
 void actor_append_collider(Actor actor, Solid *collider){
