@@ -195,7 +195,7 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
     if(hero->actor.grounded && !inputs.left && !inputs.right){
         hero->state = STATE_IDLE;
     }
-    if(hero->actor.grounded && inputs.up){
+    if(hero->actor.grounded && inputs.jump){
         hero->actor.velocity.y = -2.5;
         hero->actor.grounded = 0;
         hero->state = STATE_JUMP;
