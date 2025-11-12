@@ -257,48 +257,22 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
     FrameTimer *ftimer = get_frame_timer();
     Vector2 newvel = hero->actor.velocity;
 
-	if(inputs.left){
-		int acc = accel;
-		if(newvel.x > 0){
-			acc = acc + driftreduce;
-		}
-		newvel.x -= acc * ftimer->frame_time;
-		if(newvel.x < -topspeed){
-			newvel.x = -topspeed;
-		}
-		if(!inputs.right){
-			hero->xtransform = LEFT;
-		}
-	}
-
-	if(inputs.right){
-		float acc = accel;
-		if(newvel.x < 0){
-			acc = acc + driftreduce;
-		}
-		newvel.x += acc * ftimer->frame_time;
-		if(newvel.x > topspeed){
-			newvel.x = topspeed;
-		}
-		if(!inputs.left){
-			hero->xtransform = RIGHT;
-		}
-	}
-
-	if(!inputs.left && !inputs.right){
-		float slow = decel;
-		if(!hero->actor.grounded){
-			slow = airdecel;
-		}
-		if(newvel.x > 0){
-			newvel.x -= slow * ftimer->frame_time;
-		} else if(newvel.x < 0){
-			newvel.x += slow * ftimer->frame_time;
-		}
-		if(fabs(newvel.x) < 0.25){
-			newvel.x = 0;
-		}
-	}
+    // temp. physics check here... nothing to collide with for now
+    // except fake bounds at the edge of the creen
+    /*XXX aks -- resizing map and i need to explore all of it
+    if(hero->position.x <=8){
+        hero->position.x=8;
+    }
+    if(hero->position.x >=1264){
+        hero->position.x=1264;
+    }
+    if(hero->position.y <= 14){
+        hero->position.y=14;
+    }
+    if(hero->position.y >=464){
+        hero->position.y=464;
+    }
+    /**/
 
     if(hero->just_updated==0){
         hero->state_time = 0;
