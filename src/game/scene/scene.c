@@ -90,7 +90,8 @@ void run_scene_menu(Scene *scene){
     }
     
     Inputs inputs = get_inputs();
-    if(inputs.left|inputs.down|inputs.right|inputs.up|inputs.interact){
+    if(inputs.left|inputs.down|inputs.right|inputs.up|inputs.jump|inputs.interact){
+        //set_scene(&SCENE_END);
         set_scene(&SCENE_GAME);
         StopMusicStream(menu_song);
     }
@@ -144,12 +145,75 @@ void run_scene_game(Scene *scene){
     EndMode2D();
 }
 
-void run_scene_end(Scene *scene){
-
-}
-
 void draw_scene_game(Scene *scene){
     draw_map();
     Hero *hero = get_hero();
     draw_hero(hero);
+}
+
+static const struct finale_message {
+  int col,row; // 40x5
+  int t0,dur; // Start time and duration in s/60. Sorted by (t0).
+  const char *text;
+} finale_messagev[]={
+  {16,0,   0,840,"You win!"},
+  {12,1, 120,720,"Code: Alex Hansen"},
+  { 8,2, 240,600,"Graphics: AK Sommerville"},
+  {11,3, 360,480,"Audio: Aster Kanke"},
+  { 4,4, 480,360,"For Uplifting Jam, November 2025"},
+  {10,2, 850,360,"Thanks for playing!"},
+};
+static unsigned int finale_start_time=0;
+
+void run_scene_end(Scene *scene){
+    FrameTimer *timer = get_frame_timer();
+    unsigned int masterframe = (unsigned int)(timer->total * 5.0);
+    ClearBackground(BLACK);
+    
+    // Feast scene.
+    Texture2D texture = get_texture(TEXTURE_FINALE);
+    DrawTexture(texture,0,0,WHITE);
+    texture = get_texture(TEXTURE_FEAST);
+    const int finaleh = 120;
+    const int feastw = 123;
+    const int feasth = 57;
+    const int colw = 25;
+    const int periodv[5] = {29,37,17,19,23};
+    int dstx = (RENDER_WIDTH>>1)-(feastw>>1)-8;
+    int dsty = 55;
+    int kidi = 0;
+    for (; kidi<5; kidi++) {
+        int frame = 0; // 0,1,2
+        int c = periodv[kidi];
+        int t = masterframe%c;
+        if (t>c-7) {
+          frame = 1+(t&1);
+        }
+        Rectangle srcr = (Rectangle){kidi*colw,frame*58,colw,feasth};
+        Rectangle dstr = (Rectangle){dstx+kidi*colw,dsty,colw,feasth};
+        DrawTexturePro(texture,srcr,dstr,VEC_ZERO,0.0f,WHITE);
+    }
+    
+    // Text. 40x5 cells. Timing in s/60.
+    const int frames_per_glyph = 5;
+    unsigned int ttime = (unsigned int)(timer->total * 60.0);
+    if (!finale_start_time) finale_start_time = ttime;
+    ttime -= finale_start_time;
+    Font font = get_font();
+    const struct finale_message *message=finale_messagev;
+    int i = sizeof(finale_messagev)/sizeof(struct finale_message);
+    for (;i-->0;message++) {
+        if (ttime<message->t0) break; // Message is in the future. They're sorted by (t0), so we're done.
+        if (ttime>=message->t0+message->dur) continue; // Message finished, move along.
+        int glyphc=(ttime-message->t0)/frames_per_glyph;
+        char tmp[64];
+        int tmpc=0;
+        const char *src=message->text;
+        for (;*src&&(tmpc<glyphc)&&(tmpc<63);src++,tmpc++) {
+          tmp[tmpc]=*src;
+        }
+        tmp[tmpc]=0;
+        Vector2 dst={message->col*8,120+message->row*12};
+        DrawTextEx(font,tmp,dst,12.0f,0.0f,WHITE);
+    }
 }

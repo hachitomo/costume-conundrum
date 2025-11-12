@@ -31,7 +31,7 @@ Rectangle output_rec = {
 Rectangle fontrecs[96];
 GlyphInfo fontglyphs[96];
 Texture2D logotex,terraintex,spritestex;
-Texture2D orbis_fixetex,clouds1tex,clouds2tex,clouds3tex,bgovertex,fonttex,errortex;
+Texture2D orbis_fixetex,clouds1tex,clouds2tex,clouds3tex,bgovertex,fonttex,errortex,finaletex,feasttex;
 
 int font_codepoints[96] = {
     32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
@@ -67,6 +67,10 @@ Texture2D get_texture(int texture){
         break;
         case TEXTURE_BGOVER:
             return bgovertex;
+        case TEXTURE_FINALE:
+            return finaletex;
+        case TEXTURE_FEAST:
+            return feasttex;
         break;
     }
     return errortex;
@@ -98,6 +102,8 @@ void init_draw(){
     LOADIMG(bgover)
     LOADIMG(font)
     LOADIMG(error)
+    LOADIMG(finale)
+    LOADIMG(feast)
     #undef LOADIMG
     load_font_from_decalsheet();
     bbuf = LoadRenderTexture(RENDER_WIDTH,RENDER_HEIGHT);

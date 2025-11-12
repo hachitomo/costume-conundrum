@@ -13,6 +13,8 @@
 #define TEXTURE_CLOUDS2 7
 #define TEXTURE_CLOUDS3 8
 #define TEXTURE_BGOVER 9
+#define TEXTURE_FINALE 10
+#define TEXTURE_FEAST 11
 
 void init_draw();
 void deinit_draw();
