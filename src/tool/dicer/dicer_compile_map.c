@@ -1,4 +1,5 @@
 #include "dicer_internal.h"
+#include "game/shared_symbols.h"
 
 /* Evaluate command components.
  */
@@ -124,7 +125,7 @@ int dicer_compile_map(struct sr_encoder *dst,const void *src,int srcc) {
     }
     NEXTTOKEN
     
-    if ((tokenc==6)&&!memcmp(token,"sprite",6)) { // sprite @X,Y NAME
+    if ((tokenc==6)&&!memcmp(token,"sprite",6)) { // sprite @X,Y NAME XXX unused
       MOREPOI
       struct poi *poi=poiv+poic++;
       memset(poi,0,sizeof(struct poi));
@@ -138,8 +139,32 @@ int dicer_compile_map(struct sr_encoder *dst,const void *src,int srcc) {
         fprintf(stderr,"%s:%d: Expected sprite name, found '%.*s'\n",dicer.srcpath,lineno,tokenc,token);
         return -2;
       }
+    }
+    
+    #define POSONLY(tag) if ((tokenc==sizeof(#tag)-1)&&!memcmp(token,#tag,tokenc)) { \
+      MOREPOI \
+      struct poi *poi=poiv+poic++; \
+      memset(poi,0,sizeof(struct poi)); \
+      poi->cmd=CMD_map_##tag; \
+      NEXTTOKEN \
+      if (eval_position(&poi->x,&poi->y,token,tokenc)<0) { \
+        fprintf(stderr,"%s:%d: Expected '@X,Y', found '%.*s'\n",dicer.srcpath,lineno,tokenc,token); \
+        return -2; \
+      } \
+    }
+    else POSONLY(hero)
+    else POSONLY(ghost)
+    else POSONLY(princess)
+    else POSONLY(pumpkin)
+    else POSONLY(robot)
+    else POSONLY(clown)
+    else POSONLY(lightbear)
+    else POSONLY(cat)
+    else POSONLY(jack)
+    else POSONLY(pumpkinhat)
+    #undef POSONLY
       
-    } else {
+    else {
       // Unknown commands are fine, ignore them.
     }
     #undef NEXTTOKEN
