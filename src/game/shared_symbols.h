@@ -14,6 +14,21 @@
 
 #define EGGDEV_ignoreData "*.c,*.bak"
 
+#define CMD_map_hero       0x20 /* u16:position */
+#define CMD_map_ghost      0x21 /* u16:position */
+#define CMD_map_princess   0x22 /* u16:position */
+#define CMD_map_pumpkin    0x23 /* u16:position ; The kid dressed up as a pumpkin, not an actual pumpkin. Do not use for pie. */
+#define CMD_map_robot      0x24 /* u16:position */
+#define CMD_map_clown      0x25 /* u16:position */
+#define CMD_map_lightbear  0x26 /* u16:position */
+#define CMD_map_cat        0x27 /* u16:position */
+#define CMD_map_jack       0x28 /* u16:position ; "O'Lantern", the small decoration. */
+#define CMD_map_pumpkinhat 0x29 /* u16:position */
+
+#define NS_physics_vacant 0
+#define NS_physics_solid 1
+#define NS_physics_oneway 2
+
 /* Names of decals.
  */
 #define NS_decal_dot_walk1 1 /* 1..8 */
