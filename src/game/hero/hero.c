@@ -219,12 +219,13 @@ void reset_colliders(){
 void draw_hero(Hero *hero){
     draw_sprite(&hero->sprite,hero_bbox(hero),hero->state_time);
     for(int i=0; i<solidc; i++){
+        Color color = hero_colliders[i].physics == 1 ? LIME : ORANGE;
         DrawRectangleLines(
             (int)hero_colliders[i].position.x,
             (int)hero_colliders[i].position.y,
             (int)hero_colliders[i].position.width,
             (int)hero_colliders[i].position.height,
-            LIME
+            color
         );
     }
     DrawRectangleLinesEx(hero_bbox(get_hero()),1,RED);
