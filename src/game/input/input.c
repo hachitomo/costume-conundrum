@@ -1,9 +1,11 @@
 #include "input.h"
 #include "raylib.h"
+#include <math.h>
 
 Inputs inputs;
 int keys_lastframe = 0;
 int gamepad_lastframe = 0;
+float joystick_dead_zone = 0.15f;
 
 void poll_inputs(void){
     int left = IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A);
@@ -26,6 +28,23 @@ void poll_inputs(void){
         gamepadup =  IsGamepadButtonPressed(0,GAMEPAD_BUTTON_LEFT_FACE_UP) ;
         gamepadjump =  IsGamepadButtonPressed(0,GAMEPAD_BUTTON_RIGHT_FACE_DOWN);
     }
+    float joyx = GetGamepadAxisMovement(0,GAMEPAD_AXIS_LEFT_X);
+    float joyy = GetGamepadAxisMovement(0,GAMEPAD_AXIS_LEFT_Y);
+    if(fabs(joyx) > joystick_dead_zone){
+        if(joyx > 0){
+            gamepadright = 1;
+        }else {
+            gamepadleft = 1;
+        }
+    }
+    if(fabs(joyy) > joystick_dead_zone){
+        if(joyy > 0){
+            gamepaddown = 1;
+        }else {
+            gamepadup = 1;
+        }
+    }
+
     int gamepad_thisframe = gamepadleft || gamepaddown || gamepadright || gamepadup;
 
     inputs.left=left||gamepadleft;
