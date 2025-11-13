@@ -55,9 +55,10 @@ Scene *get_current_scene(void){
     return current_scene;
 }
 
-static void draw_sky_layer(int texid,int speed,double now) {
-    const double base_speed = 50.0; // px/s for the slowest layer.
-    int dstx = -((int)(speed * now * base_speed) % RENDER_WIDTH);
+static void draw_sky_layer(int texid,int speed,double now,int xoffset) {
+    const double base_speed = 20.0; // px/s for the slowest layer.
+    int dstx = -((int)(speed * now * base_speed + ((xoffset*7)>>3)) % RENDER_WIDTH);
+    if (dstx>0) dstx-=RENDER_WIDTH;
     Texture2D texture = get_texture(texid);
     DrawTexture(texture,dstx,0,WHITE);
     if (dstx) DrawTexture(texture,dstx+RENDER_WIDTH,0,WHITE);
@@ -75,11 +76,11 @@ void run_scene_menu(Scene *scene){
     ClearBackground(WHITE);
     
     // sky
-    draw_sky_layer(TEXTURE_ORBIS_FIXE,0,timer->total);
-    draw_sky_layer(TEXTURE_CLOUDS1,1,timer->total);
-    draw_sky_layer(TEXTURE_CLOUDS2,2,timer->total);
-    draw_sky_layer(TEXTURE_CLOUDS3,3,timer->total);
-    draw_sky_layer(TEXTURE_BGOVER,0,timer->total);
+    draw_sky_layer(TEXTURE_ORBIS_FIXE,0,timer->total,0);
+    draw_sky_layer(TEXTURE_CLOUDS1,1,timer->total,0);
+    draw_sky_layer(TEXTURE_CLOUDS2,2,timer->total,0);
+    draw_sky_layer(TEXTURE_CLOUDS3,3,timer->total,0);
+    draw_sky_layer(TEXTURE_BGOVER,0,timer->total,0);
     
     DrawTextureEx(logotex,LOGO_OFFSET,0,1,WHITE);
     Font font = get_font();
@@ -130,16 +131,15 @@ void run_scene_game(Scene *scene){
     };
     camera->target = intvector(clamp_camera(playerpos));
     
-    
     // sky
     ClearBackground(WHITE);
     BeginBlendMode(BLEND_CUSTOM_SEPARATE);
     rlSetBlendFactorsSeparate(0x0302, 0x0303, 1, 0x0303, 0x8006, 0x8006);
-        draw_sky_layer(TEXTURE_ORBIS_FIXE,0,timer->total);
-        draw_sky_layer(TEXTURE_CLOUDS1,1,timer->total);
-        draw_sky_layer(TEXTURE_CLOUDS2,2,timer->total);
-        draw_sky_layer(TEXTURE_CLOUDS3,3,timer->total);
-        draw_sky_layer(TEXTURE_BGOVER,0,timer->total);
+        draw_sky_layer(TEXTURE_ORBIS_FIXE,0,timer->total,camera->target.x);
+        draw_sky_layer(TEXTURE_CLOUDS1,1,timer->total,camera->target.x);
+        draw_sky_layer(TEXTURE_CLOUDS2,2,timer->total,camera->target.x);
+        draw_sky_layer(TEXTURE_CLOUDS3,3,timer->total,camera->target.x);
+        draw_sky_layer(TEXTURE_BGOVER,0,timer->total,camera->target.x);
     EndBlendMode();
     // draw
     BeginMode2D(*camera);
