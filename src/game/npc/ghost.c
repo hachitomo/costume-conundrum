@@ -49,6 +49,7 @@ void init_ghost(int x,int y){
     ghost.position.y = y*TILE_SIZE;
     ghost.width = decalsheet_sprites[NS_decal_ghost_right].w;
     ghost.height = decalsheet_sprites[NS_decal_ghost_right].h;
+    ghost.id = CMD_map_ghost;
     ghost.sprite = &ghost_sprite;
 }
 
@@ -99,4 +100,15 @@ Rectangle get_ghost_frame(int state,float state_time){
     }
     printf("Fallback - ghost state not detected: %d]\nDisplaying idle.\n",state);
     return get_anim_frame_rec(decalsheet_sprites,NS_decal_ghost_walk1);
+}
+
+void draw_ghost(){
+    NPC *ghost = get_ghost();
+    Rectangle dest = {
+        .x=ghost->position.x,
+        .y=ghost->position.y,
+        .width=ghost->width,
+        .height=ghost->height,
+    };
+    draw_sprite(ghost->sprite,dest,ghost->state_time);
 }

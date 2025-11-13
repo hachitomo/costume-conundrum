@@ -8,5 +8,6 @@ void init_ghost(int x,int y);
 NPC *get_ghost();
 void ghooooost(float ftime);
 Rectangle get_ghost_frame(int state,float frame_time);
+void draw_ghost();
 
 #endif

@@ -6,79 +6,55 @@
 #include "../draw/draw.h"
 #include "../npc/ghost.h"
 #include "../npc/npc.h"
+#include "../npc/princess.h"
 #include "../physics/physics.h"
 #include <stdio.h>
 
 Map game_map;
 Rectangle areas[256];
 Tilesheet map_tilesheet;
-
-// static void init_npc(NPC *npc){
-//     switch(npc->id){
-//         case CMD_map_ghost:
-//             init_ghost();
-//             break;
-//         case CMD_map_princess:
-//             break;
-//         case CMD_map_pumpkin:
-//             break;
-//         case CMD_map_robot:
-//             break;
-//         case CMD_map_clown:
-//             break;
-//         case CMD_map_lightbear:
-//             break;
-//         case CMD_map_cat:
-//             break;
-//         case CMD_map_jack:
-//             break;
-//         case CMD_map_pumpkinhat:
-//             break;
-//         default:
-//             break;
-//     }
-// }
+int npcs[7] = {0};
+int npcc = 0;
 
 // act will set NPC state, just_updated, position, etc. for each sprite
 void update_npcs(){
     FrameTimer *ftimer = get_frame_timer();
     ghooooost(ftimer->frame_time);
+    act_royalty(ftimer->frame_time);
 }
 
 void draw_npcs(){
-    // for(int i=0; i<map_poic; i++){
-    // for(int i=0; i<1; i++){
-        NPC *ghost = get_ghost();
-        Rectangle dest = {
-            .x=ghost->position.x,
-            .y=ghost->position.y,
-            .width=ghost->width,
-            .height=ghost->height,
-        };
-        draw_sprite(ghost->sprite,dest,ghost->state_time);
-    // }
+    for (int i=0;i<npcc;i++) {
+        int npcid = npcs[i];
+        switch (npcid) {
+            case CMD_map_ghost:
+                draw_ghost();
+                break;
+            case CMD_map_princess:
+                draw_princess();
+                break;
+                // TODO others
+            default:
+                return;
+        }
+    }
 }
 
 void init_npcs(){
-    // NPC *iter = npcs;
-    // for(int i=0; i<map_poic; i++){
-    // for(int i=2; i<3; i++){
-    // npcs->position.x = map_poiv[2].x * TILE_SIZE;
-    // npcs->position.y = map_poiv[2].y * TILE_SIZE;
-    // npcs->id = map_poiv[2].cmd;
-        // iter->position.x = map_poiv[i].x * TILE_SIZE;
-        // iter->position.y = map_poiv[i].y * TILE_SIZE;
-        // iter->id = map_poiv[i].cmd;
-    // init_npc(33);
-        // iter++;
-    // }
     const struct map_poi *poi=map_poiv;
     int i=map_poic;
     for (;i-->0;poi++) {
         switch (poi->cmd) {
-            case CMD_map_hero: break;//TODO put dot here
-            case CMD_map_ghost: init_ghost(poi->x,poi->y); break;
-            case CMD_map_princess: break;//TODO
+            case CMD_map_ghost: 
+                init_ghost(poi->x,poi->y);
+                npcs[npcc] = get_ghost()->id;
+                npcc++;
+                break;
+            case CMD_map_princess: 
+                init_princess(poi->x,poi->y);
+                npcs[npcc] = get_princess()->id;
+                npcc++;
+                break;
             case CMD_map_pumpkin: break;//TODO
             case CMD_map_robot: break;//TODO
             case CMD_map_clown: break;//TODO
