@@ -4,10 +4,7 @@
 #include "../frame_timer.h"
 #include "../shared_symbols.h"
 #include "../draw/draw.h"
-#include "../npc/ghost.h"
 #include "../npc/npc.h"
-#include "../npc/princess.h"
-#include "../npc/pumpkin.h"
 #include "../physics/physics.h"
 #include <stdio.h>
 
@@ -20,10 +17,6 @@ int npcc = 0;
 // act will set NPC state, just_updated, position, etc. for each sprite
 void update_npcs(){
     FrameTimer *ftimer = get_frame_timer();
-    ghooooost(ftimer->frame_time);
-    act_royalty(ftimer->frame_time);
-    pump_it_up(ftimer->frame_time);
-    
     NPC *p;
     int c=get_npcs(&p);
     for (;c-->0;p++) {
@@ -33,24 +26,6 @@ void update_npcs(){
 }
 
 void draw_npcs(){
-    for (int i=0;i<npcc;i++) {
-        int npcid = npcs[i];
-        switch (npcid) {
-            case CMD_map_ghost:
-                draw_ghost();
-                break;
-            case CMD_map_princess:
-                draw_princess();
-                break;
-            case CMD_map_pumpkin:
-                draw_pumpkin();
-                break;
-                // TODO others
-            default:
-                return;
-        }
-    }
-    
     NPC *p;
     int c=get_npcs(&p);
     for (;c-->0;p++) {
@@ -63,21 +38,9 @@ void init_npcs(){
     int i=map_poic;
     for (;i-->0;poi++) {
         switch (poi->cmd) {
-            case CMD_map_ghost: 
-                init_ghost(poi->x,poi->y);
-                npcs[npcc] = get_ghost()->id;
-                npcc++;
-                break;
-            case CMD_map_princess: 
-                init_princess(poi->x,poi->y);
-                npcs[npcc] = get_princess()->id;
-                npcc++;
-                break;
-            case CMD_map_pumpkin: 
-                init_pumpkin(poi->x,poi->y);
-                npcs[npcc] = get_pumpkin()->id;
-                npcc++;
-                break;
+            case CMD_map_ghost: init_npc(poi->x,poi->y,NS_decal_ghost_wrong); break;
+            case CMD_map_princess: init_npc(poi->x,poi->y,NS_decal_princess_wrong); break;
+            case CMD_map_pumpkin: init_npc(poi->x,poi->y,NS_decal_pumpkin_wrong); break;
             case CMD_map_robot: init_npc(poi->x,poi->y,NS_decal_robot_wrong); break;
             case CMD_map_clown: init_npc(poi->x,poi->y,NS_decal_clown_wrong); break;
             case CMD_map_lightbear: init_npc(poi->x,poi->y,NS_decal_lightbear_dig1); break;
@@ -86,6 +49,7 @@ void init_npcs(){
             case CMD_map_pumpkinhat: init_npc(poi->x,poi->y,NS_decal_pumpkinhat); break;
         }
     }
+    sort_npcs();
 }
 
 void init_map(){

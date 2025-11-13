@@ -15,6 +15,7 @@ int get_npcs(NPC **v);
  * (x,y) in meters, from the poi.
  */
 NPC *init_npc(int x,int y,int decalid);
+void sort_npcs();
 
 void update_npc(NPC *npc,FrameTimer *ftimer);
 void draw_npc(NPC *npc);

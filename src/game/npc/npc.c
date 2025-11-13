@@ -49,6 +49,9 @@ static void npc_set_decal(NPC *npc,int decalid) {
  
 static void npc_initial_nudge(NPC *npc) {
     switch (npc->id) {
+        case NS_decal_ghost_wrong: npc->argv[1]=1; npc->position.y-=7.0f; break;
+        case NS_decal_princess_wrong: npc->argv[1]=1; npc->position.y-=6.0f; break;
+        case NS_decal_pumpkin_wrong: npc->argv[1]=1; npc->position.y-=8.0f; break;
         case NS_decal_robot_wrong: npc->argv[1]=1; npc->position.y-=7.0f; break;
         case NS_decal_clown_wrong: npc->argv[1]=1; npc->position.y-=8.0f; break;
         case NS_decal_lightbear_dig1: npc->position.x-=1.0f; npc->position.y-=7.0f; break;
@@ -79,11 +82,98 @@ NPC *init_npc(int x,int y,int decalid) {
     return npc;
 }
 
+/* After creating all of them, do a one-time sort.
+ * Mostly we don't care about the order, but (npc->argv[1]==0) must render before (npc->argv[1]==1).
+ */
+ 
+static int npc_rendercmp(const NPC *a,const NPC *b) {
+    return a->argv[1]-b->argv[1];
+}
+ 
+void sort_npcs() {
+    int lo=0,hi=npcc-1,d=1;
+    while (lo<hi) {
+        int done=1,i,last;
+        if (d==1) {
+            i=lo;
+            last=hi;
+        } else {
+            i=hi;
+            last=lo;
+        }
+        for (;i!=last;i+=d) {
+            int cmp=npc_rendercmp(npcv+i,npcv+i+d);
+            if (cmp==d) {
+                NPC tmp=npcv[i];
+                npcv[i]=npcv[i+d];
+                npcv[i+d]=tmp;
+                done=0;
+            }
+        }
+        if (done) break;
+        if (d==1) {
+            hi--;
+            d=-1;
+        } else {
+            lo++;
+            d=1;
+        }
+    }
+}
+
 /* Advance animation frame and clock.
  */
  
 static void npc_animate(NPC *npc) {
     switch (npc->id0) {
+    
+        // 1,2,3,4 if sated.
+        case NS_decal_ghost_wrong: switch (npc->argv[0]) {
+            case 0: npc->animclock+=999.999; npc_set_decal(npc,NS_decal_ghost_wrong); break;
+            case 1: npc->animclock+=999.999; npc_set_decal(npc,NS_decal_ghost_right); break;
+            case 2: {
+                npc->animclock+=0.200;
+                if (++(npc->animframe)>=4) npc->animframe=0;
+                switch (npc->animframe) {
+                    case 0: npc_set_decal(npc,NS_decal_ghost_walk1); break;
+                    case 1: npc_set_decal(npc,NS_decal_ghost_walk2); break;
+                    case 2: npc_set_decal(npc,NS_decal_ghost_walk3); break;
+                    case 3: npc_set_decal(npc,NS_decal_ghost_walk4); break;
+                }
+              } break;
+          } break;
+    
+        // 1,2,3,4 if sated.
+        case NS_decal_princess_wrong: switch (npc->argv[0]) {
+            case 0: npc->animclock+=999.999; npc_set_decal(npc,NS_decal_princess_wrong); break;
+            case 1: npc->animclock+=999.999; npc_set_decal(npc,NS_decal_princess_right); break;
+            case 2: {
+                npc->animclock+=0.200;
+                if (++(npc->animframe)>=4) npc->animframe=0;
+                switch (npc->animframe) {
+                    case 0: npc_set_decal(npc,NS_decal_princess_walk1); break;
+                    case 1: npc_set_decal(npc,NS_decal_princess_walk2); break;
+                    case 2: npc_set_decal(npc,NS_decal_princess_walk3); break;
+                    case 3: npc_set_decal(npc,NS_decal_princess_walk4); break;
+                }
+              } break;
+          } break;
+    
+        // 1,2,1,3 if sated.
+        case NS_decal_pumpkin_wrong: switch (npc->argv[0]) {
+            case 0: npc->animclock+=999.999; npc_set_decal(npc,NS_decal_pumpkin_wrong); break;
+            case 1: npc->animclock+=999.999; npc_set_decal(npc,NS_decal_pumpkin_right); break;
+            case 2: {
+                npc->animclock+=0.200;
+                if (++(npc->animframe)>=4) npc->animframe=0;
+                switch (npc->animframe) {
+                    case 0: npc_set_decal(npc,NS_decal_pumpkin_walk1); break;
+                    case 1: npc_set_decal(npc,NS_decal_pumpkin_walk2); break;
+                    case 2: npc_set_decal(npc,NS_decal_pumpkin_walk1); break;
+                    case 3: npc_set_decal(npc,NS_decal_pumpkin_walk3); break;
+                }
+              } break;
+          } break;
     
         // 1,2,1,3 if sated.
         case NS_decal_robot_wrong: switch (npc->argv[0]) {
@@ -191,12 +281,16 @@ static void npc_update_kid(NPC *npc,FrameTimer *ftimer,int inv_give,int inv_take
         }
         // Take a penny?
         if (npc->argv[0]==0) {
-            Rectangle bbox=npc_get_bbox(npc);
-            if (CheckCollisionRecs(hero->bbox,bbox)) {
+            if (!inv_give) {
                 npc->argv[0]=1;
-                npc->animclock=0.0;
-                PlaySound(get_sound(SOUND_PICKUP));
-                set_inventory(inv_give,1);
+            } else {
+                Rectangle bbox=npc_get_bbox(npc);
+                if (CheckCollisionRecs(hero->bbox,bbox)) {
+                    npc->argv[0]=inv_take?1:2;
+                    npc->animclock=0.0;
+                    PlaySound(get_sound(SOUND_PICKUP));
+                    set_inventory(inv_give,1);
+                }
             }
         // Give a penny?
         } else if (npc->argv[0]==1) {
@@ -239,6 +333,12 @@ void update_npc(NPC *npc,FrameTimer *ftimer) {
         npc_update_kid(npc,ftimer,INV_clown,INV_robo);
     } else if (npc->id0==NS_decal_clown_wrong) {
         npc_update_kid(npc,ftimer,INV_robo,INV_clown);
+    } else if (npc->id0==NS_decal_ghost_wrong) {
+        npc_update_kid(npc,ftimer,INV_crown,0);
+    } else if (npc->id0==NS_decal_princess_wrong) {
+        npc_update_kid(npc,ftimer,0,INV_crown);
+    } else if (npc->id0==NS_decal_pumpkin_wrong) {
+        npc_update_kid(npc,ftimer,0,INV_pump);
     
     // Pumpkinhat can get picked up.
     } else if (npc->id0==NS_decal_pumpkinhat) {
