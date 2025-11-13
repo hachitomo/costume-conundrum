@@ -1,8 +1,9 @@
 #include "ghost.h"
 #include "raylib.h"
-#include "../map/map.h"
+#include "../audio/audio.h"
 #include "../draw/draw.h"
 #include "../hero/hero.h"
+#include "../map/map.h"
 #include "../shared_symbols.h"
 #include <stdio.h>
 
@@ -62,6 +63,7 @@ void ghooooost(){
             // retrieve crown
             set_inventory(INV_crown,1);
             ghost.state = GHOST_RIGHT;
+            PlaySound(get_sound(SOUND_PICKUP));
         }else if(CheckCollisionRecs(hero_bbox(hero),ghost_detect)){
             ghost.sprite->state = GHOST_CURIOUS;
             ghost.just_updated = 1;

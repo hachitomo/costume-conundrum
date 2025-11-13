@@ -58,14 +58,18 @@ extern const int           image_bgover_length;
 extern const unsigned char image_error[];
 extern const int           image_error_length;
 
-extern const unsigned char sound_blip[];
-extern const int           sound_blip_length;
-extern const unsigned char sound_boop[];
-extern const int           sound_boop_length;
-extern const unsigned char sound_arp[];
-extern const int           sound_arp_length;
+extern const unsigned char sound_jump[];
+extern const int           sound_jump_length;
+extern const unsigned char sound_joey[];
+extern const int           sound_joey_length;
+extern const unsigned char sound_pickup[];
+extern const int           sound_pickup_length;
 extern const unsigned char sound_fanfare[];
 extern const int           sound_fanfare_length;
+extern const unsigned char sound_successone[];
+extern const int           sound_successone_length;
+extern const unsigned char sound_successtwo[];
+extern const int           sound_successtwo_length;
 
 extern const unsigned char song_menu[];
 extern const int           song_menu_length;

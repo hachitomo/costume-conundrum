@@ -3,7 +3,7 @@
 #include "../data.h"
 #include <stdio.h>
 
-Sound arpsound,blipsound,boopsound,fanfaresound;
+Sound jumpsound,joeysound,pickupsound,fanfaresound,successonesound,successtwosound;
 Wave arpwave,blip,boop,fanfare;
 Music menumusic,gamemusic,endingmusic;
 
@@ -14,28 +14,47 @@ void init_audio(){
       tag##sound = LoadSoundFromWave(tag##wav); \
       UnloadWave(tag##wav);
     #define LOADSONG(tag) tag##music = LoadMusicStreamFromMemory(".mp3",song_##tag,song_##tag##_length); 
-    LOADSOUND(arp)
-    LOADSOUND(blip)
-    LOADSOUND(boop)
+    LOADSOUND(jump)
+    LOADSOUND(joey)
+    LOADSOUND(pickup)
     LOADSOUND(fanfare)
+    LOADSOUND(successone)
+    LOADSOUND(successtwo)
     LOADSONG(menu)
     LOADSONG(game)
     LOADSONG(ending)
 };
 
+void PlaySoundVolume(int soundid, float volume){
+    Sound snd = get_sound(soundid);
+    if(volume < 0 || volume > 1) return;
+    SetSoundVolume(snd,volume);
+    PlaySound(snd);
+}
+
+Sound success_sound(){
+    int rand = GetRandomValue(1,100);
+    Sound success = rand >50 ? get_sound(SOUND_SUCCESSONE) : get_sound(SOUND_SUCCESSTWO);
+    return success; // if only it was that easy in real life, huh?
+}
+
 Sound get_sound(int soundid){
     switch(soundid){
-        case SOUND_ARP:
-            return arpsound;
-        case SOUND_BLIP:
-            return blipsound;
-        case SOUND_BOOP:
-            return boopsound;
+        case SOUND_JUMP:
+            return jumpsound;
+        case SOUND_JOEY:
+            return joeysound;
+        case SOUND_PICKUP:
+            return pickupsound;
         case SOUND_FANFARE:
             return fanfaresound;
+        case SOUND_SUCCESSONE:
+            return successonesound;
+        case SOUND_SUCCESSTWO:
+            return successtwosound;
         default:
             printf("WARNING! Sound with ID %d not found, deaulting...",soundid);
-            return blipsound;
+            return jumpsound;
     }
 }
 
@@ -54,10 +73,12 @@ Music get_song(int songid){
 }
 
 void deinit_audio(){
-    UnloadSound(blipsound);
-    UnloadSound(boopsound);
-    UnloadSound(arpsound);
+    UnloadSound(jumpsound);
+    UnloadSound(joeysound);
+    UnloadSound(pickupsound);
     UnloadSound(fanfaresound);
+    UnloadSound(successtwosound);
+    UnloadSound(successonesound);
     UnloadMusicStream(menumusic);
     UnloadMusicStream(gamemusic);
     UnloadMusicStream(endingmusic);

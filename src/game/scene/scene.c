@@ -144,20 +144,6 @@ void run_scene_game(Scene *scene){
     // draw
     BeginMode2D(*camera);
         draw_scene_game(scene);
-        Rectangle ghost_detect = {
-            .x=328,
-            .y=216,
-            .height=112,
-            .width=128,
-        };
-        Rectangle ghost_hitbox = {
-            .x=368,
-            .y=280,
-            .height=33,
-            .width=28,
-        };
-        DrawRectangleLinesEx(ghost_detect,1,ORANGE);
-        DrawRectangleLinesEx(ghost_hitbox,1,PURPLE);
     EndMode2D();
 }
 

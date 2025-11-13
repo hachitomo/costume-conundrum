@@ -205,6 +205,7 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
         hero->actor.velocity.y = -2.5;
         hero->actor.grounded = 0;
         hero->state = STATE_JUMP;
+        PlaySound(get_sound(SOUND_JUMP));
     }
     hero->sprite.state = hero->state;
 
@@ -236,8 +237,8 @@ void draw_hero(Hero *hero){
         offset.x = hero->sprite.xtransform == 1 ? 2 : 5;
         offset.y = hero->sprite.xtransform == 1 ? 4 : -5;
         Rectangle crownpos = {
-            .x=hero->actor.position.x + offset.x,
-            .y=hero->actor.position.y + offset.y,
+            .x=(int)(hero->actor.position.x + offset.x),
+            .y=(int)(hero->actor.position.y + offset.y),
             .width=13,
             .height=6,
         };
