@@ -5,6 +5,7 @@
 #include "../shared_symbols.h"
 #include "../draw/draw.h"
 #include "../npc/ghost.h"
+#include "../npc/npc.h"
 #include "../physics/physics.h"
 #include <stdio.h>
 
@@ -71,7 +72,22 @@ void init_npcs(){
     // init_npc(33);
         // iter++;
     // }
-    init_ghost();
+    const struct map_poi *poi=map_poiv;
+    int i=map_poic;
+    for (;i-->0;poi++) {
+        switch (poi->cmd) {
+            case CMD_map_hero: break;//TODO put dot here
+            case CMD_map_ghost: init_ghost(poi->x,poi->y); break;
+            case CMD_map_princess: break;//TODO
+            case CMD_map_pumpkin: break;//TODO
+            case CMD_map_robot: break;//TODO
+            case CMD_map_clown: break;//TODO
+            case CMD_map_lightbear: break;//TODO
+            case CMD_map_cat: break;//TODO
+            case CMD_map_jack: break;//TODO
+            case CMD_map_pumpkinhat: break;//TODO
+        }
+    }
 }
 
 void init_map(){

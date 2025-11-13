@@ -35,7 +35,7 @@ NPC *get_ghost(){
     return &ghost;
 }
 
-void init_ghost(){
+void init_ghost(int x,int y){
     ghost.state = GHOST_WRONG;
     ghost.just_updated = 0;
     
@@ -45,8 +45,8 @@ void init_ghost(){
     ghost_sprite.framesc=8;
     ghost_sprite.frate=0.125;
     ghost_sprite.get_animation_frame=&get_ghost_frame;
-    ghost.position.x = map_poiv[2].x*TILE_SIZE;
-    ghost.position.y = map_poiv[2].y*TILE_SIZE;
+    ghost.position.x = x*TILE_SIZE;
+    ghost.position.y = y*TILE_SIZE;
     ghost.width = decalsheet_sprites[NS_decal_ghost_right].w;
     ghost.height = decalsheet_sprites[NS_decal_ghost_right].h;
     ghost.sprite = &ghost_sprite;
