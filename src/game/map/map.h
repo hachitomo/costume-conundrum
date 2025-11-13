@@ -23,6 +23,8 @@ typedef struct NPC{
     //Tilesheet *tilesheet // assumed to be sprites.png for game jam, but could set here
     int animframe;
     double animclock;
+    int argv[4]; // usage depends on (id0)
+    int defunct;
 }NPC;
 
 typedef struct Tilesheet{

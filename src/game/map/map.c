@@ -27,6 +27,7 @@ void update_npcs(){
     for (;c-->0;p++) {
       update_npc(p,ftimer);
     }
+    reap_defunct_npcs();
 }
 
 void draw_npcs(){
