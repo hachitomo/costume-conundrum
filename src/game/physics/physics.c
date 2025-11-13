@@ -142,6 +142,9 @@ void move_actor(Actor *actor, Solid *colliders, int collidersc){
     }
 
     if(fixesc == 0){
+        if(newpos.y > actor->position.y){
+            actor->grounded = 0;
+        }
         actor->position = newpos;
         return;
     } else if(fixesc == 1){

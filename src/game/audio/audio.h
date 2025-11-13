@@ -18,6 +18,7 @@ void init_audio();
 Sound get_sound(int soundid);
 Sound success_sound();
 Music get_song(int soundid);
+void PlaySoundVolume(int soundid,float volume);
 void deinit_audio();
 
 #endif

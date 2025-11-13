@@ -190,18 +190,19 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
         }else{
             hero->state = STATE_JUMP;
         }
-    }
-	if(hero->actor.grounded && ((!inputs.left && inputs.right) || (inputs.left && !inputs.right))){
-        hero->state = STATE_WALK;
-    }
-    if(hero->actor.grounded && !inputs.left && !inputs.right){
-        hero->state = STATE_IDLE;
-    }
-    if(hero->actor.grounded && inputs.jump){
-        hero->actor.velocity.y = -2.5;
-        hero->actor.grounded = 0;
-        hero->state = STATE_JUMP;
-        PlaySound(get_sound(SOUND_JUMP));
+    } else {
+        if((!inputs.left && inputs.right) || (inputs.left && !inputs.right)){
+            hero->state = STATE_WALK;
+        }
+        if(!inputs.left && !inputs.right){
+            hero->state = STATE_IDLE;
+        }
+        if(inputs.jump){
+            hero->actor.velocity.y = -2.5;
+            hero->actor.grounded = 0;
+            hero->state = STATE_JUMP;
+            PlaySoundVolume(SOUND_JUMP,0.5);
+        }
     }
     hero->sprite.state = hero->state;
 
