@@ -17,9 +17,14 @@ void reset_colliders();
 Sprite hero_sprite = {0};
 Image hero_img;
 Texture2D hero_tex;
-float HERO_ANIM_RATE = 0.125;
 Solid hero_colliders[100];
 int collidersc = 0;
+
+int crown   = 0;
+int clown   = 0;
+int robo    = 0;
+int pump    = 0;
+
 Actor hero_actor = {
     .position={
         .x=GAME_START_X,
@@ -69,6 +74,7 @@ void init_hero(void){
     hero_sprite.texture = LoadTextureFromImage(hero_img);
     hero_sprite.get_animation_frame = get_hero_frame;
     hero_sprite.xtransform=1;
+    hero_sprite.frate=0.125;
     hero.sprite=hero_sprite;
     hero.actor=hero_actor;
     if(hero_colliders == NULL) {
@@ -218,6 +224,26 @@ void reset_colliders(){
 
 void draw_hero(Hero *hero){
     draw_sprite(&hero->sprite,hero_bbox(hero),hero->state_time);
+    if(crown){
+        Texture2D tex = hero->sprite.texture;
+        Rectangle crown = {
+            .x=21,
+            .y=29,
+            .width=13,
+            .height=6,
+        };
+        Vector2 offset;
+        offset.x = hero->sprite.xtransform == 1 ? 2 : 5;
+        offset.y = hero->sprite.xtransform == 1 ? 4 : -5;
+        Rectangle crownpos = {
+            .x=hero->actor.position.x + offset.x,
+            .y=hero->actor.position.y + offset.y,
+            .width=13,
+            .height=6,
+        };
+        float rotation = hero->sprite.xtransform == 1 ? 315 : 45;
+        DrawTexturePro(tex,crown,crownpos,VEC_ZERO,rotation,WHITE);
+    }
     /*
     for(int i=0; i<solidc; i++){
         Color color = hero_colliders[i].physics == TILE_PHYSICAL ? LIME : ORANGE;
@@ -263,7 +289,7 @@ Rectangle get_hero_frame(int state,float state_time){
         printf("tried to get hero frame length OOB %d",state);
         return get_sprite_frame_info(decalsheet_sprites,NS_decal_dot_idle);
     }
-    int frame = get_animation_frame(state_time,HERO_ANIM_RATE,hero_framesc[state]);
+    int frame = get_animation_frame(state_time,hero_sprite.frate,hero_framesc[state]);
     switch(state){
         case 1:
             return get_sprite_frame_info(decalsheet_sprites,walk_frames[frame]);
@@ -283,4 +309,35 @@ Rectangle hero_bbox(Hero *hero){
     result.width = (int)HERO_WIDTH;
     result.height = (int)HERO_HEIGHT;
     return result;
+}
+
+
+void set_inventory(int item, int value){
+    switch(item){
+        case INV_crown:
+            crown = value;
+            break;
+        case INV_clown:
+            clown = value;
+            break;
+        case INV_robo:
+            robo = value;
+            break;
+        case INV_pump:
+            pump = value;
+            break;
+    }
+}
+
+int get_inventory(int item){
+     switch(item){
+        case INV_crown:
+            return crown;
+        case INV_clown:
+            return clown;
+        case INV_robo:
+            return robo;
+        case INV_pump:
+            return pump;
+    }
 }

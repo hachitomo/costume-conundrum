@@ -3,14 +3,6 @@
 
 #include "raylib.h"
 
-// duration - length of each frame of the animation, in secs
-// 0 for static (no movement)
-// typedef struct SpriteAnimation{
-//     const Rectangle *frames;
-//     int framesc;
-//     float time,duration;
-// }SpriteAnimation;
-
 
 typedef struct Sprite{
     Texture2D texture;

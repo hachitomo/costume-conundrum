@@ -91,5 +91,6 @@
 #define NS_decal_cat2 58
 #define NS_decal_cat3 59
 #define NS_decal_cat4 60
+#define NS_decal_ghost_query_up 61
 
 #endif

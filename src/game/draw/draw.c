@@ -155,3 +155,13 @@ void draw_game(Scene *scene){
         DrawTexturePro(bbuf.texture,buffer_rec,output_rec,screen_origin,0,WHITE);
     EndDrawing();
 }
+
+Rectangle get_anim_frame_rec(const struct decal sheet[], int frame){
+    Rectangle result = {
+        .x=sheet[frame].x,
+        .y=sheet[frame].y,
+        .width=sheet[frame].w,
+        .height=sheet[frame].h
+    };
+    return result;
+}

@@ -25,6 +25,6 @@ void draw_game(Scene *);
 Texture2D get_texture(int texture);
 Font get_font(void);
 void load_font_from_decalsheet(void);
-
+Rectangle get_anim_frame_rec(const struct decal sheet[], int frame);
 
 #endif

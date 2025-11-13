@@ -4,9 +4,6 @@
 #include <math.h>
 #include <stdio.h>
 
-RenderTexture2D sprite_buf;
-int init = 1;
-
 void draw_sprite(Sprite *sprite,Rectangle dest,float state_time){
     Rectangle frame = sprite->get_animation_frame(sprite->state,state_time);
     frame.width *= sprite->xtransform;

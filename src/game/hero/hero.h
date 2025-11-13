@@ -8,10 +8,15 @@
 #include "../scene/scene.h"
 #include "../sprite/sprite.h"
 
+#define INV_crown   1
+#define INV_clown   2
+#define INV_robo    3
+#define INV_pump    4
+
 typedef struct Hero{
     Actor actor;
     Sprite sprite;
-    int state,xtransform,just_updated;
+    int state,xtransform,just_updated,inventory;
     float state_time;
 }Hero;
 
@@ -23,6 +28,8 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs);
 void draw_hero(Hero *hero);
 Rectangle get_hero_frame(int state, float state_time);
 Rectangle hero_bbox(Hero *hero);
+void set_inventory(int item, int value);
+int get_inventory(int item);
 // SpriteAnimation *get_hero_animations();
 
 static const int HERO_WIDTH = 17;
