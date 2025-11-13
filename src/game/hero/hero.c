@@ -77,6 +77,7 @@ void init_hero(void){
     hero_sprite.frate=0.125;
     hero.sprite=hero_sprite;
     hero.actor=hero_actor;
+    hero.bbox=hero_actor.position;
 };
 
 void deinit_hero(void){
@@ -184,6 +185,11 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
     solidc = solids_in_selection(hero_colliders,physics_zone,100);
     move_actor(&hero->actor,hero_colliders,solidc);
 
+    hero->bbox.x=(int)hero->actor.position.x;
+    hero->bbox.y=(int)hero->actor.position.y;
+    hero->bbox.width=hero->actor.position.width;
+    hero->bbox.height=hero->actor.position.height;
+
     if(!hero->actor.grounded){
         if(newvel.y > 0){
             hero->state = STATE_FALL;
@@ -221,7 +227,7 @@ void reset_colliders(){
 }
 
 void draw_hero(Hero *hero){
-    draw_sprite(&hero->sprite,hero_bbox(hero),hero->state_time);
+    draw_sprite(&hero->sprite,hero->bbox,hero->state_time);
     if(crown){
         Texture2D tex = hero->sprite.texture;
         Rectangle crown = {
@@ -231,15 +237,15 @@ void draw_hero(Hero *hero){
             .height=6,
         };
         Vector2 offset;
-        offset.x = hero->sprite.xtransform == 1 ? 2 : 5;
-        offset.y = hero->sprite.xtransform == 1 ? 4 : -5;
+        offset.x = hero->sprite.xtransform == -1 ? 18 : -1; // L : R
+        offset.y = hero->sprite.xtransform == -1 ? 14 : 26;
         Rectangle crownpos = {
             .x=(int)(hero->actor.position.x + offset.x),
             .y=(int)(hero->actor.position.y + offset.y),
             .width=13,
             .height=6,
         };
-        float rotation = hero->sprite.xtransform == 1 ? 315 : 45;
+        float rotation = hero->sprite.xtransform == 1 ? 270 : 90;
         DrawTexturePro(tex,crown,crownpos,VEC_ZERO,rotation,WHITE);
     }
     /*
@@ -262,7 +268,7 @@ void draw_hero(Hero *hero){
             );
         }
     }
-    DrawRectangleLinesEx(hero_bbox(get_hero()),1,RED);
+    DrawRectangleLinesEx(hero->bbox),1,RED);
     */
     reset_colliders();
 }
@@ -300,14 +306,14 @@ Rectangle get_hero_frame(int state,float state_time){
     return get_sprite_frame_info(decalsheet_sprites,NS_decal_dot_idle);
 }
 
-Rectangle hero_bbox(Hero *hero){
-    Rectangle result = {0};
-    result.x = (int)hero->actor.position.x;
-    result.y = (int)hero->actor.position.y;
-    result.width = (int)HERO_WIDTH;
-    result.height = (int)HERO_HEIGHT;
-    return result;
-}
+// Rectangle hero_bbox(Hero *hero){
+//     Rectangle result = {0};
+//     result.x = (int)hero->actor.position.x;
+//     result.y = (int)hero->actor.position.y;
+//     result.width = (int)HERO_WIDTH;
+//     result.height = (int)HERO_HEIGHT;
+//     return result;
+// }
 
 
 void set_inventory(int item, int value){

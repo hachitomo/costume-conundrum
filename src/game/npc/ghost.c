@@ -58,12 +58,12 @@ void init_ghost(){
 void ghooooost(float ftime){
     if(ghost.state == GHOST_WRONG){
         Hero *hero = get_hero();
-        if(CheckCollisionRecs(hero_bbox(hero),ghost_hitbox)){
+        if(CheckCollisionRecs(hero->bbox,ghost_hitbox)){
             // retrieve crown
             set_inventory(INV_crown,1);
             ghost.state = GHOST_RIGHT;
             PlaySound(get_sound(SOUND_PICKUP));
-        }else if(CheckCollisionRecs(hero_bbox(hero),ghost_detect)){
+        }else if(CheckCollisionRecs(hero->bbox,ghost_detect)){
             ghost.sprite->state = GHOST_CURIOUS;
             ghost.just_updated = 1;
             if(hero->actor.position.x < ghost.position.x){

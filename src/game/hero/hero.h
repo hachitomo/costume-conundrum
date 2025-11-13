@@ -16,6 +16,7 @@
 typedef struct Hero{
     Actor actor;
     Sprite sprite;
+    Rectangle bbox;
     int state,xtransform,just_updated,inventory;
     float state_time;
 }Hero;
@@ -27,7 +28,7 @@ void set_hero_state(int state);
 void update_hero(Hero *hero, Scene *scene, Inputs inputs);
 void draw_hero(Hero *hero);
 Rectangle get_hero_frame(int state, float state_time);
-Rectangle hero_bbox(Hero *hero);
+// Rectangle hero_bbox(Hero *hero);
 void set_inventory(int item, int value);
 int get_inventory(int item);
 // SpriteAnimation *get_hero_animations();
