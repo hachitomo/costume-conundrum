@@ -7,14 +7,6 @@
 #include "../shared_symbols.h"
 #include <stdio.h>
 
-#define GHOST_WRONG 0
-#define GHOST_RIGHT 1
-
-#define GHOST_DEFEATED 2
-#define GHOST_CURIOUS 3
-#define GHOST_HAPPY 4
-#define GHOST_WALK 5
-
 // area ghost will 'notice' you
 Rectangle ghost_detect = {
     .x=336,
@@ -64,6 +56,7 @@ void ghooooost(float ftime){
             set_inventory(INV_crown,1);
             ghost.state = GHOST_RIGHT;
             ghost.just_updated = 1;
+            ghost.argv[0] = 2;
             PlaySound(get_sound(SOUND_PICKUP));
         }else if(CheckCollisionRecs(hero->bbox,ghost_detect)){
             ghost.sprite->state = GHOST_CURIOUS;

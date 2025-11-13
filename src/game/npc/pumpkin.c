@@ -58,6 +58,7 @@ void pump_it_up(float ftime){
             pumpkin.state = PUMPKIN_RIGHT;
             pumpkin.sprite->state = PUMPKIN_HAPPY;
             pumpkin.just_updated = 1;
+            pumpkin.argv[0] = 2;
         }else if(CheckCollisionRecs(hero->bbox,pumpkin_detect)){
             pumpkin.sprite->state = PUMPKIN_QUERY;
             pumpkin.just_updated = 1;

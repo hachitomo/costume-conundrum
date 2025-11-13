@@ -8,6 +8,10 @@
 #include "../hero/hero.h"
 #include "../input/input.h"
 #include "../draw/draw.h"
+#include "../npc/ghost.h"
+#include "../npc/npc.h"
+#include "../npc/princess.h"
+#include "../npc/pumpkin.h"
 #include <stdio.h>
 #include <math.h>
 
@@ -107,6 +111,23 @@ Vector2 intvector(Vector2 v){
 }
 
 void run_scene_game(Scene *scene){
+
+    // check completion
+    NPC *npcs;
+    int i = 0;
+    int npcc = get_npcs(&npcs);
+    int complete = 0;
+    for(; i<npcc; i++){
+        if(npcs->argv[1] ==1 && npcs->argv[0] == 2){
+            complete = 1;
+            break;
+        }
+    }
+    if(complete){
+        PlaySound(get_sound(SOUND_FANFARE));
+        set_scene(&SCENE_END);
+    }
+
     Music game_song = get_song(SONG_GAME);
     bool playing = IsMusicStreamPlaying(game_song);
     if(!playing){

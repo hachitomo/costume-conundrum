@@ -66,6 +66,7 @@ void act_royalty(float ftime){
             PlaySound(success_sound());
             princess.state = PRINCESS_RIGHT;
             princess.sprite->state = PRINCESS_HAPPY;
+            princess.argv[0] = 2;
         }else if(CheckCollisionRecs(hero->bbox,princess_detect)){
             princess.sprite->state = PRINCESS_QUERY;
             if(hero->actor.position.x < princess.position.x){
