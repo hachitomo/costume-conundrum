@@ -8,10 +8,7 @@
 #include "../hero/hero.h"
 #include "../input/input.h"
 #include "../draw/draw.h"
-#include "../npc/ghost.h"
 #include "../npc/npc.h"
-#include "../npc/princess.h"
-#include "../npc/pumpkin.h"
 #include <stdio.h>
 #include <math.h>
 
@@ -116,11 +113,13 @@ void run_scene_game(Scene *scene){
     NPC *npcs;
     int i = 0;
     int npcc = get_npcs(&npcs);
-    int complete = 0;
-    for(; i<npcc; i++){
-        if(npcs->argv[1] ==1 && npcs->argv[0] == 2){
-            complete = 1;
-            break;
+    int complete = 1;
+    for(; i<npcc; i++,npcs++){
+        if (npcs->argv[1]==1) {
+            if (npcs->argv[0]!=2) {
+                complete=0;
+                break;
+            }
         }
     }
     if(complete){
