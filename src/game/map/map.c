@@ -21,6 +21,12 @@ void update_npcs(){
     FrameTimer *ftimer = get_frame_timer();
     ghooooost(ftimer->frame_time);
     act_royalty(ftimer->frame_time);
+    
+    NPC *p;
+    int c=get_npcs(&p);
+    for (;c-->0;p++) {
+      update_npc(p,ftimer);
+    }
 }
 
 void draw_npcs(){
@@ -37,11 +43,12 @@ void draw_npcs(){
             default:
                 return;
         }
+    }
     
     NPC *p;
     int c=get_npcs(&p);
     for (;c-->0;p++) {
-      update_npc(p,ftimer);
+      draw_npc(p);
     }
 }
 
