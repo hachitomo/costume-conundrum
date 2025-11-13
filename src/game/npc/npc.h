@@ -18,5 +18,6 @@ NPC *init_npc(int x,int y,int decalid);
 
 void update_npc(NPC *npc,FrameTimer *ftimer);
 void draw_npc(NPC *npc);
+void reap_defunct_npcs();
 
 #endif
