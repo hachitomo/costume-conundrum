@@ -18,9 +18,11 @@ typedef const unsigned char *Tiles;
 typedef struct NPC{
     Vector2 position; // initialized from map_poiv, updated with act
     Sprite *sprite;
-    int id,state,xtransform,just_updated;
+    int id0,id,state,xtransform,just_updated;
     float state_time,width,height;
     //Tilesheet *tilesheet // assumed to be sprites.png for game jam, but could set here
+    int animframe;
+    double animclock;
 }NPC;
 
 typedef struct Tilesheet{

@@ -150,8 +150,8 @@ void run_scene_game(Scene *scene){
 void draw_scene_game(Scene *scene){
     draw_map();
     Hero *hero = get_hero();
-    draw_hero(hero);
     draw_npcs();
+    draw_hero(hero);
 }
 
 static const struct finale_message {

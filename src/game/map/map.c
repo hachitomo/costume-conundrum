@@ -23,6 +23,12 @@ void update_npcs(){
     ghooooost(ftimer->frame_time);
     act_royalty(ftimer->frame_time);
     pump_it_up(ftimer->frame_time);
+    
+    NPC *p;
+    int c=get_npcs(&p);
+    for (;c-->0;p++) {
+      update_npc(p,ftimer);
+    }
 }
 
 void draw_npcs(){
@@ -42,6 +48,12 @@ void draw_npcs(){
             default:
                 return;
         }
+    }
+    
+    NPC *p;
+    int c=get_npcs(&p);
+    for (;c-->0;p++) {
+      draw_npc(p);
     }
 }
 
@@ -65,12 +77,12 @@ void init_npcs(){
                 npcs[npcc] = get_pumpkin()->id;
                 npcc++;
                 break;
-            case CMD_map_robot: break;//TODO
-            case CMD_map_clown: break;//TODO
-            case CMD_map_lightbear: break;//TODO
-            case CMD_map_cat: break;//TODO
-            case CMD_map_jack: break;//TODO
-            case CMD_map_pumpkinhat: break;//TODO
+            case CMD_map_robot: init_npc(poi->x,poi->y,NS_decal_robot_wrong); break;
+            case CMD_map_clown: init_npc(poi->x,poi->y,NS_decal_clown_wrong); break;
+            case CMD_map_lightbear: init_npc(poi->x,poi->y,NS_decal_lightbear_dig1); break;
+            case CMD_map_cat: init_npc(poi->x,poi->y,NS_decal_cat1); break;
+            case CMD_map_jack: init_npc(poi->x,poi->y,NS_decal_jack1); break;
+            case CMD_map_pumpkinhat: init_npc(poi->x,poi->y,NS_decal_pumpkinhat); break;
         }
     }
 }

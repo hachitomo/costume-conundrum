@@ -28,10 +28,10 @@ void init_pumpkin(int x, int y){
     pumpkin_sprite.framesc=8;
     pumpkin_sprite.frate=0.125;
     pumpkin_sprite.get_animation_frame=&get_pumpkin_frame;
-    pumpkin.position.x = x*TILE_SIZE;
-    pumpkin.position.y = y*TILE_SIZE;
     pumpkin.width = decalsheet_sprites[NS_decal_pumpkin_wrong].w;
     pumpkin.height = decalsheet_sprites[NS_decal_pumpkin_wrong].h;
+    pumpkin.position.x = (int)(x*TILE_SIZE - 0.5 * pumpkin.width);
+    pumpkin.position.y = (int)(y*TILE_SIZE - 0.5 * pumpkin.height)+1;
 
     pumpkin_detect.x=pumpkin.position.x - 32;
     pumpkin_detect.y=pumpkin.position.y - 32;
