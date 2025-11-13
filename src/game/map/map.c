@@ -7,6 +7,7 @@
 #include "../npc/ghost.h"
 #include "../npc/npc.h"
 #include "../npc/princess.h"
+#include "../npc/pumpkin.h"
 #include "../physics/physics.h"
 #include <stdio.h>
 
@@ -21,6 +22,7 @@ void update_npcs(){
     FrameTimer *ftimer = get_frame_timer();
     ghooooost(ftimer->frame_time);
     act_royalty(ftimer->frame_time);
+    pump_it_up(ftimer->frame_time);
 }
 
 void draw_npcs(){
@@ -32,6 +34,9 @@ void draw_npcs(){
                 break;
             case CMD_map_princess:
                 draw_princess();
+                break;
+            case CMD_map_pumpkin:
+                draw_pumpkin();
                 break;
                 // TODO others
             default:
@@ -55,7 +60,11 @@ void init_npcs(){
                 npcs[npcc] = get_princess()->id;
                 npcc++;
                 break;
-            case CMD_map_pumpkin: break;//TODO
+            case CMD_map_pumpkin: 
+                init_pumpkin(poi->x,poi->y);
+                npcs[npcc] = get_pumpkin()->id;
+                npcc++;
+                break;
             case CMD_map_robot: break;//TODO
             case CMD_map_clown: break;//TODO
             case CMD_map_lightbear: break;//TODO

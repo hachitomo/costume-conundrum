@@ -45,10 +45,10 @@ void init_ghost(int x,int y){
     ghost_sprite.framesc=8;
     ghost_sprite.frate=0.125;
     ghost_sprite.get_animation_frame=&get_ghost_frame;
-    ghost.position.x = x*TILE_SIZE;
-    ghost.position.y = y*TILE_SIZE;
     ghost.width = decalsheet_sprites[NS_decal_ghost_right].w;
     ghost.height = decalsheet_sprites[NS_decal_ghost_right].h;
+    ghost.position.x = (int)(x*TILE_SIZE - (0.5 * ghost.width));
+    ghost.position.y = (int)(y*TILE_SIZE - (0.5 * ghost.height) + 2);
     ghost.id = CMD_map_ghost;
     ghost.sprite = &ghost_sprite;
 }
@@ -63,6 +63,7 @@ void ghooooost(float ftime){
             // retrieve crown
             set_inventory(INV_crown,1);
             ghost.state = GHOST_RIGHT;
+            ghost.just_updated = 1;
             PlaySound(get_sound(SOUND_PICKUP));
         }else if(CheckCollisionRecs(hero->bbox,ghost_detect)){
             ghost.sprite->state = GHOST_CURIOUS;
@@ -78,6 +79,7 @@ void ghooooost(float ftime){
         }
     }else{
         ghost.sprite->state = GHOST_HAPPY;
+        ghost.just_updated = 1;
     }
 }
 
