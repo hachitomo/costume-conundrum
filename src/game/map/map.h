@@ -15,10 +15,8 @@
 typedef const unsigned char *Tiles;
 
 // Generic def of Map NPCs
-typedef void* (NpcAction)(); // NPC behavior
 typedef struct NPC{
     Vector2 position; // initialized from map_poiv, updated with act
-    NpcAction *act;
     Sprite *sprite;
     int id,state,xtransform,just_updated;
     float state_time,width,height;

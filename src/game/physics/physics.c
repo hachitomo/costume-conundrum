@@ -32,7 +32,7 @@ float vector_magnitude(Vector2 vec) {
 
 
 void move_actor(Actor *actor, Solid *colliders, int collidersc){
-    FrameTimer *ftimer = get_frame_timer();
+    // FrameTimer *ftimer = get_frame_timer();
     Rectangle newpos = {
         .x=actor->position.x+actor->velocity.x,
         .y=actor->position.y+actor->velocity.y,
@@ -163,7 +163,6 @@ void move_actor(Actor *actor, Solid *colliders, int collidersc){
         }
         finalnudge = fixes->delta;
     } else {
-        CollisionFix *result;
         float smallesty = 0;
         float smallestx = 0;
         for(int i=0; i<fixesc;i++){

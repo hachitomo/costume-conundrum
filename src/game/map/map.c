@@ -12,43 +12,36 @@ Map game_map;
 Rectangle areas[256];
 Tilesheet map_tilesheet;
 
-static void init_npc(NPC *npc){
-    switch(npc->id){
-        case CMD_map_ghost:
-            init_ghost();
-            break;
-        case CMD_map_princess:
-            break;
-        case CMD_map_pumpkin:
-            break;
-        case CMD_map_robot:
-            break;
-        case CMD_map_clown:
-            break;
-        case CMD_map_lightbear:
-            break;
-        case CMD_map_cat:
-            break;
-        case CMD_map_jack:
-            break;
-        case CMD_map_pumpkinhat:
-            break;
-        default:
-            break;
-    }
-}
+// static void init_npc(NPC *npc){
+//     switch(npc->id){
+//         case CMD_map_ghost:
+//             init_ghost();
+//             break;
+//         case CMD_map_princess:
+//             break;
+//         case CMD_map_pumpkin:
+//             break;
+//         case CMD_map_robot:
+//             break;
+//         case CMD_map_clown:
+//             break;
+//         case CMD_map_lightbear:
+//             break;
+//         case CMD_map_cat:
+//             break;
+//         case CMD_map_jack:
+//             break;
+//         case CMD_map_pumpkinhat:
+//             break;
+//         default:
+//             break;
+//     }
+// }
 
 // act will set NPC state, just_updated, position, etc. for each sprite
 void update_npcs(){
     FrameTimer *ftimer = get_frame_timer();
-    // for(int i=0; i<map_poic; i++){
-    // for(int i=0; i<1; i++){
-    //     NPC *iter = npcs+i; // ghost only
-    //     (iter->act)(ftimer->frame_time);
-    //     iter++;
-    // }
-    NPC *ghost = get_ghost();
-    ghost->act(ftimer->frame_time);
+    ghooooost(ftimer->frame_time);
 }
 
 void draw_npcs(){

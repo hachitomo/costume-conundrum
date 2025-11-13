@@ -77,10 +77,6 @@ void init_hero(void){
     hero_sprite.frate=0.125;
     hero.sprite=hero_sprite;
     hero.actor=hero_actor;
-    if(hero_colliders == NULL) {
-        // idk, burn everything down?
-        printf("Oh no, no memory for colliders I guess");
-    }
 };
 
 void deinit_hero(void){
@@ -341,4 +337,5 @@ int get_inventory(int item){
         case INV_pump:
             return pump;
     }
+    return 0;
 }

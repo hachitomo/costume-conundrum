@@ -6,7 +6,7 @@
 
 void init_ghost();
 NPC *get_ghost();
-void ghooooost();
+void ghooooost(float ftime);
 Rectangle get_ghost_frame(int state,float frame_time);
 
 #endif

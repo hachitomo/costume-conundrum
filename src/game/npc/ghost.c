@@ -50,13 +50,12 @@ void init_ghost(){
     ghost.width = decalsheet_sprites[NS_decal_ghost_right].w;
     ghost.height = decalsheet_sprites[NS_decal_ghost_right].h;
     ghost.sprite = &ghost_sprite;
-    ghost.act=(NpcAction *)ghooooost;
 }
 
 // Please note:
 // ooooOOOoooo
 // this is how the ghost doooOOOOoooo
-void ghooooost(){
+void ghooooost(float ftime){
     if(ghost.state == GHOST_WRONG){
         Hero *hero = get_hero();
         if(CheckCollisionRecs(hero_bbox(hero),ghost_hitbox)){

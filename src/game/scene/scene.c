@@ -177,7 +177,7 @@ void run_scene_end(Scene *scene){
     Texture2D texture = get_texture(TEXTURE_FINALE);
     DrawTexture(texture,0,0,WHITE);
     texture = get_texture(TEXTURE_FEAST);
-    const int finaleh = 120;
+    // const int finaleh = 120;
     const int feastw = 123;
     const int feasth = 57;
     const int colw = 25;

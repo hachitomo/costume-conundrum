@@ -13,7 +13,6 @@ void poll_inputs(void){
     int right = IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D);
     int up = IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W);
     int jump = IsKeyPressed(KEY_SPACE);
-    int keys_thisframe = left || down || right || up;
 
     int gamepadleft = 0;
     int gamepaddown = 0;
@@ -44,8 +43,6 @@ void poll_inputs(void){
             gamepadup = 1;
         }
     }
-
-    int gamepad_thisframe = gamepadleft || gamepaddown || gamepadright || gamepadup;
 
     inputs.left=left||gamepadleft;
     inputs.down=down||gamepaddown;
