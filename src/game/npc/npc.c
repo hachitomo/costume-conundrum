@@ -49,8 +49,8 @@ static void npc_set_decal(NPC *npc,int decalid) {
  
 static void npc_initial_nudge(NPC *npc) {
     switch (npc->id) {
-        case NS_decal_robot_wrong: npc->position.y-=7.0f; break;
-        case NS_decal_clown_wrong: npc->position.y-=8.0f; break;
+        case NS_decal_robot_wrong: npc->argv[1]=1; npc->position.y-=7.0f; break;
+        case NS_decal_clown_wrong: npc->argv[1]=1; npc->position.y-=8.0f; break;
         case NS_decal_lightbear_dig1: npc->position.x-=1.0f; npc->position.y-=7.0f; break;
         case NS_decal_cat1: npc->position.x+=4.0f; npc->position.y+=1.0f; break;
         case NS_decal_jack1: npc->position.x-=1.0f; npc->position.y-=5.0f; break;
