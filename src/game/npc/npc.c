@@ -378,6 +378,12 @@ void draw_npc(NPC *npc) {
 }
 
 void clear_all_npcs(){
-    npcc = 0;
+    int i=npcc;
+    NPC *npc=npcv+i-1;
+    for (;i-->0;npc--) {
+        npc->defunct = 1;
+        npcc--;
+    }
     reap_defunct_npcs();
+    npcc = 0;
 }

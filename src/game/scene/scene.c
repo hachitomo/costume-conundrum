@@ -241,11 +241,14 @@ void run_scene_end(Scene *scene){
     }
 
     Music ending_song = get_song(SONG_ENDING);
-    if(ttime > 4 && !IsMusicStreamPlaying(ending_song)){
+    if(ttime > 120 && !IsMusicStreamPlaying(ending_song)){
         PlayMusicStream(ending_song);
     }
+    UpdateMusicStream(ending_song);
 
     if(ttime > 1100 && any_inputs()){
+        clear_all_npcs();
         set_scene(&SCENE_MENU);
+        return;
     }
 }
