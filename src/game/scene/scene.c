@@ -27,6 +27,14 @@ Rectangle render_bounds = {
     .height=RENDER_HEIGHT,
 };
 
+Rectangle cat_hitbox = {
+    .x=32,
+    .y=112,
+    .height=48,
+    .width=64
+};
+double last_meow = 0;
+int meow_delay = 6;
 
 void set_scene(Scene *scene){
     current_scene = scene;
@@ -174,6 +182,12 @@ void run_scene_game(Scene *scene){
         .y=hero->actor.position.y,
     };
     camera->target = intvector(clamp_camera(playerpos));
+
+    // cat meow
+    if(CheckCollisionRecs(hero->bbox,cat_hitbox) && GetTime() - last_meow > meow_delay){
+        PlaySoundVolume(SOUND_JOEY,0.7);
+        last_meow = GetTime();
+    }
     
     // sky
     ClearBackground(WHITE);
