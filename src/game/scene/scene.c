@@ -115,7 +115,10 @@ Vector2 intvector(Vector2 v){
     return result;
 }
 
+static double complete_clock=0.0;
+
 void run_scene_game(Scene *scene){
+    FrameTimer *timer = get_frame_timer();
 
     // check completion
     NPC *npcs;
@@ -132,10 +135,14 @@ void run_scene_game(Scene *scene){
     }
     Music game_song = get_song(SONG_GAME);
     if(complete){
-        PlaySound(get_sound(SOUND_FANFARE));
-        set_scene(&SCENE_END);
-        StopMusicStream(game_song);
-        SeekMusicStream(game_song,0);
+        if ((complete_clock+=timer->frame_time)>=2.0) {
+            PlaySound(get_sound(SOUND_FANFARE));
+            set_scene(&SCENE_END);
+            StopMusicStream(game_song);
+            SeekMusicStream(game_song,0);
+        }
+    } else {
+        complete_clock=0.0;
     }
 
     bool playing = IsMusicStreamPlaying(game_song);
@@ -143,7 +150,6 @@ void run_scene_game(Scene *scene){
         PlayMusicStream(game_song);
     }
     UpdateMusicStream(game_song);
-    FrameTimer *timer = get_frame_timer();
     
     // update
     Inputs inputs = get_inputs();
@@ -175,6 +181,12 @@ void run_scene_game(Scene *scene){
     BeginMode2D(*camera);
         draw_scene_game(scene);
     EndMode2D();
+    if (complete_clock>1.0) {
+        int a=(int)((complete_clock-1.0)*256.0);
+        if (a>0xff) a=0xff; else if (a<1) a=1;
+        Color color={0,0,0,a};
+        DrawRectangle(0,0,RENDER_WIDTH,RENDER_HEIGHT,color);
+    }
 }
 
 void draw_scene_game(Scene *scene){
