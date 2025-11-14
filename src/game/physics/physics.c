@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "../constants.h"
 #include "../frame_timer.h"
+#include "../input/input.h"
 #include "../map/map.h"
 #include <math.h>
 #include <stdio.h>
@@ -148,6 +149,9 @@ void move_actor(Actor *actor, Solid *colliders, int collidersc){
         actor->position = newpos;
         return;
     } else if(fixesc == 1){
+        Inputs inputs = get_inputs();
+        int downjump = inputs.down && inputs.jump;
+
         if(fixes->delta.x != 0 && fixes->delta.y != 0){
             if(fabs(fixes->delta.x) > fabs(fixes->delta.y)){
                 fixes->delta.x = 0;
@@ -158,13 +162,18 @@ void move_actor(Actor *actor, Solid *colliders, int collidersc){
         if(fixes->delta.x != 0){
             actor->velocity.x = 0;
         }
-        if(fixes->delta.y != 0){
+        if(fixes->delta.y != 0 && !downjump){
             actor->velocity.y = 0;
             if(fixes->delta.y < 0){
                 actor->grounded = 1;
             }
         }
-        finalnudge = fixes->delta;
+        
+        if(fixes->clip && fixes->delta.y > 0 && downjump){
+            finalnudge.y = -fixes->delta.y;
+        }else{
+            finalnudge = fixes->delta;
+        }
     } else {
         float smallesty = 0;
         float smallestx = 0;

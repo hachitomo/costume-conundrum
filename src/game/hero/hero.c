@@ -216,7 +216,11 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
             hero->state = STATE_IDLE;
         }
         if(inputs.jump){
-            hero->actor.velocity.y = jumpvelocity;
+            if(!inputs.down){
+                hero->actor.velocity.y = jumpvelocity;
+            }else{
+                hero->actor.velocity.y = 1;
+            }
             hero->actor.grounded = 0;
             hero->state = STATE_JUMP;
             PlaySoundVolume(SOUND_JUMP,0.5);
