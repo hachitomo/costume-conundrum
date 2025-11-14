@@ -12,7 +12,7 @@ void poll_inputs(void){
     int down = IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S);
     int right = IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D);
     int up = IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W);
-    int jump = IsKeyPressed(KEY_SPACE);
+    int jump = IsKeyDown(KEY_SPACE);
 
     int gamepadleft = 0;
     int gamepaddown = 0;
@@ -25,7 +25,7 @@ void poll_inputs(void){
         gamepaddown =  IsGamepadButtonDown(0,GAMEPAD_BUTTON_LEFT_FACE_DOWN);
         gamepadright = IsGamepadButtonDown(0,GAMEPAD_BUTTON_LEFT_FACE_RIGHT);
         gamepadup =  IsGamepadButtonPressed(0,GAMEPAD_BUTTON_LEFT_FACE_UP) ;
-        gamepadjump =  IsGamepadButtonPressed(0,GAMEPAD_BUTTON_RIGHT_FACE_DOWN);
+        gamepadjump =  IsGamepadButtonDown(0,GAMEPAD_BUTTON_RIGHT_FACE_DOWN);
     }
     float joyx = GetGamepadAxisMovement(0,GAMEPAD_AXIS_LEFT_X);
     float joyy = GetGamepadAxisMovement(0,GAMEPAD_AXIS_LEFT_Y);

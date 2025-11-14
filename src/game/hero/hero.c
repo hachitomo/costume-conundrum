@@ -20,6 +20,7 @@ Image hero_img;
 Texture2D hero_tex;
 Solid hero_colliders[100];
 int collidersc = 0;
+int hero_jump_blackout=0;
 
 #define INVENTORY_LIMIT 4
 static int inventoryv[INVENTORY_LIMIT];
@@ -81,14 +82,17 @@ void init_hero(void){
     inventoryc=0;
 };
 
-void reinit_hero(void){
+void reinit_hero(int x,int y){
     hero_sprite.get_animation_frame = get_hero_frame;
     hero_sprite.xtransform=1;
     hero_sprite.frate=0.125;
     hero.sprite=hero_sprite;
     hero.actor=hero_actor;
-    hero.bbox=hero_actor.position;
+    const struct decal *decal=decalsheet_sprites+NS_decal_dot_idle;
+    hero.bbox=(Rectangle){x*TILE_SIZE,(y+1)*TILE_SIZE-decal->h,decal->w,decal->h};
+    hero.actor.position=hero.bbox;
     inventoryc=0;
+    hero_jump_blackout=1;
 }
 
 void deinit_hero(void){
@@ -202,9 +206,12 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
     hero->bbox.width=hero->actor.position.width;
     hero->bbox.height=hero->actor.position.height;
 
+    if (!inputs.jump) hero_jump_blackout=0;
     if(!hero->actor.grounded){
         if(newvel.y > 0){
             hero->state = STATE_FALL;
+        } else if ((newvel.y < 0) && !inputs.jump) {
+            hero->actor.velocity.y = 0.0f;
         }else{
             hero->state = STATE_JUMP;
         }
@@ -215,7 +222,7 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
         if(!inputs.left && !inputs.right){
             hero->state = STATE_IDLE;
         }
-        if(inputs.jump){
+        if(inputs.jump && !hero_jump_blackout){
             if(!inputs.down){
                 hero->actor.velocity.y = jumpvelocity;
             }else{
@@ -224,6 +231,7 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
             hero->actor.grounded = 0;
             hero->state = STATE_JUMP;
             PlaySoundVolume(SOUND_JUMP,0.5);
+            hero_jump_blackout=1;
         }
     }
     hero->sprite.state = hero->state;
