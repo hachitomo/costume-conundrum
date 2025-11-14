@@ -113,6 +113,26 @@ void set_hero_state(int state){
     hero.just_updated = 0;
 }
 
+static int hero_on_oneway(Hero *hero) {
+    int xa=(int)(hero->bbox.x/TILE_SIZE);
+    int xz=(int)((hero->bbox.x+hero->bbox.width)/TILE_SIZE);
+    if (xa<0) xa=0;
+    if (xz>=map_w) xz=map_w-1;
+    if (xa>xz) return 0;
+    int y=(int)((hero->bbox.y+hero->bbox.height+TILE_SIZE*0.5)/TILE_SIZE);
+    if ((y<0)||(y>=map_h)) return 0;
+    int onewayc=0;
+    const unsigned char *tileid=map+y*map_w+xa;
+    for (;xa<=xz;xa++,tileid++) {
+        switch (tilesheet_terrain[*tileid]) {
+            case NS_physics_solid: return 0;
+            case NS_physics_oneway: onewayc++; break;
+        }
+    }
+    if (!onewayc) return 0;
+    return 1;
+}
+
 #define LEFT -1
 #define RIGHT 1
 #define accel 4
@@ -225,12 +245,19 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
         if(inputs.jump && !hero_jump_blackout){
             if(!inputs.down){
                 hero->actor.velocity.y = jumpvelocity;
+                hero->actor.grounded = 0;
+                hero->state = STATE_JUMP;
+                PlaySoundVolume(SOUND_JUMP,0.5);
             }else{
-                hero->actor.velocity.y = 1;
+                if (hero_on_oneway(hero)) {
+                    hero->actor.velocity.y = 1;
+                    hero->actor.position.y+=1.0f;
+                    hero->bbox.y=(int)hero->actor.position.y;
+                    hero->actor.grounded = 0;
+                    hero->state = STATE_JUMP;
+                    PlaySoundVolume(SOUND_JUMP,0.5);
+                }
             }
-            hero->actor.grounded = 0;
-            hero->state = STATE_JUMP;
-            PlaySoundVolume(SOUND_JUMP,0.5);
             hero_jump_blackout=1;
         }
     }
