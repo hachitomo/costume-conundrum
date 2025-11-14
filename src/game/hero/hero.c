@@ -101,11 +101,11 @@ void set_hero_state(int state){
 
 #define LEFT -1
 #define RIGHT 1
-#define accel 5
+#define accel 4
 #define decel 7
 #define airdecel 4
-#define driftreduce 2
-#define topspeed 15
+#define driftreduce 5
+#define topspeed 3.5
 #define gravity 3.5
 #define maxgravity 8
 
