@@ -11,6 +11,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void reset_colliders();
 
@@ -20,10 +21,9 @@ Texture2D hero_tex;
 Solid hero_colliders[100];
 int collidersc = 0;
 
-int crown   = 0;
-int clown   = 0;
-int robo    = 0;
-int pump    = 0;
+#define INVENTORY_LIMIT 4
+static int inventoryv[INVENTORY_LIMIT];
+static int inventoryc=0;
 
 Actor hero_actor = {
     .position={
@@ -78,6 +78,7 @@ void init_hero(void){
     hero.sprite=hero_sprite;
     hero.actor=hero_actor;
     hero.bbox=hero_actor.position;
+    inventoryc=0;
 };
 
 void deinit_hero(void){
@@ -226,28 +227,54 @@ void reset_colliders(){
     collidersc = 0;
 }
 
-void draw_hero(Hero *hero){
-    draw_sprite(&hero->sprite,hero->bbox,hero->state_time);
-    if(crown){
-        Texture2D tex = hero->sprite.texture;
-        Rectangle crown = {
-            .x=21,
-            .y=29,
-            .width=13,
-            .height=6,
-        };
-        Vector2 offset;
-        offset.x = hero->sprite.xtransform == -1 ? 18 : -1; // L : R
-        offset.y = hero->sprite.xtransform == -1 ? 14 : 26;
-        Rectangle crownpos = {
-            .x=(int)(hero->actor.position.x + offset.x),
-            .y=(int)(hero->actor.position.y + offset.y),
-            .width=13,
-            .height=6,
-        };
-        float rotation = hero->sprite.xtransform == 1 ? 270 : 90;
-        DrawTexturePro(tex,crown,crownpos,VEC_ZERO,rotation,WHITE);
+static const struct decal *decal_for_inventory(int inv) {
+    switch (inv) {
+        case INV_crown: return decalsheet_sprites+NS_decal_crown;
+        case INV_clown: return decalsheet_sprites+NS_decal_clownmask;
+        case INV_robo: return decalsheet_sprites+NS_decal_robotmask;
+        case INV_pump: return decalsheet_sprites+NS_decal_pumpkinhat;
     }
+    return 0;
+}
+
+void draw_hero(Hero *hero){
+    const Rectangle bbox=hero->bbox;
+
+    if (inventoryc) {
+        // The arm.
+        Rectangle armdst=(Rectangle){roundf(bbox.x),roundf(bbox.y),bbox.width,bbox.height};
+        const struct decal *decal=decalsheet_sprites+NS_decal_dot_arm;
+        Rectangle srcr=(Rectangle){decal->x,decal->y,decal->w,decal->h};
+        armdst.width=decal->w;
+        float px=armdst.x+armdst.width;
+        if (hero->sprite.xtransform<0.0) {
+            armdst.x=roundf(bbox.x+bbox.width)-armdst.width;
+            srcr.width=-srcr.width;
+            px=armdst.x;
+        }
+        DrawTexturePro(hero->sprite.texture,srcr,armdst,VEC_ZERO,0,WHITE);
+        
+        // The things.
+        float py=armdst.y+roundf(armdst.height*0.5f);
+        const int *p=inventoryv;
+        int i=inventoryc;
+        for (;i-->0;p++) {
+            const struct decal *decal=decal_for_inventory(*p);
+            if (!decal) continue;
+            srcr=(Rectangle){decal->x,decal->y,decal->w,decal->h};
+            Rectangle dstr=srcr;
+            py-=dstr.height;
+            dstr.y=py;
+            dstr.x=roundf(px-dstr.width*0.5f);
+            dstr.width=srcr.width;
+            dstr.height=srcr.height;
+            DrawTexturePro(hero->sprite.texture,srcr,dstr,VEC_ZERO,0,WHITE);
+        }
+    }
+
+    // Dot.
+    draw_sprite(&hero->sprite,hero->bbox,hero->state_time);
+    
     /*
     for(int i=0; i<solidc; i++){
         Color color = hero_colliders[i].physics == TILE_PHYSICAL ? LIME : ORANGE;
@@ -317,32 +344,25 @@ Rectangle get_hero_frame(int state,float state_time){
 
 
 void set_inventory(int item, int value){
-    switch(item){
-        case INV_crown:
-            crown = value;
-            break;
-        case INV_clown:
-            clown = value;
-            break;
-        case INV_robo:
-            robo = value;
-            break;
-        case INV_pump:
-            pump = value;
-            break;
+    if (value) {
+        if (inventoryc>=INVENTORY_LIMIT) return;
+        if (get_inventory(item)) return;
+        inventoryv[inventoryc++]=item;
+    } else {
+        int i=inventoryc;
+        while (i-->0) {
+            if (inventoryv[i]==item) {
+                inventoryc--;
+                memmove(inventoryv+i,inventoryv+i+1,sizeof(int)*(inventoryc-i));
+                return;
+            }
+        }
     }
 }
 
 int get_inventory(int item){
-     switch(item){
-        case INV_crown:
-            return crown;
-        case INV_clown:
-            return clown;
-        case INV_robo:
-            return robo;
-        case INV_pump:
-            return pump;
-    }
+    const int *p=inventoryv;
+    int i=inventoryc;
+    for (;i-->0;p++) if (*p==item) return 1;
     return 0;
 }
