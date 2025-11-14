@@ -104,6 +104,7 @@ void run_scene_menu(Scene *scene){
         set_scene(&SCENE_GAME);
         hello_input_blackout=1;
         StopMusicStream(menu_song);
+        SeekMusicStream(menu_song,0);
     }
 }
 
@@ -130,12 +131,14 @@ void run_scene_game(Scene *scene){
             }
         }
     }
+    Music game_song = get_song(SONG_GAME);
     if(complete){
         PlaySound(get_sound(SOUND_FANFARE));
         set_scene(&SCENE_END);
+        StopMusicStream(game_song);
+        SeekMusicStream(game_song,0);
     }
 
-    Music game_song = get_song(SONG_GAME);
     bool playing = IsMusicStreamPlaying(game_song);
     if(!playing){
         PlayMusicStream(game_song);
@@ -250,6 +253,7 @@ void run_scene_end(Scene *scene){
 
     Music ending_song = get_song(SONG_ENDING);
     if(ttime > 120 && !IsMusicStreamPlaying(ending_song)){
+        StopSound(get_sound(SOUND_FANFARE));
         PlayMusicStream(ending_song);
     }
     UpdateMusicStream(ending_song);
@@ -257,6 +261,8 @@ void run_scene_end(Scene *scene){
     if(ttime > 1100 && any_inputs()){
         clear_all_npcs();
         set_scene(&SCENE_MENU);
+        StopMusicStream(ending_song);
+        SeekMusicStream(ending_song,0);
         finale_start_time=0;
         return;
     }
