@@ -121,6 +121,7 @@ void set_hero_state(int state){
 #define jumpvelocity -3.0
 
 int solidc = 0;
+int hero_jump_blackout=0;
 
 void update_hero(Hero *hero, Scene *scene, Inputs inputs){
     FrameTimer *ftimer = get_frame_timer();
@@ -202,9 +203,12 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
     hero->bbox.width=hero->actor.position.width;
     hero->bbox.height=hero->actor.position.height;
 
+    if (!inputs.jump) hero_jump_blackout=0;
     if(!hero->actor.grounded){
         if(newvel.y > 0){
             hero->state = STATE_FALL;
+        } else if ((newvel.y < 0) && !inputs.jump) {
+            hero->actor.velocity.y = 0.0f;
         }else{
             hero->state = STATE_JUMP;
         }
@@ -215,11 +219,12 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
         if(!inputs.left && !inputs.right){
             hero->state = STATE_IDLE;
         }
-        if(inputs.jump){
+        if(inputs.jump && !hero_jump_blackout){
             hero->actor.velocity.y = jumpvelocity;
             hero->actor.grounded = 0;
             hero->state = STATE_JUMP;
             PlaySoundVolume(SOUND_JUMP,0.5);
+            hero_jump_blackout=1;
         }
     }
     hero->sprite.state = hero->state;
