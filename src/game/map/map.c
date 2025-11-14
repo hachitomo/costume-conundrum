@@ -5,6 +5,7 @@
 #include "../shared_symbols.h"
 #include "../draw/draw.h"
 #include "../npc/npc.h"
+#include "../hero/hero.h"
 #include "../physics/physics.h"
 #include <stdio.h>
 
@@ -38,6 +39,7 @@ void init_npcs(){
     int i=map_poic;
     for (;i-->0;poi++) {
         switch (poi->cmd) {
+            case CMD_map_hero: reinit_hero(poi->x,poi->y); break;
             case CMD_map_ghost: init_npc(poi->x,poi->y,NS_decal_ghost_wrong); break;
             case CMD_map_princess: init_npc(poi->x,poi->y,NS_decal_princess_wrong); break;
             case CMD_map_pumpkin: init_npc(poi->x,poi->y,NS_decal_pumpkin_wrong); break;

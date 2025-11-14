@@ -99,7 +99,6 @@ void run_scene_menu(Scene *scene){
             hello_input_blackout=0;
         }
     } else if(inputs.left|inputs.down|inputs.right|inputs.up|inputs.jump|inputs.interact){
-        reinit_hero();
         init_map();
         set_scene(&SCENE_GAME);
         hello_input_blackout=1;

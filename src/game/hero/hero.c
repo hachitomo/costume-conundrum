@@ -20,6 +20,7 @@ Image hero_img;
 Texture2D hero_tex;
 Solid hero_colliders[100];
 int collidersc = 0;
+int hero_jump_blackout=0;
 
 #define INVENTORY_LIMIT 4
 static int inventoryv[INVENTORY_LIMIT];
@@ -81,14 +82,17 @@ void init_hero(void){
     inventoryc=0;
 };
 
-void reinit_hero(void){
+void reinit_hero(int x,int y){
     hero_sprite.get_animation_frame = get_hero_frame;
     hero_sprite.xtransform=1;
     hero_sprite.frate=0.125;
     hero.sprite=hero_sprite;
     hero.actor=hero_actor;
-    hero.bbox=hero_actor.position;
+    const struct decal *decal=decalsheet_sprites+NS_decal_dot_idle;
+    hero.bbox=(Rectangle){x*TILE_SIZE,(y+1)*TILE_SIZE-decal->h,decal->w,decal->h};
+    hero.actor.position=hero.bbox;
     inventoryc=0;
+    hero_jump_blackout=1;
 }
 
 void deinit_hero(void){
@@ -121,7 +125,6 @@ void set_hero_state(int state){
 #define jumpvelocity -3.0
 
 int solidc = 0;
-int hero_jump_blackout=0;
 
 void update_hero(Hero *hero, Scene *scene, Inputs inputs){
     FrameTimer *ftimer = get_frame_timer();
