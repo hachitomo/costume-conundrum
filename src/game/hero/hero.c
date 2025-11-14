@@ -116,8 +116,9 @@ void set_hero_state(int state){
 #define airdecel 4
 #define driftreduce 5
 #define topspeed 3.5
-#define gravity 3.5
-#define maxgravity 8
+#define gravity 5.0
+#define maxgravity 12
+#define jumpvelocity -3.0
 
 int solidc = 0;
 
@@ -215,7 +216,7 @@ void update_hero(Hero *hero, Scene *scene, Inputs inputs){
             hero->state = STATE_IDLE;
         }
         if(inputs.jump){
-            hero->actor.velocity.y = -2.5;
+            hero->actor.velocity.y = jumpvelocity;
             hero->actor.grounded = 0;
             hero->state = STATE_JUMP;
             PlaySoundVolume(SOUND_JUMP,0.5);
