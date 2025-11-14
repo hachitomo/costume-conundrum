@@ -239,4 +239,13 @@ void run_scene_end(Scene *scene){
         Vector2 dst={message->col*8,120+message->row*12};
         DrawTextEx(font,tmp,dst,12.0f,0.0f,WHITE);
     }
+
+    Music ending_song = get_song(SONG_ENDING);
+    if(ttime > 4 && !IsMusicStreamPlaying(ending_song)){
+        PlayMusicStream(ending_song);
+    }
+
+    if(ttime > 1100 && any_inputs()){
+        set_scene(&SCENE_MENU);
+    }
 }

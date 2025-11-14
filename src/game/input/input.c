@@ -55,3 +55,7 @@ void poll_inputs(void){
 Inputs get_inputs(void){
     return inputs;
 }
+
+int any_inputs(){
+    return inputs.left || inputs.right || inputs.up || inputs.down || inputs.jump;
+}

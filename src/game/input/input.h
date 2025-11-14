@@ -7,5 +7,6 @@ typedef struct Inputs{
 
 void poll_inputs(void);
 struct Inputs get_inputs(void);
+int any_inputs(void);
 
 #endif

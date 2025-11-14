@@ -376,3 +376,8 @@ void draw_npc(NPC *npc) {
     }
     DrawTexturePro(texture,srcr,dstr,VEC_ZERO,0,WHITE);
 }
+
+void clear_all_npcs(){
+    npcc = 0;
+    reap_defunct_npcs();
+}

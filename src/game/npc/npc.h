@@ -20,5 +20,6 @@ void sort_npcs();
 void update_npc(NPC *npc,FrameTimer *ftimer);
 void draw_npc(NPC *npc);
 void reap_defunct_npcs();
+void clear_all_npcs();
 
 #endif
