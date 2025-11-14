@@ -13,6 +13,7 @@
 #include <math.h>
 
 Color SKYCOLOR = { 42, 60, 91, 255 };
+char speedclock[25];
 static Vector2 LOGO_OFFSET = {
     .x=32,
     .y=10,
@@ -132,6 +133,13 @@ void run_scene_game(Scene *scene){
     }
     Music game_song = get_song(SONG_GAME);
     if(complete){
+
+        // capture and format completion time
+        FrameTimer *ftimer = get_frame_timer();
+        long secsi = ftimer->global_exetime_sec;
+        int mins = (int)floorl(secsi / 60);
+        snprintf(speedclock,25,"%02d:%06.3f",mins,GetTime());
+
         PlaySound(get_sound(SOUND_FANFARE));
         set_scene(&SCENE_END);
         StopMusicStream(game_song);
@@ -195,6 +203,8 @@ static const struct finale_message {
   {11,3, 360,480,"Audio: Aster Kanke"},
   { 4,4, 480,360,"For Uplifting Jam, November 2025"},
   {10,2, 850,360,"Thanks for playing!"},
+//   { 7,3, 950,360,"Completion time: "},
+//   {24,3,1000,300,speedclock},
 };
 static unsigned int finale_start_time=0;
 
@@ -257,6 +267,15 @@ void run_scene_end(Scene *scene){
     }
     UpdateMusicStream(ending_song);
 
+    if(ttime > 1000){
+        char timetext[40];
+        snprintf(timetext,40,"Completion time: %s",speedclock);
+        Vector2 dest = {
+            .x=58,
+            .y=156,
+        };
+        DrawTextEx(font,timetext,dest,12.0f,0.0f,WHITE);
+    }
     if(ttime > 1100 && any_inputs()){
         clear_all_npcs();
         set_scene(&SCENE_MENU);
