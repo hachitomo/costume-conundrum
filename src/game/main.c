@@ -24,7 +24,6 @@ int main(void)
     init_audio();
     init_draw();
     init_hero();
-    init_map();
 
     #if defined(PLATFORM_WEB)
         SetTargetFPS(TARGET_FPS);

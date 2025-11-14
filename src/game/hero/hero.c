@@ -81,6 +81,16 @@ void init_hero(void){
     inventoryc=0;
 };
 
+void reinit_hero(void){
+    hero_sprite.get_animation_frame = get_hero_frame;
+    hero_sprite.xtransform=1;
+    hero_sprite.frate=0.125;
+    hero.sprite=hero_sprite;
+    hero.actor=hero_actor;
+    hero.bbox=hero_actor.position;
+    inventoryc=0;
+}
+
 void deinit_hero(void){
     UnloadTexture(hero_sprite.texture);
 };

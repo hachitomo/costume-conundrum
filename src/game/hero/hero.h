@@ -22,6 +22,7 @@ typedef struct Hero{
 }Hero;
 
 void init_hero(void);
+void reinit_hero(void);
 // void deinit_hero(void);
 Hero *get_hero(void);
 void set_hero_state(int state);

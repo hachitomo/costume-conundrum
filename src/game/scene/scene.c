@@ -52,6 +52,8 @@ Scene SCENE_END = {
     .draw=run_scene_end,
 };
 
+static int hello_input_blackout=1;
+
 Scene *get_current_scene(void){
     return current_scene;
 }
@@ -92,9 +94,15 @@ void run_scene_menu(Scene *scene){
     }
     
     Inputs inputs = get_inputs();
-    if(inputs.left|inputs.down|inputs.right|inputs.up|inputs.jump|inputs.interact){
-        //set_scene(&SCENE_END);
+    if (hello_input_blackout) {
+        if (!inputs.left&&!inputs.down&&!inputs.right&&!inputs.up&&!inputs.jump&&!inputs.interact) {
+            hello_input_blackout=0;
+        }
+    } else if(inputs.left|inputs.down|inputs.right|inputs.up|inputs.jump|inputs.interact){
+        reinit_hero();
+        init_map();
         set_scene(&SCENE_GAME);
+        hello_input_blackout=1;
         StopMusicStream(menu_song);
     }
 }
@@ -249,6 +257,7 @@ void run_scene_end(Scene *scene){
     if(ttime > 1100 && any_inputs()){
         clear_all_npcs();
         set_scene(&SCENE_MENU);
+        finale_start_time=0;
         return;
     }
 }
