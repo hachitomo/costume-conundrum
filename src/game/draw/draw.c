@@ -32,6 +32,7 @@ Rectangle fontrecs[96];
 GlyphInfo fontglyphs[96];
 Texture2D logotex,terraintex,spritestex;
 Texture2D orbis_fixetex,clouds1tex,clouds2tex,clouds3tex,bgovertex,fonttex,errortex,finaletex,feasttex;
+int need_blackout=0;
 
 int font_codepoints[96] = {
     32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
@@ -140,6 +141,26 @@ void deinit_draw(){
     UnloadTexture(bgovertex);
 }
 
+static void refresh_output_rec(int *rw,int *rh) {
+    float nw = (*rw=GetRenderWidth());
+    float nh = -(*rh=GetRenderHeight());
+    if ((nw==output_rec.width)&&(nh==output_rec.height)) return;
+    
+    float dstaspect=nw/-nh;
+    const float srcaspect=(float)RENDER_WIDTH/-(float)RENDER_HEIGHT;
+    if (dstaspect>srcaspect) { // pillarbox
+      output_rec.width=(int)(nh*srcaspect);
+      output_rec.height=nh;
+    } else { // letterbox (or exact)
+      output_rec.width=nw;
+      output_rec.height=(int)(nw/srcaspect);
+    }
+    
+    output_rec.x = (int)(nw*0.5f-output_rec.width*0.5f);
+    output_rec.y = (int)(nh*-0.5f+output_rec.height*0.5f);
+    need_blackout=((output_rec.width<nw)||(output_rec.height>nh));
+}
+
 void draw_game(Scene *scene){
 
     BeginTextureMode(bbuf);
@@ -151,7 +172,10 @@ void draw_game(Scene *scene){
     EndTextureMode();
 
     // bbuf -> screen
+    int rw=0,rh=0;
+    refresh_output_rec(&rw,&rh);
     BeginDrawing();
+        if (need_blackout) DrawRectangle(0,0,rw,rh,BLACK);
         DrawTexturePro(bbuf.texture,buffer_rec,output_rec,screen_origin,0,WHITE);
     EndDrawing();
 }
