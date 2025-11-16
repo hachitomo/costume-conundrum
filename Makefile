@@ -25,7 +25,7 @@ $(DICER_EXE):$(DICER_OFILES);$(PRECMD) gcc -o$@ $^
 
 # Then infer the dicer's output and roll those into SRCFILES.
 # Violating my usual no-outputs-in-mid rule so we don't have to deal with inputs under mid.
-DATA_FILES_SRC:=$(filter src/data/%,$(filter-out %.c,$(SRCFILES)))
+DATA_FILES_SRC:=$(filter src/data/%,$(filter-out %.c,$(filter-out %.md,$(SRCFILES))))
 DATA_FILES_C:=$(patsubst %,%.c,$(DATA_FILES_SRC))
 src/data/%.c:src/data/% $(DICER_EXE);$(PRECMD) $(DICER_EXE) -o$@ $<
 SRCFILES:=$(filter-out src/data/%,$(SRCFILES)) $(DATA_FILES_C)

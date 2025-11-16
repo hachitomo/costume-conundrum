@@ -11,20 +11,18 @@ void poll_inputs(void){
     int left = IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A);
     int down = IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S);
     int right = IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D);
-    int up = IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W);
     int jump = IsKeyDown(KEY_SPACE);
+    int fullscreen = IsKeyPressed(KEY_F11);
 
     int gamepadleft = 0;
     int gamepaddown = 0;
     int gamepadright= 0;
-    int gamepadup = 0;
     int gamepadjump = 0;
 
     if(IsGamepadAvailable(0)){
         gamepadleft =  IsGamepadButtonDown(0,GAMEPAD_BUTTON_LEFT_FACE_LEFT);
         gamepaddown =  IsGamepadButtonDown(0,GAMEPAD_BUTTON_LEFT_FACE_DOWN);
         gamepadright = IsGamepadButtonDown(0,GAMEPAD_BUTTON_LEFT_FACE_RIGHT);
-        gamepadup =  IsGamepadButtonPressed(0,GAMEPAD_BUTTON_LEFT_FACE_UP) ;
         gamepadjump =  IsGamepadButtonDown(0,GAMEPAD_BUTTON_RIGHT_FACE_DOWN);
     }
     float joyx = GetGamepadAxisMovement(0,GAMEPAD_AXIS_LEFT_X);
@@ -39,17 +37,14 @@ void poll_inputs(void){
     if(fabs(joyy) > joystick_dead_zone){
         if(joyy > 0){
             gamepaddown = 1;
-        }else {
-            gamepadup = 1;
         }
     }
 
     inputs.left=left||gamepadleft;
     inputs.down=down||gamepaddown;
     inputs.right=right||gamepadright;
-    inputs.up=up||gamepadup;
-    inputs.interact=down||up||gamepaddown||gamepadup;
     inputs.jump=jump||gamepadjump;
+    inputs.fullscreen = fullscreen;
 }
 
 Inputs get_inputs(void){

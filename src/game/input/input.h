@@ -2,7 +2,7 @@
 #define INPUT_H
 
 typedef struct Inputs{
-    int up,left,down,right,jump,interact;
+    int up,left,down,right,jump,fullscreen;
 }Inputs;
 
 void poll_inputs(void);

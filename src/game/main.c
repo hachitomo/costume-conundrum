@@ -46,6 +46,10 @@ int main(void)
 void UpdateDrawFrame(){
     update_frame_timer();
     poll_inputs();
+    Inputs inputs = get_inputs();
+    if(inputs.fullscreen){
+        ToggleFullscreen();
+    }
     draw_game(get_current_scene());
 }
 
