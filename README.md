@@ -4,6 +4,7 @@ Play as Dot Vine the witch in Costume Conundrum!
 
 Traverse the neighborhood in search of lost costume parts, so the kids can complete their costumes and get back to trick or treating. This game is a submission to LightBearSoftware's Uplifting Game Jam 2025
 
+![alt text](etc/comic-920px.png)
 
 Controls: 
 
@@ -32,4 +33,4 @@ After that, just run `make web` which will produce an html page, a js file, and 
 
 ## Licensing
 
-The code, images, and sound effects in this project are licensed under the GNU GPLv3. This includes everything in the project except the music in src/data/song, which is licensed by Aster Kanke under the CC-BY-NC-ND 4.0 license.
+The code, images, and sound effects in this project are licensed under the GNU GPLv3. This includes everything in the project except the music in src/data/song and etc/music, which is licensed by Aster Kanke under the CC-BY-NC-ND 4.0 license.
