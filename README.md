@@ -1,5 +1,18 @@
 # Costume-Conundrum
 
+Play as Dot Vine the witch in Costume Conundrum!
+
+Traverse the neighborhood in search of lost costume parts, so the kids can complete their costumes and get back to trick or treating. This game is a submission to LightBearSoftware's Uplifting Game Jam 2025
+
+
+Controls: 
+
+Move left/right - A / D / D-pad / joy
+
+Jump: Space / A (xbox) / X (PS)
+
+Play in browser: https://hachitomo.itch.io/costume-conundrum
+
 ## Build pre-reqs
 
 Download raylib https://github.com/raysan5/raylib/releases/tag/5.5
