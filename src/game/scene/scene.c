@@ -104,10 +104,10 @@ void run_scene_menu(Scene *scene){
     
     Inputs inputs = get_inputs();
     if (hello_input_blackout) {
-        if (!inputs.left&&!inputs.down&&!inputs.right&&!inputs.up&&!inputs.jump&&!inputs.interact) {
+        if (!inputs.left&&!inputs.down&&!inputs.right&&!inputs.up&&!inputs.jump) {
             hello_input_blackout=0;
         }
-    } else if(inputs.left|inputs.down|inputs.right|inputs.up|inputs.jump|inputs.interact){
+    } else if(inputs.left|inputs.down|inputs.right|inputs.up|inputs.jump){
         init_map();
         set_scene(&SCENE_GAME);
         hello_input_blackout=1;
@@ -294,8 +294,8 @@ void run_scene_end(Scene *scene){
     UpdateMusicStream(ending_song);
 
     if(ttime > 1000){
-        char timetext[40];
-        snprintf(timetext,40,"Completion time: %s",speedclock);
+        char timetext[42];
+        snprintf(timetext,42,"Completion time: %s",speedclock);
         Vector2 dest = {
             .x=58,
             .y=156,
